@@ -1,0 +1,11 @@
+﻿@model IEnumerable<COLAFHotel.Models.Service>
+@{
+    ViewBag.Title = "Special Services";
+}
+<h2>Special Services</h2>
+<ul>
+    @foreach (var service in Model)
+    {
+        <li><strong>@service.Name:</strong> @service.Description</li>
+    }
+</ul>

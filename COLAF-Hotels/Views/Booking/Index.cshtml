@@ -1,0 +1,35 @@
+﻿@model IEnumerable<COLAFHotel.Models.Booking>
+@{
+    ViewBag.Title = "Bookings";
+}
+<h2>Bookings</h2>
+<a class="btn btn-primary mb-2" asp-action="Create">Create New Booking</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Guest Name</th>
+            <th>Room Number</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Status</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Id</td>
+                <td>@booking.GuestName</td>
+                <td>@booking.RoomNumber</td>
+                <td>@booking.CheckInDate.ToShortDateString()</td>
+                <td>@booking.CheckOutDate.ToShortDateString()</td>
+                <td>@booking.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@booking.Id">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

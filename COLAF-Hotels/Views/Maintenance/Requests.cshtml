@@ -1,0 +1,27 @@
+﻿@model IEnumerable<COLAFHotel.Models.MaintenanceRequest>
+@{
+    ViewBag.Title = "Maintenance Requests";
+}
+<h2>Maintenance Requests</h2>
+<a class="btn btn-primary mb-2" asp-action="CreateRequest">Create New Request</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Room Number</th>
+            <th>Issue Description</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Id</td>
+                <td>@request.RoomNumber</td>
+                <td>@request.IssueDescription</td>
+                <td>@request.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>

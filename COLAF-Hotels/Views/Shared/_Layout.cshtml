@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - COLAF-Hotel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">COLAF-Hotel</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("List", "Room")">Rooms</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Booking")">Bookings</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Profile", "Guest")">Guest Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Tasks", "Housekeeping")">Housekeeping</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Requests", "Maintenance")">Maintenance</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("SpecialServices", "Services")">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Offers", "Discount")">Discounts</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Notification")">Notifications</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Summary", "Reports")">Reports</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Security")">Security</a></li>
+            </ul>
+            <ul class="navbar-nav">
+                @if (TempData["User"] != null)
+                {
+                    <li class="nav-item">
+                        <span class="navbar-text">Logged in as: @TempData["User"]</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Logout", "Account")">Logout</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        @RenderBody()
+    </div>
+    <footer class="text-center mt-3">
+        <p>&copy; @DateTime.Now.Year - COLAF-Hotel</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

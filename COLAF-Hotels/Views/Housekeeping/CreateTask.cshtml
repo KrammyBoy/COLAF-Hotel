@@ -1,0 +1,23 @@
+﻿@model COLAFHotel.Models.HousekeepingTask
+@{
+    ViewBag.Title = "Create Housekeeping Task";
+}
+<h2>Create Housekeeping Task</h2>
+<form asp-action="CreateTask" method="post">
+    <div class="form-group">
+        <label>Room Number:</label>
+        <input type="text" asp-for="RoomNumber" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Task Description:</label>
+        <textarea asp-for="TaskDescription" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+        <label>Status:</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Task</button>
+</form>

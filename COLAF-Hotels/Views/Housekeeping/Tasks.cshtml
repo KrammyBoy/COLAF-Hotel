@@ -1,0 +1,27 @@
+﻿@model IEnumerable<COLAFHotel.Models.HousekeepingTask>
+@{
+    ViewBag.Title = "Housekeeping Tasks";
+}
+<h2>Housekeeping Tasks</h2>
+<a class="btn btn-primary mb-2" asp-action="CreateTask">Create New Task</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Room Number</th>
+            <th>Task Description</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Id</td>
+                <td>@task.RoomNumber</td>
+                <td>@task.TaskDescription</td>
+                <td>@task.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>

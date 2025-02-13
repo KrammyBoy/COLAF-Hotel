@@ -1,0 +1,11 @@
+﻿@model COLAFHotel.Models.Booking
+@{
+    ViewBag.Title = "Booking Details";
+}
+<h2>Booking Details</h2>
+<p><strong>ID:</strong> @Model.Id</p>
+<p><strong>Guest Name:</strong> @Model.GuestName</p>
+<p><strong>Room Number:</strong> @Model.RoomNumber</p>
+<p><strong>Check-In Date:</strong> @Model.CheckInDate.ToShortDateString()</p>
+<p><strong>Check-Out Date:</strong> @Model.CheckOutDate.ToShortDateString()</p>
+<p><strong>Status:</strong> @Model.Status</p>

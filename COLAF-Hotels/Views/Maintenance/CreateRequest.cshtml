@@ -1,0 +1,24 @@
+﻿@model COLAFHotel.Models.MaintenanceRequest
+@{
+    ViewBag.Title = "Create Maintenance Request";
+}
+<h2>Create Maintenance Request</h2>
+<form asp-action="CreateRequest" method="post">
+    <div class="form-group">
+        <label>Room Number:</label>
+        <input type="text" asp-for="RoomNumber" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Issue Description:</label>
+        <textarea asp-for="IssueDescription" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+        <label>Status:</label>
+        <select asp-for="Status" class="form-control">
+            <option value="Reported">Reported</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+</form>

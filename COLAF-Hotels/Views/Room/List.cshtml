@@ -1,0 +1,28 @@
+﻿@model IEnumerable<COLAFHotel.Models.Room>
+@{
+    ViewBag.Title = "Room List";
+}
+<h2>Room List</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>@room.RoomNumber</td>
+                <td>@room.Category</td>
+                <td>@room.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-roomNumber="@room.RoomNumber">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

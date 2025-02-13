@@ -1,0 +1,11 @@
+﻿@model IEnumerable<string>
+@{
+    ViewBag.Title = "Notifications";
+}
+<h2>Notifications</h2>
+<ul>
+    @foreach (var note in Model)
+    {
+        <li>@note</li>
+    }
+</ul>
