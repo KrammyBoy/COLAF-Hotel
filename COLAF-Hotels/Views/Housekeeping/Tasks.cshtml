@@ -2,26 +2,38 @@
 @{
     ViewBag.Title = "Housekeeping Tasks";
 }
-<h2>Housekeeping Tasks</h2>
-<a class="btn btn-primary mb-2" asp-action="CreateTask">Create New Task</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Room Number</th>
-            <th>Task Description</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var task in Model)
-        {
-            <tr>
-                <td>@task.Id</td>
-                <td>@task.RoomNumber</td>
-                <td>@task.TaskDescription</td>
-                <td>@task.Status</td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-[var(--primary-color)] mb-4">Housekeeping Tasks</h2>
+
+    <a class="bg-[var(--primary-color)] text-white py-2 px-4 rounded-lg hover:bg-[var(--third-color)] transition"
+       asp-action="CreateTask">+ Create New Task</a>
+
+    <div class="overflow-x-auto mt-4">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2 border-b">ID</th>
+                    <th class="px-4 py-2 border-b">Room Number</th>
+                    <th class="px-4 py-2 border-b">Task Description</th>
+                    <th class="px-4 py-2 border-b">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var task in Model)
+                {
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-2 border-b">@task.Id</td>
+                        <td class="px-4 py-2 border-b">@task.RoomNumber</td>
+                        <td class="px-4 py-2 border-b">@task.TaskDescription</td>
+                        <td class="px-4 py-2 border-b">
+                            <span class="px-3 py-1 rounded-full text-white text-sm @(task.Status == "Completed" ? "bg-green-500" : "bg-yellow-500")">
+                                @task.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

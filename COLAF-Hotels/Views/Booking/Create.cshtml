@@ -2,30 +2,43 @@
 @{
     ViewBag.Title = "Create Booking";
 }
-<h2>Create Booking</h2>
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label>Guest Name:</label>
-        <input type="text" asp-for="GuestName" class="form-control" required />
+
+<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)]">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
+        <h2 class="text-2xl font-semibold text-[var(--primary-color)] mb-6 text-center">Create Booking</h2>
+
+        <form asp-action="Create" method="post" class="space-y-4">
+            <div>
+                <label class="block text-[var(--secondary-color)] font-medium mb-1">Guest Name</label>
+                <input type="text" asp-for="GuestName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" required />
+            </div>
+
+            <div>
+                <label class="block text-[var(--secondary-color)] font-medium mb-1">Room Number</label>
+                <input type="text" asp-for="RoomNumber" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" required />
+            </div>
+
+            <div>
+                <label class="block text-[var(--secondary-color)] font-medium mb-1">Check-In Date</label>
+                <input type="date" asp-for="CheckInDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" required />
+            </div>
+
+            <div>
+                <label class="block text-[var(--secondary-color)] font-medium mb-1">Check-Out Date</label>
+                <input type="date" asp-for="CheckOutDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" required />
+            </div>
+
+            <div>
+                <label class="block text-[var(--secondary-color)] font-medium mb-1">Status</label>
+                <select asp-for="Status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]">
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full bg-[var(--primary-color)] text-white py-2 rounded-lg hover:bg-[var(--third-color)] transition duration-300">
+                Submit Booking
+            </button>
+        </form>
     </div>
-    <div class="form-group">
-        <label>Room Number:</label>
-        <input type="text" asp-for="RoomNumber" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Check-In Date:</label>
-        <input type="date" asp-for="CheckInDate" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Check-Out Date:</label>
-        <input type="date" asp-for="CheckOutDate" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Status:</label>
-        <select asp-for="Status" class="form-control">
-            <option value="Confirmed">Confirmed</option>
-            <option value="Pending">Pending</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>

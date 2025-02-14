@@ -2,27 +2,33 @@
 @{
     ViewBag.Title = "Room List";
 }
-<h2>Room List</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Room Number</th>
-            <th>Category</th>
-            <th>Status</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var room in Model)
-        {
-            <tr>
-                <td>@room.RoomNumber</td>
-                <td>@room.Category</td>
-                <td>@room.Status</td>
-                <td>
-                    <a asp-action="Details" asp-route-roomNumber="@room.RoomNumber">View</a>
-                </td>
+<!-- TODO LIST -->
+<!-- 1. Design an HTML template for each room in the list, including an image and a modern, visually appealing layout. -->
+<!-- 2. Connect the template to the database to dynamically display room details and images. -->
+
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[var(--fourth-color)]">
+    <h2 class="text-[var(--primary-color)] text-3xl font-semibold mb-4">Room List - Each room should be a card</h2>
+    <table class="w-full border-collapse border border-[var(--third-color)]">
+        <thead>
+            <tr class="bg-[var(--fifth-color)] text-white">
+                <th class="py-2 px-4 border border-[var(--third-color)]">Room Number</th>
+                <th class="py-2 px-4 border border-[var(--third-color)]">Category</th>
+                <th class="py-2 px-4 border border-[var(--third-color)]">Status</th>
+                <th class="py-2 px-4 border border-[var(--third-color)]">Details</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var room in Model)
+            {
+                <tr class="hover:bg-[var(--fourth-color)]">
+                    <td class="py-2 px-4 border border-[var(--third-color)]">@room.RoomNumber</td>
+                    <td class="py-2 px-4 border border-[var(--third-color)]">@room.Category</td>
+                    <td class="py-2 px-4 border border-[var(--third-color)]">@room.Status</td>
+                    <td class="py-2 px-4 border border-[var(--third-color)]">
+                        <a asp-action="Details" asp-route-roomNumber="@room.RoomNumber" class="text-[var(--primary-color)] hover:underline">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

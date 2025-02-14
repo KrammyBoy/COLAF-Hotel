@@ -2,22 +2,32 @@
 @{
     ViewBag.Title = "Create Housekeeping Task";
 }
-<h2>Create Housekeeping Task</h2>
-<form asp-action="CreateTask" method="post">
-    <div class="form-group">
-        <label>Room Number:</label>
-        <input type="text" asp-for="RoomNumber" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Task Description:</label>
-        <textarea asp-for="TaskDescription" class="form-control" required></textarea>
-    </div>
-    <div class="form-group">
-        <label>Status:</label>
-        <select asp-for="Status" class="form-control">
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Create Task</button>
-</form>
+
+<div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-[var(--primary-color)] mb-4">Create Housekeeping Task</h2>
+
+    <form asp-action="CreateTask" method="post" class="space-y-4">
+        <div>
+            <label class="block text-lg font-medium">Room Number:</label>
+            <input type="text" asp-for="RoomNumber" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-[var(--primary-color)]" required />
+        </div>
+
+        <div>
+            <label class="block text-lg font-medium">Task Description:</label>
+            <textarea asp-for="TaskDescription" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-[var(--primary-color)]" required></textarea>
+        </div>
+
+        <div>
+            <label class="block text-lg font-medium">Status:</label>
+            <select asp-for="Status" class="w-full px-3 py-2 border rounded-lg shadow-sm focus:ring-[var(--primary-color)]">
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-[var(--primary-color)] text-white py-2 px-4 rounded-lg hover:bg-[var(--third-color)] transition">
+            Create Task
+        </button>
+    </form>
+</div>
