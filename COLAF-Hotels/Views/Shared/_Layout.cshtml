@@ -15,43 +15,43 @@
         }
     </style>
 </head>
-<body class="font-sans bg-gray-100">
-    <nav class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="@Url.Action("Index", "Dashboard")" class="text-[var(--primary-color)] text-2xl font-semibold hover:bg-[var(--fifth-color)] rounded-lg p-2">COLAF<span class="text-[var(--third-color)] text-2xl font-thin">-Hotel</span></a>
-            <div class="flex space-x-6">
-                <a href="@Url.Action("Index", "Dashboard")" class="text-gray-700 hover:text-[var(--primary-color)]">Dashboard</a>
-                <a href="@Url.Action("List", "Room")" class="text-gray-700 hover:text-[var(--primary-color)]">Rooms</a>
-                <a href="@Url.Action("Index", "Booking")" class="text-gray-700 hover:text-[var(--primary-color)]">Bookings</a>
-                <a href="@Url.Action("Profile", "Guest")" class="text-gray-700 hover:text-[var(--primary-color)]">Guest Profile</a>
-                <a href="@Url.Action("Tasks", "Housekeeping")" class="text-gray-700 hover:text-[var(--primary-color)]">Housekeeping</a>
-                <a href="@Url.Action("Requests", "Maintenance")" class="text-gray-700 hover:text-[var(--primary-color)]">Maintenance</a>
-                <a href="@Url.Action("SpecialServices", "Services")" class="text-gray-700 hover:text-[var(--primary-color)]">Services</a>
-                <a href="@Url.Action("Offers", "Discount")" class="text-gray-700 hover:text-[var(--primary-color)]">Discounts</a>
-                <a href="@Url.Action("Index", "Notification")" class="text-gray-700 hover:text-[var(--primary-color)]">Notifications</a>
-                <a href="@Url.Action("Summary", "Reports")" class="text-gray-700 hover:text-[var(--primary-color)]">Reports</a>
-                <a href="@Url.Action("Index", "Security")" class="text-gray-700 hover:text-[var(--primary-color)]">Security</a>
+<body class="font-sans bg-[var(--fifth-color)] text-gray-900">
+    <nav class="bg-[var(--secondary-color)] shadow-md">
+        <div class="max-w-full mx-auto p-3 flex justify-between items-center">
+            <a href="@Url.Action("Index", "Dashboard")" class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span></a>
+            <div class="hidden md:flex space-x-6">
+                <a href="@Url.Action("Index", "Dashboard")" class="text-white hover:text-[var(--primary-color)] transition">Dashboard</a>
+                <a href="@Url.Action("List", "Room")" class="text-white hover:text-[var(--primary-color)] transition">Rooms</a>
+                <a href="@Url.Action("Index", "Booking")" class="text-white hover:text-[var(--primary-color)] transition">Bookings</a>
+                <a href="@Url.Action("Profile", "Guest")" class="text-white hover:text-[var(--primary-color)] transition">Guest Profile</a>
+                <a href="@Url.Action("Tasks", "Housekeeping")" class="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
+                <a href="@Url.Action("Requests", "Maintenance")" class="text-white hover:text-[var(--primary-color)] transition">Maintenance</a>
+                <a href="@Url.Action("SpecialServices", "Services")" class="text-white hover:text-[var(--primary-color)] transition">Services</a>
+                <a href="@Url.Action("Offers", "Discount")" class="text-white hover:text-[var(--primary-color)] transition">Discounts</a>
+                <a href="@Url.Action("Index", "Notification")" class="text-white hover:text-[var(--primary-color)] transition">Notifications</a>
+                <a href="@Url.Action("Summary", "Reports")" class="text-white hover:text-[var(--primary-color)] transition">Reports</a>
+                <a href="@Url.Action("Index", "Security")" class="text-white hover:text-[var(--primary-color)] transition">Security</a>
             </div>
-            <div class="flex space-x-4 items-center">
+            <div class="flex items-center space-x-4">
                 @if (TempData["User"] != null)
                 {
-                    <span class="text-gray-700">Logged in as: @TempData["User"]</span>
-                    <a href="@Url.Action("Logout", "Account")" class="text-blue-600 hover:underline">Logout</a>
+                    <span class="text-[var(--fourth-color)]">Welcome, @TempData["User"]</span>
+                    <a href="@Url.Action("Logout", "Account")" class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">Logout</a>
                 }
                 else
                 {
-                    <a href="@Url.Action("Login", "Account")" class="text-blue-600 hover:underline">Login</a>
+                    <a href="@Url.Action("Login", "Account")" class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">Login</a>
                 }
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto mt-6 px-4">
+    <div class="container mx-auto mt-8 px-6">
         @RenderBody()
     </div>
 
-    <footer class="text-center mt-6 py-4 bg-gray-800 text-white">
-        <p>&copy; @DateTime.Now.Year - COLAF-Hotel</p>
+    <footer class="text-center mt-10 py-6 bg-[var(--secondary-color)] text-white">
+        <p>&copy; @DateTime.Now.Year - COLAF-Hotel. All rights reserved.</p>
     </footer>
 
     @RenderSection("Scripts", required: false)
