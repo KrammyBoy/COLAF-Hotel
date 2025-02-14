@@ -1,35 +1,50 @@
-﻿@model IEnumerable<COLAFHotel.Models.Booking>
+@model IEnumerable<COLAFHotel.Models.Booking>
 @{
     ViewBag.Title = "Bookings";
 }
-<h2>Bookings</h2>
-<a class="btn btn-primary mb-2" asp-action="Create">Create New Booking</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Guest Name</th>
-            <th>Room Number</th>
-            <th>Check-In</th>
-            <th>Check-Out</th>
-            <th>Status</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var booking in Model)
-        {
-            <tr>
-                <td>@booking.Id</td>
-                <td>@booking.GuestName</td>
-                <td>@booking.RoomNumber</td>
-                <td>@booking.CheckInDate.ToShortDateString()</td>
-                <td>@booking.CheckOutDate.ToShortDateString()</td>
-                <td>@booking.Status</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@booking.Id">View</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="container mx-auto p-6">
+    <h2 class="text-3xl font-semibold text-[var(--primary-color)] mb-4">Bookings</h2>
+
+    <a asp-action="Create" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--third-color)] transition">
+        Create New Booking
+    </a>
+
+    <div class="overflow-x-auto mt-4">
+        <table class="w-full border-collapse bg-white shadow-md rounded-lg">
+            <thead class="bg-[var(--secondary-color)] text-white">
+                <tr>
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">Guest Name</th>
+                    <th class="px-4 py-2">Room Number</th>
+                    <th class="px-4 py-2">Check-In</th>
+                    <th class="px-4 py-2">Check-Out</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr class="border-b">
+                        <td class="px-4 py-2">@booking.Id</td>
+                        <td class="px-4 py-2">@booking.GuestName</td>
+                        <td class="px-4 py-2">@booking.RoomNumber</td>
+                        <td class="px-4 py-2">@booking.CheckInDate.ToShortDateString()</td>
+                        <td class="px-4 py-2">@booking.CheckOutDate.ToShortDateString()</td>
+                        <td class="px-4 py-2">
+                            <span class="px-3 py-1 rounded-lg text-white"
+                                  style="background-color: @(booking.Status == "Confirmed" ? "green" : "orange")">
+                                @booking.Status
+                            </span>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a asp-action="Details" asp-route-id="@booking.Id"
+                               class="text-[var(--primary-color)] hover:underline">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
