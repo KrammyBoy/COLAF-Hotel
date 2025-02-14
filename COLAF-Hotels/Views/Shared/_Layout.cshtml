@@ -1,57 +1,59 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title - COLAF-Hotel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --secondary-color: #3E362E;
+            --primary-color: #865D36;
+            --third-color: #93785B;
+            --fourth-color: #AC8968;
+            --fifth-color: #A69080;
+        }
+    </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">COLAF-Hotel</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("List", "Room")">Rooms</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Booking")">Bookings</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Profile", "Guest")">Guest Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Tasks", "Housekeeping")">Housekeeping</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Requests", "Maintenance")">Maintenance</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("SpecialServices", "Services")">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Offers", "Discount")">Discounts</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Notification")">Notifications</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Summary", "Reports")">Reports</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Security")">Security</a></li>
-            </ul>
-            <ul class="navbar-nav">
+<body class="font-sans bg-gray-100">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="@Url.Action("Index", "Dashboard")" class="text-[var(--primary-color)] text-2xl font-semibold hover:bg-[var(--fifth-color)] rounded-lg p-2">COLAF<span class="text-[var(--third-color)] text-2xl font-thin">-Hotel</span></a>
+            <div class="flex space-x-6">
+                <a href="@Url.Action("Index", "Dashboard")" class="text-gray-700 hover:text-[var(--primary-color)]">Dashboard</a>
+                <a href="@Url.Action("List", "Room")" class="text-gray-700 hover:text-[var(--primary-color)]">Rooms</a>
+                <a href="@Url.Action("Index", "Booking")" class="text-gray-700 hover:text-[var(--primary-color)]">Bookings</a>
+                <a href="@Url.Action("Profile", "Guest")" class="text-gray-700 hover:text-[var(--primary-color)]">Guest Profile</a>
+                <a href="@Url.Action("Tasks", "Housekeeping")" class="text-gray-700 hover:text-[var(--primary-color)]">Housekeeping</a>
+                <a href="@Url.Action("Requests", "Maintenance")" class="text-gray-700 hover:text-[var(--primary-color)]">Maintenance</a>
+                <a href="@Url.Action("SpecialServices", "Services")" class="text-gray-700 hover:text-[var(--primary-color)]">Services</a>
+                <a href="@Url.Action("Offers", "Discount")" class="text-gray-700 hover:text-[var(--primary-color)]">Discounts</a>
+                <a href="@Url.Action("Index", "Notification")" class="text-gray-700 hover:text-[var(--primary-color)]">Notifications</a>
+                <a href="@Url.Action("Summary", "Reports")" class="text-gray-700 hover:text-[var(--primary-color)]">Reports</a>
+                <a href="@Url.Action("Index", "Security")" class="text-gray-700 hover:text-[var(--primary-color)]">Security</a>
+            </div>
+            <div class="flex space-x-4 items-center">
                 @if (TempData["User"] != null)
                 {
-                    <li class="nav-item">
-                        <span class="navbar-text">Logged in as: @TempData["User"]</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Logout", "Account")">Logout</a>
-                    </li>
+                    <span class="text-gray-700">Logged in as: @TempData["User"]</span>
+                    <a href="@Url.Action("Logout", "Account")" class="text-blue-600 hover:underline">Logout</a>
                 }
                 else
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Login", "Account")">Login</a>
-                    </li>
+                    <a href="@Url.Action("Login", "Account")" class="text-blue-600 hover:underline">Login</a>
                 }
-            </ul>
+            </div>
         </div>
     </nav>
-    <div class="container mt-3">
+
+    <div class="container mx-auto mt-6 px-4">
         @RenderBody()
     </div>
-    <footer class="text-center mt-3">
+
+    <footer class="text-center mt-6 py-4 bg-gray-800 text-white">
         <p>&copy; @DateTime.Now.Year - COLAF-Hotel</p>
     </footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
