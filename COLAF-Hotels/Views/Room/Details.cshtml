@@ -1,13 +1,8 @@
-﻿@model COLAFHotel.Models.Room
+@model COLAFHotel.Models.Room
 @{
     ViewBag.Title = "Room Details";
 }
-
-<div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md border border-[var(--fourth-color)]">
-    <h2 class="text-[var(--primary-color)] text-3xl font-semibold mb-4">Room Details</h2>
-    <p class="text-lg"><strong class="text-[var(--secondary-color)]">Room Number:</strong> @Model.RoomNumber</p>
-    <p class="text-lg"><strong class="text-[var(--secondary-color)]">Category:</strong> @Model.Category</p>
-    <p class="text-lg"><strong class="text-[var(--secondary-color)]">Status:</strong> @Model.Status</p>
-</div>
-
-<hr class="my-6">
+<h2>Room Details</h2>
+<p><strong>Room Number:</strong> @Model.RoomNumber</p>
+<p><strong>Category:</strong> @Model.Category</p>
+<p><strong>Status:</strong> @Model.Status</p>
