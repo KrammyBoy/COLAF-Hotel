@@ -1,0 +1,30 @@
+<!-- Views/User/Login.cshtml -->
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)]">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-96">
+        <h2 class="text-2xl font-semibold text-gray-800 text-center">Login</h2>
+        <p class="text-gray-600 text-sm text-center">Already have an account? Login below.</p>
+
+        <form method="post" asp-action="Login" class="mt-4 space-y-4">
+            <input type="email" name="email" placeholder="Email" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" required>
+            <input type="password" name="password" placeholder="Password" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" required>
+
+            <button type="submit" class="w-full bg-[#D4AF37] text-black py-3 rounded-lg font-semibold hover:bg-[#b8962e] transition-all">
+                Login
+            </button>
+        </form>
+
+        <p class="mt-4 text-center text-gray-600 text-sm">
+            Not a member yet?
+            <a asp-controller="User" asp-action="Register" class="text-[#D4AF37] hover:underline">Join us and register</a>
+        </p>
+    </div>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <p class="text-red-600 text-sm text-center">@ViewBag.Error</p>
+}

@@ -1,28 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using COLAFHotel.Data;
 using COLAFHotel.Models;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace COLAFHotel.Controllers
 {
     public class RoomController : Controller
     {
-        // In-memory list of rooms (to be replaced with a DB later)
-        private static List<Room> rooms = new List<Room>
+        private readonly ApplicationDbContext _context;
+
+        public RoomController(ApplicationDbContext context)
         {
-            new Room { RoomNumber = "101", Category = "Deluxe", Status = "Vacant", ImageUrl = "~/assets/hotel_assets/hotel-deluxe.jpeg", Offerings = "Free breakfast", Price = 5000 },
-            new Room { RoomNumber = "102", Category = "Suite", Status = "Occupied", ImageUrl = "~/assets/hotel_assets/hotel-suite.jpg", Offerings = "Free breakfast" , Price = 3500 },
-            new Room { RoomNumber = "103", Category = "Standard", Status = "Under Maintenance" , ImageUrl = "~/assets/hotel_assets/hotel-standard.jpg", Offerings = "Free breakfast", Price = 1800 },
-            new Room { RoomNumber = "603", Category = "Deluxe", Status = "Vacant" , ImageUrl = "~/assets/hotel_assets/hotel-deluxe2.jpeg", Offerings = "Free breakfast", Price = 7800 }
-        };
+            _context = context;
+        }
 
         public IActionResult List()
         {
-            return View(rooms);
+            var room = _context.Room.ToList();  // Fetch data from PostgreSQL
+            return View(room);
         }
 
         public IActionResult Details(string roomNumber)
         {
-            var room = rooms.Find(r => r.RoomNumber == roomNumber);
+            var room = _context.Room.FirstOrDefault(r => r.RoomNumber == roomNumber);
             if (room == null)
             {
                 return NotFound();
