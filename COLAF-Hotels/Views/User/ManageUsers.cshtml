@@ -8,6 +8,8 @@
 <ul class="list-disc pl-5">
     @foreach (var user in Model)
     {
-        <li class="text-gray-700">@user.username (@user.email)</li> <!-- Modify based on your model properties -->
+        <li class="text-gray-700">
+            @user.username (@user.email) - <strong>ID:</strong> @user.user_id
+        </li>
     }
 </ul>

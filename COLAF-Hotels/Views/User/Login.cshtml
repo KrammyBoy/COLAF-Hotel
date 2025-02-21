@@ -1,5 +1,5 @@
 @{
-    ViewBag.Title = "User Oten";
+    ViewBag.Title = "Login";
 }
 
 <div class="relative w-full h-[125vh] flex items-center justify-between px-12 overflow-hidden text-white">
@@ -37,7 +37,7 @@
 
         <!-- Call to Action - "Book Now" Moved Below -->
         <div class="mt-6 flex justify-start animate-fade-in delay-600">
-            <a href="/booking"
+            <a href=""
                class="bg-[#D4AF37] text-black px-8 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-[#b8962e] hover:scale-105 transition-all animate-pulse">
                 Book Now
             </a>
@@ -74,12 +74,15 @@
             <div id="registerForm" class="absolute inset-0 h-[72vh] bg-white p-6 rounded-lg shadow-lg transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none">
                 <h3 class="text-2xl font-semibold text-gray-800">Register</h3>
                 <p class="text-gray-600 text-sm">Not a member yet? Join us and register.</p>
-                <form method="post" asp-action="Register" asp-controller="User"class="mt-4 space-y-4 text-[var(--fourth-color)]">
-                    <input type="text" placeholder="Username" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    <input type="password" placeholder="Password" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    <input type="password" placeholder="Confirm Password" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    <input type="text" placeholder="Full Name" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
-                    <input type="email" placeholder="Email" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                <form method="post" asp-action="RegisterUser" asp-controller="User" class="mt-4 space-y-4 text-[var(--fourth-color)]">
+                    <input type="text" name="username" placeholder="Username" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                    <input type="password" name="password" placeholder="Password" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                    <input type="password" name="confirmPassword" placeholder="Confirm Password" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                    <div class="flex space-x-4">
+                        <input type="text" name="firstname" placeholder="First Name" class="w-1/2 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                        <input type="text" name="lastname" placeholder="Last Name" class="w-1/2 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                    </div>
+                    <input type="email" name="email" placeholder="Email" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
                     <button type="submit" class="w-full bg-[#D4AF37] text-black py-3 rounded-lg font-semibold hover:bg-[#b8962e] transition-all">
                         Register Now
                     </button>

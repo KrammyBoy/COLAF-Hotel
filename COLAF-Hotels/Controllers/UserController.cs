@@ -27,14 +27,15 @@ namespace COLAFHotel.Controllers
         }
 
         // GET: Register
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
         // POST: Register
-        [HttpPost]
-        public async Task<IActionResult> Register(string username, string firstname, string lastname, string email, string password, string confirmPassword)
+        [HttpPost("User/RegisterUser")] // Unique route for registration
+        public async Task<IActionResult> Register(string username, string firstname, string lastname, string email, string password, string confirmPassword, string role)
         {
             if (password != confirmPassword)
             {
@@ -48,10 +49,22 @@ namespace COLAFHotel.Controllers
                 return View();
             }
 
-            // Hash password before saving
-            string hashedPassword = HashPassword(password);
+            // Check if role is null or empty in the database
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.username == username);
 
-            if (role == null || role == "") role = "Guest";
+            // Hash password before saving
+            //string hashedPassword = HashPassword(password);
+
+            if (existingUser != null)
+            {
+                role = existingUser.role; // Get role from DB if user exists
+            }
+
+            // If the role is still null or empty, assign "Guest"
+            if (string.IsNullOrEmpty(role))
+            {
+                role = "Guest";
+            }
 
             // Create user object
             User newUser = new User
@@ -60,7 +73,8 @@ namespace COLAFHotel.Controllers
                 firstname = firstname,
                 lastname = lastname,
                 email = email,
-                password = hashedPassword,
+                password = password,
+                //password = hashedPassword,
                 role = role
             };
 
@@ -93,18 +107,24 @@ namespace COLAFHotel.Controllers
                 ViewBag.Error = $"Invalid email or password.";
                 return View();
             }
+            // Debugging: Check the retrieved user role before storing in session
+            Console.WriteLine($"Retrieved Role from DB: {user.role}");
+
+            HttpContext.Session.Clear(); // Clear old session data
 
             // Store user session
             HttpContext.Session.SetString("UserId", user.user_id.ToString());
             HttpContext.Session.SetString("User", user.username);
             HttpContext.Session.SetString("Role", user.role);
 
+            Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}");
+
             // Redirect to dashboard
             return RedirectToAction("Index", "Dashboard");
         }
 
         // Password Hashing
-        private string HashPassword(string password)
+        /*private string HashPassword(string password)
         {
             byte[] salt = new byte[16];
             using (var rng = RandomNumberGenerator.Create())
@@ -121,7 +141,7 @@ namespace COLAFHotel.Controllers
             );
 
             return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
-        }
+        }*/
 
         // Logout
         public IActionResult Logout()
@@ -134,5 +154,54 @@ namespace COLAFHotel.Controllers
             var users = await _context.Users.ToListAsync(); // Fetch users from DB
             return PartialView("~/Views/User/ManageUsers.cshtml", users); // Return partial view
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRole([FromBody] UserRoleUpdateModel model)
+        {
+            Console.WriteLine($"🔍 Received UpdateRole request - user_id: {model.user_id}, role: {model.role}");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.user_id == model.user_id);
+
+            if (user == null)
+            {
+                Console.WriteLine($"❌ ERROR: User with ID {model.user_id} not found!");
+                return Json(new { message = $"User with ID {model.user_id} not found!" });
+            }
+
+            // Update the role in the database
+            user.role = model.role;
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine($"✅ SUCCESS: Role updated to {model.role}!");
+            return Json(new { message = "Role updated successfully!" });
+        }
+
+        // ✅ Ensure this model matches JavaScript request
+        public class UserRoleUpdateModel
+        {
+            public int user_id { get; set; } // ✅ Must match JavaScript key
+            public string role { get; set; }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int user_id)
+        {
+            Console.WriteLine($"🔍 Received DeleteUser request - user_id: {user_id}");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.user_id == user_id);
+
+            if (user == null)
+            {
+                Console.WriteLine($"❌ ERROR: User with ID {user_id} not found!");
+                return Json(new { message = $"User with ID {user_id} not found!" });
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            Console.WriteLine($"✅ SUCCESS: User with ID {user_id} deleted!");
+            return Json(new { message = "User deleted successfully!" });
+        }
+
     }
 }

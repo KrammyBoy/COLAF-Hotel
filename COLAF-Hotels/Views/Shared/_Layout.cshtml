@@ -2,6 +2,8 @@
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+
+    Console.WriteLine($"Retrieved from Session in Layout - Username: {user}, Role: {role}");
 }
 
 <!DOCTYPE html>
@@ -13,11 +15,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --secondary-color: #3E362E;
-            --primary-color: #865D36;
-            --third-color: #93785B;
-            --fourth-color: #AC8968;
-            --fifth-color: #A69080;
+        --secondary-color: #3E362E;
+        --primary-color: #865D36;
+        --third-color: #93785B;
+        --fourth-color: #AC8968;
+        --fifth-color: #A69080;
         }
     </style>
 </head>
@@ -26,9 +28,13 @@
         <div class="max-w-full mx-auto p-3 flex justify-between items-center">
             <a href="@Url.Action("Index", "Dashboard")" class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span></a>
             <div class="hidden md:flex space-x-6">
-                <a href="@Url.Action("Index", "Dashboard")" class="text-white hover:text-[var(--primary-color)] transition">Home</a>
+                <a class="text-white">@role</a>
+                <a></a>
+                @if (!string.IsNullOrEmpty(role))
+                {
+                    <a href="@Url.Action("Index", "Dashboard")" class="text-white hover:text-[var(--primary-color)] transition">Home</a>
+                }
                 <a href="@Url.Action("List", "Room")" class="text-white hover:text-[var(--primary-color)] transition">Rooms</a>
-                <a class="text-white hover:text-[var(--primary-color)] transition">@role</a>
                 @if (!string.IsNullOrEmpty(role))
                 {
                     if (role == "Guest")
