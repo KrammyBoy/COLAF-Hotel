@@ -80,20 +80,24 @@ namespace COLAFHotel.Controllers
 
         // POST: Login
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
-            // Find user by email
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+            Console.WriteLine($"Received Username: {username}");
+            Console.WriteLine($"Received Password: {password}");
 
-            if (user == null || !VerifyPassword(password, user.password))
+            // Find user by username
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.username == username);
+
+            if (user == null || !(user.password == password))
             {
-                ViewBag.Error = "Invalid email or password.";
+                ViewBag.Error = $"Invalid email or password.";
                 return View();
             }
 
             // Store user session
             HttpContext.Session.SetString("UserId", user.user_id.ToString());
-            HttpContext.Session.SetString("Username", user.username);
+            HttpContext.Session.SetString("User", user.username);
+            HttpContext.Session.SetString("Role", user.role);
 
             // Redirect to dashboard
             return RedirectToAction("Index", "Dashboard");
@@ -125,38 +129,10 @@ namespace COLAFHotel.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
-
-        // Verify Password
-        private bool VerifyPassword(string enteredPassword, string storedHash)
+        public async Task<IActionResult> ManageUsers()
         {
-            var parts = storedHash.Split(':');
-            if (parts.Length != 2) return false;
-
-            byte[] salt = Convert.FromBase64String(parts[0]);
-            byte[] storedHashBytes = Convert.FromBase64String(parts[1]);
-
-            byte[] enteredHashBytes = KeyDerivation.Pbkdf2(
-                password: enteredPassword,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 32
-            );
-
-            return storedHashBytes.SequenceEqual(enteredHashBytes);
+            var users = await _context.Users.ToListAsync(); // Fetch users from DB
+            return PartialView("~/Views/User/ManageUsers.cshtml", users); // Return partial view
         }
-
-        /*// Hash verification method
-        private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] enteredBytes = Encoding.UTF8.GetBytes(enteredPassword);
-                byte[] enteredHash = sha256.ComputeHash(enteredBytes);
-                string enteredHashString = BitConverter.ToString(enteredHash).Replace("-", "").ToLower();
-
-                return enteredHashString == storedHashedPassword;
-            }
-        }*/
     }
 }

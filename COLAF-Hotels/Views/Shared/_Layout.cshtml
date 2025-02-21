@@ -1,7 +1,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
-    var role = HttpContextAccessor.HttpContext?.Session.GetString("UserRole");
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
 
 <!DOCTYPE html>

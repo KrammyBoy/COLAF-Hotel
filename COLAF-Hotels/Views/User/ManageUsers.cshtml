@@ -1,11 +1,13 @@
-﻿@model List<string>
+﻿@model List<COLAFHotel.Models.User>
 @{
     ViewBag.Title = "Manage Users";
 }
-<h2>Manage Users</h2>
-<ul>
+
+<h2 class="text-xl font-bold">Manage Users</h2>
+
+<ul class="list-disc pl-5">
     @foreach (var user in Model)
     {
-        <li>@user</li>
+        <li class="text-gray-700">@user.username (@user.email)</li> <!-- Modify based on your model properties -->
     }
 </ul>
