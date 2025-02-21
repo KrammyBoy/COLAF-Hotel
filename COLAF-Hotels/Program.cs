@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
