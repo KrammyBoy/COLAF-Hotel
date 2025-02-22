@@ -10,9 +10,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    @if (!string.IsNullOrEmpty(role))
+    {
+        switch (role)
+        {
+            case "Admin":
+                <title>@ViewBag.Title - Admin</title>
+                break;
+        }
+    }
     <title>@ViewBag.Title - COLAF-Hotel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <style>
         :root {
         --secondary-color: #3E362E;
@@ -51,17 +62,17 @@
                     @switch (role)
                     {
                         case "Guest":
-                            @await Html.PartialAsync("_GuestNavLinks")
+                            @await Html.PartialAsync("Pages/_GuestNavLinks")
                             break;
                         case "Admin":
-                            @await Html.PartialAsync("_AdminNavLinks")
+                            @await Html.PartialAsync("Pages/_AdminNavLinks")
                             break;
                         case "Housekeeper":
                             <a href="@Url.Action("Tasks", "Housekeeping")"
                              lass="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
                             break;
                         case "Staff":
-                            @await Html.PartialAsync("_StaffNavLinks")
+                            @await Html.PartialAsync("Pages/_StaffNavLinks")
                             break;
                     }
                 }

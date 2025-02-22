@@ -1,0 +1,317 @@
+﻿<div class="flex flex-row w-full bg-gray-200 p-6 justify-between">
+    <div class="flex flex-col w-[62%] rounded-lg bg-gray-400 p-4">
+        <!--Sites Overview-->
+        <div class="flex flex-col font-thin font-monospace bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-4 rounded-lg text-white">
+            <span class="self-center text-lg">SITES OVERVIEW</span>
+            <span class="self-center bg-gray-700 p-4 w-full h-[14vh] rounded-lg my-2">
+                Some Cool Line Graph here (corresponding to daily visits)
+            </span>
+            <div class="flex flex-row p-4 justify-between items-center rounded-lg">
+                <span class="flex items-center">
+                    <svg class="w-6 h-6 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3m7 18V3m4 18V3"></path>
+                    </svg>
+                    Total Visits: 12, 450
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-6 h-6 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6m4 10V6m-8 10V6M5 16V6"></path>
+                    </svg>
+                    Daily Visits: 360
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-6 h-6 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8V4m-4 4V4m8 4V4M4 16h16m-2 4H6"></path>
+                    </svg>
+                    Total Sales: $32, 240
+                </span>
+            </div>
+        </div>
+        <!-- Guests and Bookings -->
+        <div class="flex flex-row items-stretch justify-between items-center font-thin font-monospace text-white mt-4 text-base">
+            <!-- Guest Overview -->
+            <div class="flex flex-col bg-gradient-to-br from-[#4E3629] to-[#8B5E3C] p-4 rounded-lg w-[34%] shadow-lg">
+                <span class="self-center mb-2 text-lg">Guest Overview</span>
+
+                <span class="flex items-center">
+                    <!-- Total Guests Icon -->
+                    <svg class="w-6 h-6 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5m4-6a4 4 0 100-8 4 4 0 000 8z"></path>
+                    </svg>
+                    Total Guests: 2,800
+                </span>
+
+                <span class="flex items-center mt-2">
+                    <!-- Online Guests Icon -->
+                    <svg class="w-6 h-6 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.001 10.001 0 0012 22a10.001 10.001 0 006.879-4.196M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Online Guests: 74
+                </span>
+
+                <!-- Manage Users Button -->
+                <a href="@Url.Action("ManageUsers", "User")"
+                   class="mt-[12vh] p-2 rounded-lg text-sm bg-[var(--secondary-color)] hover:bg-[var(--fifth-color)] flex items-center justify-center">
+                    Manage Users
+                    <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Empty Booking Section -->
+            <div class="flex flex-col bg-gradient-to-br from-[#4E3629] to-[#8B5E3C] p-4 rounded-lg w-[65%] shadow-lg">
+                <span class="self-center mb-2 text-lg">Bookings</span>
+
+                <span class="flex items-center">
+                    <!-- Total Bookings Icon -->
+                    <svg class="w-6 h-6 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 4h10m-6 10h4m-4-4h4m-6 4h.01M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                    </svg>
+                    Total Bookings
+                </span>
+
+                <span class="flex items-center mt-2">
+                    <!-- Current Bookings Icon -->
+                    <svg class="w-6 h-6 text-blue-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Current Bookings
+                </span>
+
+                <span class="flex items-center mt-2">
+                    <!-- Total Check-ins Icon -->
+                    <svg class="w-6 h-6 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 3v-6m3-6H9a2 2 0 00-2 2v16a2 2 0 002 2h6a2 2 0 002-2V5a2 2 0 00-2-2z"></path>
+                    </svg>
+                    Total Check-ins
+                </span>
+
+                <span class="flex items-center mt-2">
+                    <!-- Current Check-ins Icon -->
+                    <svg class="w-6 h-6 text-yellow-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-4.553a2 2 0 00-2.829-2.829L12 7.172l-4.553-4.553a2 2 0 00-2.829 2.829L9 10m6 0a9 9 0 11-6 0"></path>
+                    </svg>
+                    Current Check-ins
+                </span>
+
+                <!-- View Bookings Button -->
+                <a href="#" class="mt-4 p-2 rounded-lg text-sm bg-[var(--secondary-color)] hover:bg-[var(--fifth-color)] flex items-center justify-center">
+                    View Bookings
+                    <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v16l12-8-12-8z"></path>
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+        <!--Rooms-->
+        <div class="flex flex-row justify-between items-center items-stretch font-thin font-monospace text-white mt-4 text-base rounded-lg shadow-lg">
+            <!-- Occupied Rooms -->
+            <a href="#" class="flex flex-col w-[30%] bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-4 rounded-lg items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 self-center text-red-400 group-hover:text-red-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V10m0 0l-6 6m6-6l6 6" />
+                </svg>
+                <span class="text-xl font-bold mt-2">120</span>
+                <span class="text-sm opacity-80">Occupied Rooms</span>
+            </a>
+
+            <!-- Rooms in Maintenance -->
+            <a href="#" class="flex flex-col w-[30%] bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-4 rounded-lg items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 14c0-4-5-7-9-7s-9 3-9 7c0 3 2 5 6 6v2h6v-2c4-1 6-3 6-6z" />
+                </svg>
+                <span class="text-xl font-bold mt-2">15</span>
+                <span class="text-sm opacity-80">Rooms in Maintenance</span>
+            </a>
+
+            <!-- Vacant Rooms -->
+            <a href="#" class="flex flex-col w-[30%] bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-4 rounded-lg items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-green-400 group-hover:text-green-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 3v-6m3-6H9a2 2 0 00-2 2v16a2 2 0 002 2h6a2 2 0 002-2V5a2 2 0 00-2-2z" />
+                </svg>
+                <span class="text-xl font-bold mt-2">85</span>
+                <span class="text-sm opacity-80">Vacant Rooms</span>
+            </a>
+        </div>
+        <!--Staff-->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 font-thin font-monospace text-white mt-4 text-base rounded-lg shadow-lg bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-6">
+            <!-- Total Staff, Housekeepers, and Front Desk -->
+            <div class="flex flex-col items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-8a2 2 0 00-2-2h-6V5a3 3 0 00-6 0v5H4a2 2 0 00-2 2v8h5" />
+                </svg>
+                <span class="text-xl font-bold mt-2">250</span>
+                <span class="text-sm opacity-80">Total Staff</span>
+                <span class="text-sm opacity-60">80 Housekeepers • 50 Front Desk</span>
+            </div>
+
+            <!-- Staff Checked in Today -->
+            <div class="flex flex-col items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-green-400 group-hover:text-green-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M12 22a10 10 0 100-20 10 10 0 000 20z" />
+                </svg>
+                <span class="text-xl font-bold mt-2">45</span>
+                <span class="text-sm opacity-80">Staff Checked in Today</span>
+            </div>
+
+            <!-- Pending Requests (Guest & Staff) -->
+            <div class="flex flex-col items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-yellow-400 group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9h8M8 13h6m-6 4h4M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" />
+                </svg>
+                <span class="text-xl font-bold mt-2">30</span>
+                <span class="text-sm opacity-80">Pending Requests</span>
+                <span class="text-sm opacity-60">Guest: 20 • Staff: 10</span>
+            </div>
+
+            <!-- Pending Tasks (Housekeeping & Front Desk) -->
+            <div class="flex flex-col items-center group transition-transform transform hover:scale-105">
+                <svg class="w-12 h-12 text-red-400 group-hover:text-red-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7M5 7h14M5 11h9" />
+                </svg>
+                <span class="text-xl font-bold mt-2">18</span>
+                <span class="text-sm opacity-80">Pending Tasks</span>
+                <span class="text-sm opacity-60">Housekeeping & Front Desk</span>
+            </div>
+        </div>
+
+
+    </div>
+    <!--Dashboard Calendar-->
+    <div class="relative flex flex-col self-start w-[35%] rounded-lg bg-gradient-to-br from-[#8B5E3C] to-[#4E3629] p-4 justify-center items-center">
+        <div class="flex flex-row justify-between items-center self-start w-full">
+            <!-- Dashboard Title -->
+            <h2 class="text-xl font-light font-monospace text-white">DASHBOARD</h2>
+
+            <!-- Date & Time Section -->
+            <div class="flex items-center space-x-3 bg-[var(--third-color)] p-2 rounded-lg">
+                <!-- Date Display -->
+                <h2 class="text-base font-light text-white" id="dateDisplay">
+                    <!-- Date will be inserted by JavaScript -->
+                </h2>
+
+                <!-- Clock Display with Icon -->
+                <div class="flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2" />
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
+                    <h2 class="text-base font-light text-white" id="clockDisplay">
+                        <!-- Time will be inserted by JavaScript -->
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-2 rounded-lg shadow-md mt-2 w-full">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-calendar-alt text-blue-500 mr-2"></i> Company Events Calendar
+            </h2>
+            <div class="bg-gray-100 rounded-lg flex flex-col p-2 w-full">
+                <div id="calendar" class="bg-gray-100 rounded-lg"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next', // Removed 'today' button
+                center: 'title',
+                right: 'dayGridMonth'
+            },
+            height: 350,
+            aspectRatio: 2,
+            events: '/Event/GetEvents',
+
+            // Add hover effect for events
+            eventMouseEnter: function(info) {
+                let tooltip = document.createElement("div");
+                tooltip.className = "fc-tooltip";
+                tooltip.innerText = info.event.title;
+                document.body.appendChild(tooltip);
+
+                tooltip.style.position = "absolute";
+                tooltip.style.background = "rgba(0, 0, 0, 0.8)";
+                tooltip.style.color = "white";
+                tooltip.style.padding = "5px 10px";
+                tooltip.style.borderRadius = "5px";
+                tooltip.style.fontSize = "12px";
+                tooltip.style.pointerEvents = "none";
+                tooltip.style.zIndex = "1000";
+                tooltip.style.top = (info.jsEvent.clientY + 10) + "px";
+                tooltip.style.left = (info.jsEvent.clientX + 10) + "px";
+
+                info.el.setAttribute("data-tooltip-id", tooltip);
+            },
+            eventMouseLeave: function(info) {
+                let tooltip = document.querySelector(".fc-tooltip");
+                if (tooltip) tooltip.remove();
+            }
+        });
+
+        calendar.render();
+
+        // Function to resize calendar text & style elements
+        function resizeCalendarText() {
+            document.querySelectorAll('#calendar *').forEach(element => {
+                element.style.fontSize = '14px'; // Change all text to 14px
+            });
+
+            // Specific text size adjustments
+            document.querySelectorAll('.fc-toolbar-title').forEach(el => el.style.fontSize = '18px'); // Month title
+            document.querySelectorAll('.fc-daygrid-day-number').forEach(el => el.style.fontSize = '12px'); // Day numbers
+            document.querySelectorAll('.fc-event-title').forEach(el => el.style.fontSize = '10px'); // Event text
+            document.querySelectorAll('.fc-col-header-cell').forEach(el => el.style.fontSize = '14px'); // Weekdays (Sun, Mon, etc.)
+
+            // Style buttons
+            document.querySelectorAll('.fc-button').forEach(button => {
+                button.style.fontSize = '12px'; // Smaller button text
+                button.style.padding = '5px 10px'; // Adjust padding
+                button.style.height = '30px'; // Adjust button height
+                button.style.backgroundColor = '#4E3629'; // Dark brown background
+                button.style.border = 'none'; // Remove border
+                button.style.color = 'white'; // White text
+                button.style.borderRadius = '5px'; // Rounded edges
+                button.style.fontWeight = 'bold'; // Bold text
+                button.onmouseover = () => (button.style.backgroundColor = '#8B5E3C'); // Hover effect
+                button.onmouseout = () => (button.style.backgroundColor = '#4E3629');
+            });
+
+            // Highlight the current day
+            document.querySelectorAll('.fc-day-today').forEach(day => {
+                day.style.backgroundColor = '#FFD700'; // Gold background for current day
+                day.style.color = '#4E3629'; // Dark text for contrast
+                day.style.borderRadius = '5px'; // Rounded edges
+                day.style.fontWeight = 'bold';
+            });
+        }
+
+        // Run initially after rendering
+        setTimeout(resizeCalendarText, 500);
+
+        // Use MutationObserver to detect changes in calendar structure & reapply styles
+        const observer = new MutationObserver(() => {
+            resizeCalendarText();
+        });
+
+        observer.observe(calendarEl, { childList: true, subtree: true });
+    });
+
+        function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+        document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', options);
+        document.getElementById('clockDisplay').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime(); // Initialize immediately
+</script>
+
+
+
+
