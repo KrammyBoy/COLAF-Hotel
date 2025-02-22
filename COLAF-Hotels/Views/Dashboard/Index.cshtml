@@ -19,49 +19,8 @@
         else if (role == "Admin")
         {
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">Manage Users</h2>
+                <h2 class="text-2xl font-bold">Dashboard Panel</h2>
             </div>
-
-            @if (Model?.Any() == true)
-            {
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 text-left">
-                                <th class="p-3 border">Username</th>
-                                <th class="p-3 border">Email</th>
-                                <th class="p-3 border">Role</th>
-                                <th class="p-3 border">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var userItem in Model)
-                            {
-                                <tr class="border hover:bg-gray-50">
-                                    <td class="p-3 border">@userItem.username</td>
-                                    <td class="p-3 border">@userItem.email</td>
-                                    <td class="p-3 border">
-                                        <select class="px-2 py-1 border rounded" id="roleSelect_@userItem.user_id" data-current-role="@userItem.role" onchange="enableApplyButton(@userItem.user_id)">
-                                            <option value="Guest" selected="@(userItem.role == "Guest" ? "selected" : null)">Guest</option>
-                                            <option value="Admin" selected="@(userItem.role == "Admin" ? "selected" : null)">Admin</option>
-                                            <option value="Housekeeper" selected="@(userItem.role == "Housekeeper" ? "selected" : null)">Housekeeper</option>
-                                            <option value="Staff" selected="@(userItem.role == "Staff" ? "selected" : null)">Staff</option>
-                                        </select>
-                                    </td>
-                                    <td class="p-3 border">
-                                        <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" id="applyBtn_@userItem.user_id" onclick="applyChanges(@userItem.user_id)" disabled>Apply Changes</button>
-                                        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="confirmDelete(@userItem.user_id)">Delete</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <p class="text-gray-500">No users found.</p>
-            }
         }
     }
     else
@@ -86,65 +45,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function enableApplyButton(userId) {
-        const selectElement = document.getElementById(`roleSelect_${userId}`);
-        const selectedRole = selectElement.value;
-        const currentRole = selectElement.getAttribute("data-current-role");
-
-        const applyButton = document.getElementById(`applyBtn_${userId}`);
-
-        // Enable the button only if the role has been changed
-        if (selectedRole !== currentRole) {
-            applyButton.disabled = false;
-        } else {
-            applyButton.disabled = true;
-        }
-    }
-
-    function applyChanges(user_id) {
-        const selectElement = document.getElementById(`roleSelect_${user_id}`);
-        const newRole = selectElement.value;
-
-        console.log(`🔍 Updating role for user_id: ${user_id}, new role: ${newRole}`);
-
-        fetch(`/User/UpdateRole`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ user_id: user_id, role: newRole }) // ✅ Keep `user_id` from Razor
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(`✅ Response from server:`, data);
-            alert(data.message);
-            location.reload(); // ✅ Refresh to see the updated roles
-        })
-        .catch(error => console.error('❌ Error updating role:', error));
-    }
-
-    function confirmDelete(user_id) {
-        console.log(`🔍 Attempting to delete user_id: ${user_id}`);
-
-        if (!confirm("Are you sure you want to delete this user?")) {
-            console.log("❌ Deletion cancelled.");
-            return;
-        }
-
-        fetch(`/User/DeleteUser/${user_id}`, { method: 'DELETE' }) // ✅ Use `user_id` from Razor
-            .then(response => response.json())
-            .then(data => {
-                console.log(`✅ User deleted successfully:`, data);
-                alert(data.message);
-                location.reload(); // ✅ Refresh after deletion
-            })
-            .catch(error => console.error('❌ Error deleting user:', error));
-    }
-
-
-    function closeModal() {
-        document.getElementById("deleteModal").classList.add("hidden");
-    }
-</script>

@@ -122,37 +122,16 @@ namespace COLAFHotel.Controllers
             // Redirect to dashboard
             return RedirectToAction("Index", "Dashboard");
         }
-
-        // Password Hashing
-        /*private string HashPassword(string password)
-        {
-            byte[] salt = new byte[16];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-
-            byte[] hash = KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 32
-            );
-
-            return $"{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
-        }*/
-
-        // Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
-        public async Task<IActionResult> ManageUsers()
-        {
-            var users = await _context.Users.ToListAsync(); // Fetch users from DB
-            return PartialView("~/Views/User/ManageUsers.cshtml", users); // Return partial view
+
+        [HttpGet]
+        public IActionResult ManageUsers() {
+            var users = _context.Users.ToList();
+            return View(users);
         }
 
         [HttpPost]

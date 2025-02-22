@@ -26,59 +26,68 @@
 <body class="font-sans bg-[var(--fifth-color)] text-gray-900">
     <nav class="bg-[var(--secondary-color)] shadow-md">
         <div class="max-w-full mx-auto p-3 flex justify-between items-center">
-            <a href="@Url.Action("Index", "Dashboard")" class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span></a>
+            <!-- Logo -->
+            <a href="@Url.Action("Index", "Dashboard")"
+               class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">
+                COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span>
+            </a>
+
+            <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-6">
-                <a class="text-white">@role</a>
-                <a></a>
-                @if (!string.IsNullOrEmpty(role))
+
+                @if (string.IsNullOrEmpty(role))
                 {
-                    <a href="@Url.Action("Index", "Dashboard")" class="text-white hover:text-[var(--primary-color)] transition">Home</a>
+                    <a href="@Url.Action("List", "Room")"
+                       class="relative text-white text-lg cursor-pointer
+                   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+                   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+                   hover:after:w-full hover:after:left-0">
+                        BOOK A ROOM
+                    </a>
                 }
-                <a href="@Url.Action("List", "Room")" class="text-white hover:text-[var(--primary-color)] transition">Rooms</a>
+
                 @if (!string.IsNullOrEmpty(role))
                 {
-                    if (role == "Guest")
+                    @switch (role)
                     {
-                        <a href="@Url.Action("Index", "Booking")" class="text-white hover:text-[var(--primary-color)] transition">Bookings</a>
-                        <a href="@Url.Action("Profile", "Guest")" class="text-white hover:text-[var(--primary-color)] transition">Guest Profile</a>
-                        <a href="@Url.Action("Requests", "Maintenance")" class="text-white hover:text-[var(--primary-color)] transition">Maintenance</a>
-                        <a href="@Url.Action("SpecialServices", "Services")" class="text-white hover:text-[var(--primary-color)] transition">Services</a>
-                        <a href="@Url.Action("Offers", "Discount")" class="text-white hover:text-[var(--primary-color)] transition">Discounts</a>
-                        <a href="@Url.Action("Index", "Notification")" class="text-white hover:text-[var(--primary-color)] transition">Notifications</a>
-                    }
-                    else if (role == "Admin")
-                    {
-                        <a href="@Url.Action("Index", "Security")" class="text-white hover:text-[var(--primary-color)] transition">Security</a>
-                    }
-                    else if (role == "Housekeeper")
-                    {
-                        <a href="@Url.Action("Tasks", "Housekeeping")" class="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
-                    }
-                    else if (role == "Staff")
-                    {
-                        <a href="@Url.Action("Index", "Booking")" class="text-white hover:text-[var(--primary-color)] transition">Bookings</a>
-                        <a href="@Url.Action("Profile", "Guest")" class="text-white hover:text-[var(--primary-color)] transition">Guest Profile</a>
-                        <a href="@Url.Action("Tasks", "Housekeeping")" class="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
-                        <a href="@Url.Action("SpecialServices", "Services")" class="text-white hover:text-[var(--primary-color)] transition">Services</a>
-                        <a href="@Url.Action("Offers", "Discount")" class="text-white hover:text-[var(--primary-color)] transition">Discounts</a>
-                        <a href="@Url.Action("Index", "Notification")" class="text-white hover:text-[var(--primary-color)] transition">Notifications</a>
-                        <a href="@Url.Action("Summary", "Reports")" class="text-white hover:text-[var(--primary-color)] transition">Reports</a>
+                        case "Guest":
+                            @await Html.PartialAsync("_GuestNavLinks")
+                            break;
+                        case "Admin":
+                            @await Html.PartialAsync("_AdminNavLinks")
+                            break;
+                        case "Housekeeper":
+                            <a href="@Url.Action("Tasks", "Housekeeping")"
+                             lass="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
+                            break;
+                        case "Staff":
+                            @await Html.PartialAsync("_StaffNavLinks")
+                            break;
                     }
                 }
             </div>
+
+            <!-- User Info / Login -->
             <div class="flex items-center space-x-4">
                 @if (!string.IsNullOrEmpty(user))
                 {
                     <span class="text-[var(--fourth-color)]">Welcome, @user</span>
-                    <a href="@Url.Action("Logout", "User")" class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">Logout</a>
+                    <a href="@Url.Action("Logout", "User")"
+                       class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">
+                        Logout
+                    </a>
                 }
                 else
                 {
-                    <a href="@Url.Action("Login", "User")" class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">Login</a>
+                    <a href="@Url.Action("Login", "User")"
+                       class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">
+                        Login
+                    </a>
                 }
             </div>
         </div>
     </nav>
+
 
     <div>
         @RenderBody()
