@@ -32,5 +32,8 @@ namespace COLAFHotel.Models
         [Column("price")]
         public int Price { get; set; }
 
+        [NotMapped]
+        public int? Floor { get; set; }
+
     }
 }

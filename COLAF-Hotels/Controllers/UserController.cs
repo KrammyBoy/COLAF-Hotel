@@ -163,22 +163,22 @@ namespace COLAFHotel.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser(int user_id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            Console.WriteLine($"🔍 Received DeleteUser request - user_id: {user_id}");
+            Console.WriteLine($"🔍 Received DeleteUser request - user_id: {id}");
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.user_id == user_id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.user_id == id);
 
             if (user == null)
             {
-                Console.WriteLine($"❌ ERROR: User with ID {user_id} not found!");
-                return Json(new { message = $"User with ID {user_id} not found!" });
+                Console.WriteLine($"❌ ERROR: User with ID {id} not found!");
+                return Json(new { message = $"User with ID {id} not found!" });
             }
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            Console.WriteLine($"✅ SUCCESS: User with ID {user_id} deleted!");
+            Console.WriteLine($"✅ SUCCESS: User with ID {id} deleted!");
             return Json(new { message = "User deleted successfully!" });
         }
 

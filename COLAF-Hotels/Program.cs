@@ -25,6 +25,7 @@ app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
+app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
