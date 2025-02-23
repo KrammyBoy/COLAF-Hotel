@@ -9,48 +9,81 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
 
-<div class="p-6 shadow-lg rounded-lg bg-white">
+<div class="p-6 shadow-lg rounded-lg bg-gray-300">
     @if (!string.IsNullOrEmpty(role))
     {
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold">Manage Users</h2>
+            <h2 class="text-2xl font-light font-monospace text-[var(--fourth-color)]">MANAGE USERS</h2>
+        </div>
+        <div class="flex justify-start items-center mb-4 self-center">
+            <!-- Role Filter with Icon -->
+            <div class="relative">
+                <i class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <!-- Lucide user icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </i>
+                <select id="roleFilter" class="pl-10 pr-3 py-2 border rounded-lg bg-gray-800 text-white font-light" onchange="filterUsers()">
+                    <option value="">All Roles</option>
+                    <option value="Guest">Guest</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Housekeeper">Housekeeper</option>
+                    <option value="Staff">Staff</option>
+                </select>
+            </div>
+
+            <!-- Search Input with Icon -->
+            <div class="relative w-2/3 ml-4">
+                <i class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <!-- Lucide search icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                </i>
+                <input type="text" id="searchInput" placeholder="Search by name, email, or role..."
+                       class="pl-10 pr-3 py-2 bg-gray-800 text-white border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       onkeyup="filterUsers()">
+            </div>
         </div>
 
         @if (Model?.Any() == true)
         {
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                    <thead>
-                        <tr class="bg-gray-100 text-gray-700 text-left">
-                            <th class="p-3 border">Username</th>
-                            <th class="p-3 border">Email</th>
-                            <th class="p-3 border">Role</th>
-                            <th class="p-3 border">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var userItem in Model)
-                        {
-                            <tr class="border hover:bg-gray-50">
-                                <td class="p-3 border">@userItem.username</td>
-                                <td class="p-3 border">@userItem.email</td>
-                                <td class="p-3 border">
-                                    <select class="px-2 py-1 border rounded" id="roleSelect_@userItem.user_id" data-current-role="@userItem.role" onchange="enableApplyButton(@userItem.user_id)">
-                                        <option value="Guest" selected="@(userItem.role == "Guest" ? "selected" : null)">Guest</option>
-                                        <option value="Admin" selected="@(userItem.role == "Admin" ? "selected" : null)">Admin</option>
-                                        <option value="Housekeeper" selected="@(userItem.role == "Housekeeper" ? "selected" : null)">Housekeeper</option>
-                                        <option value="Staff" selected="@(userItem.role == "Staff" ? "selected" : null)">Staff</option>
-                                    </select>
-                                </td>
-                                <td class="p-3 border">
-                                    <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600" id="applyBtn_@userItem.user_id" onclick="applyChanges(@userItem.user_id)" disabled>Apply Changes</button>
-                                    <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" onclick="confirmDelete(@userItem.user_id)">Delete</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                @foreach (var userItem in Model)
+                {
+                    <div class="border rounded-lg shadow-md bg-gray-700 p-4 flex flex-col justify-between shadow-lg user-card"
+                        data-username="@userItem.username"
+                        data-email="@userItem.email"
+                        data-role="@userItem.role"
+                    >
+                        <div>
+                            <h2 class="text-lg font-semibold text-[var(--third-color)]">@userItem.username</h2>
+                            <p class="text-sm text-[var(--fourth-color)]">@userItem.email</p>
+
+                            <label for="roleSelect_@userItem.user_id" class="block text-sm font-medium mt-2 text-yellow-500">Role:</label>
+                            <select class="w-full px-2 py-1 rounded-lg mt-1 bg-gray-900 text-white font-monospace font-thin" id="roleSelect_@userItem.user_id" data-current-role="@userItem.role" onchange="enableApplyButton(@userItem.user_id)">
+                                <option value="Guest" selected="@(userItem.role == "Guest" ? "selected" : null)">Guest</option>
+                                <option value="Admin" selected="@(userItem.role == "Admin" ? "selected" : null)">Admin</option>
+                                <option value="Housekeeper" selected="@(userItem.role == "Housekeeper" ? "selected" : null)">Housekeeper</option>
+                                <option value="Staff" selected="@(userItem.role == "Staff" ? "selected" : null)">Staff</option>
+                            </select>
+                        </div>
+
+                        <div class="flex justify-between mt-4">
+                            <button class="bg-blue-400 text-white px-3 py-1 rounded hover:bg-blue-500 disabled:bg-gray-900" id="applyBtn_@userItem.user_id" onclick="applyChanges(@userItem.user_id)" disabled>
+                                Apply
+                            </button>
+                            <button class="bg-red-400 text-white px-3 py-1 rounded hover:bg-red-500" onclick="confirmDelete(@userItem.user_id)">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                }
             </div>
+
         }
         else
         {
@@ -136,9 +169,28 @@
             })
             .catch(error => console.error('❌ Error deleting user:', error));
     }
-
-
     function closeModal() {
         document.getElementById("deleteModal").classList.add("hidden");
     }
+    function filterUsers() {
+        let searchQuery = document.getElementById("searchInput").value.toLowerCase();
+        let selectedRole = document.getElementById("roleFilter").value;
+        let userCards = document.querySelectorAll(".user-card");
+
+        userCards.forEach(card => {
+            let username = card.getAttribute("data-username").toLowerCase();
+            let email = card.getAttribute("data-email").toLowerCase();
+            let role = card.getAttribute("data-role");
+
+            let matchesSearch = username.includes(searchQuery) || email.includes(searchQuery);
+            let matchesRole = selectedRole === "" || role === selectedRole;
+
+            if (matchesSearch && matchesRole) {
+                card.style.display = "block"; // Show matching users
+            } else {
+                card.style.display = "none"; // Hide non-matching users
+            }
+        });
+    }
+
 </script>

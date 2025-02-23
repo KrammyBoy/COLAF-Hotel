@@ -25,6 +25,9 @@ namespace COLAFHotel.Models
         [Column("image_url")]
         public string ImageUrl { get; set; }
 
+        [Column("image_type")] //Add new column in ROOM PostgreSQL
+        public string ImageType { get; set; } //This corresponds to the type of Image ( each category have two pictures)
+
         [Required]
         [Column("price")]
         public int Price { get; set; }

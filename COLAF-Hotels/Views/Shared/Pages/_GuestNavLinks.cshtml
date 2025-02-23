@@ -1,6 +1,42 @@
-﻿<a href="@Url.Action("Index", "Booking")" class="text-white hover:text-[var(--primary-color)] transition">Bookings</a>
-<a href="@Url.Action("Profile", "Guest")" class="text-white hover:text-[var(--primary-color)] transition">Guest Profile</a>
-<a href="@Url.Action("Requests", "Maintenance")" class="text-white hover:text-[var(--primary-color)] transition">Maintenance</a>
-<a href="@Url.Action("SpecialServices", "Services")" class="text-white hover:text-[var(--primary-color)] transition">Services</a>
-<a href="@Url.Action("Offers", "Discount")" class="text-white hover:text-[var(--primary-color)] transition">Discounts</a>
-<a href="@Url.Action("Index", "Notification")" class="text-white hover:text-[var(--primary-color)] transition">Notifications</a>
+﻿<a href="@Url.Action("List", "Room")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    ROOMS
+</a>
+<a href="@Url.Action("Index", "Booking")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    MY BOOKINGS
+</a>
+<a href="@Url.Action("Offers", "Discount")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    OFFERS
+</a>
+<a href="@Url.Action("Profile", "Guest")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    PROFILE
+</a>
+<a href="@Url.Action("Requests", "Maintenance")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    MAINTENANCE
+</a>
+<a href="@Url.Action("SpecialServices", "Services")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    SERVICES
+</a>
+<a href="@Url.Action("Index", "Notification")" class="relative text-white text-lg cursor-pointer
+   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   hover:after:w-full hover:after:left-0">
+    NOTIFICATION
+</a>
