@@ -58,7 +58,9 @@
                         </p>
                         <p class="text-2xl font-semibold text-green-600 mt-2 text-right">₱@room.Price.ToString("N2")</p>
                     </div>
-                    <a href="@Url.Action("Index", "Booking")" class="mt-4 p-2 rounded-lg text-sm bg-[var(--secondary-color)] hover:bg-[var(--fifth-color)] flex items-center justify-center text-lg text-white font-thin self-center w-[75%]">
+                    <a href="@Url.Action("Create", "Booking", new { roomId = room.RoomId, roomNumber = room.RoomNumber, roomImg = room.ImageUrl, 
+                    roomCategory = room.Category, roomPrice = room.Price
+                    })" class="mt-4 p-2 rounded-lg text-sm bg-[var(--secondary-color)] hover:bg-[var(--fifth-color)] flex items-center justify-center text-lg text-white font-thin self-center w-[75%]">
                         BOOK NOW
                         <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v16l12-8-12-8z"></path>

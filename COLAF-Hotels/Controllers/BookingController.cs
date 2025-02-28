@@ -14,18 +14,18 @@ namespace COLAFHotel.Controllers
             return View(bookings);
         }
 
-        public IActionResult Create()
+        public IActionResult Create(int roomId, string roomNumber, string roomImg, string roomCategory, int roomPrice)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Create(Booking booking)
-        {
-            // For demo, assign an incremental ID and add to list.
-            booking.Id = bookings.Count + 1;
-            bookings.Add(booking);
-            return RedirectToAction("Index");
+            var room = new Room
+            {
+                RoomId = roomId,
+                RoomNumber = roomNumber,
+                Category = roomCategory,
+                ImageUrl = roomImg,
+                Price = roomPrice
+            };
+            
+            return View(room);
         }
 
         public IActionResult Details(int id)
