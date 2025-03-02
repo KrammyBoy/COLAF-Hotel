@@ -91,7 +91,10 @@ namespace COLAFHotel.Controllers
         {
             return View();
         }
-
+        public IActionResult RegisterPage()
+        {
+            return View();
+        }
         // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)

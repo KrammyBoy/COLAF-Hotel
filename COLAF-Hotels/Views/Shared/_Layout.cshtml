@@ -2,6 +2,7 @@
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    string currentPath = Context.Request.Path.Value;
 
     Console.WriteLine($"Retrieved from Session in Layout - Username: {user}, Role: {role}");
 }
@@ -35,26 +36,36 @@
     </style>
 </head>
 <body class="font-sans bg-[var(--fifth-color)] text-gray-900">
-    <nav class="fixed bg-[var(--secondary-color)] shadow-md w-full">
+    <nav class="fixed bg-[var(--secondary-color)] shadow-md w-full p-2 rounded-b-[2rem] z-50">
+
         <div class="max-w-full mx-auto p-3 flex justify-between items-center">
             <!-- Logo -->
-            <a href="@Url.Action("Index", "Dashboard")"
+            @if (!string.IsNullOrEmpty(role))
+            {
+                <a href="@Url.Action("Index", "Dashboard")"
+                   class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">
+                    COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span>
+                </a>
+            }else {
+            <a href="@Url.Action("Login", "User")"
                class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">
                 COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span>
             </a>
-
+            }
             <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-6">
 
                 @if (string.IsNullOrEmpty(role))
                 {
                     <a href="@Url.Action("List", "Room")"
-                       class="relative text-white text-lg cursor-pointer
-                   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-                   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-                   hover:after:w-full hover:after:left-0">
+                       class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
                         BOOK A ROOM
                     </a>
+
                 }
 
                 @if (!string.IsNullOrEmpty(role))
@@ -98,8 +109,6 @@
             </div>
         </div>
     </nav>
-
-
     <div>
         @RenderBody()
     </div>

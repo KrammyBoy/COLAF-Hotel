@@ -1,16 +1,95 @@
-@model COLAFHotel.Models.Room
+﻿@model COLAFHotel.Models.Room
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewBag.Title = "Create Booking";
+    var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
-
 <div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6">
-    <div class="mt-10 bg-white shadow-lg rounded-lg w-[50%] overflow-hidden">
-        <img src="@Url.Content(Model.ImageUrl)" class="w-full h-[20rem] object-cover" />
-        <div class="p-4">
-            <h2 class="text-2xl font-semibold text-[var(--primary-color)] mb-6">Booking</h2>
-            <h1>@Model.RoomNumber</h1>
-            <h2>@Model.Category</h2>
-            <h2>@Model.Price</h2>
+    @if (!string.IsNullOrEmpty(role))
+    {
+        <div class="relative bg-[var(--fourth-color)] shadow-xl rounded-lg w-full max-w-4xl overflow-hidden p-6">
+            <!-- Room Image -->
+            <div class="relative w-full h-[28rem]">
+                <img src="@Url.Content(Model.ImageUrl)" class="w-full h-full object-cover rounded-lg brightness-90" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            </div>
+
+            <!-- Room Details -->
+            <div class="p-6">
+                <h2 class="text-4xl font-bold text-[var(--primary-color)] mb-4">Room @Model.RoomNumber</h2>
+                <p class="text-lg text-gray-700">Category: <span class="text-[var(--secondary-color)] font-semibold">@Model.Category</span></p>
+
+                <!-- Booking Form -->
+                <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="mt-6 space-y-4">
+                    <input type="hidden" name="RoomId" value="@Model.RoomId" />
+
+                    <!-- Guest Count -->
+                    <div>
+                        <label class="block text-lg font-semibold mb-1">Number of Guests:</label>
+                        <input type="number" id="guestCount" name="GuestCount" value="1" min="1" max="5" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                    </div>
+
+                    <!-- Check-in & Check-out Dates -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-lg font-semibold mb-1">Check-in Date:</label>
+                            <input type="date" id="checkInDate" name="CheckInDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                        </div>
+                        <div>
+                            <label class="block text-lg font-semibold mb-1">Check-out Date:</label>
+                            <input type="date" id="checkOutDate" name="CheckOutDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                        </div>
+                    </div>
+
+                    <!-- Transport Service -->
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="transportService" name="TransportService" class="w-5 h-5" onchange="updatePrice()">
+                        <label for="transportService" class="text-lg">Include Transport Service (+₱500)</label>
+                    </div>
+
+                    <!-- Updated Price -->
+                    <p class="text-lg font-semibold text-green-400">Total Price: <span id="totalPrice">₱@Model.Price.ToString("N2")</span></p>
+
+                    <!-- Buttons -->
+                    <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                        <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-[var(--primary-color)] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:scale-105">
+                            BOOK NOW
+                        </button>
+
+                        <a href="@Url.Action("SaveForLater", "Booking", new { roomId = Model.RoomId })"
+                           class="w-full sm:w-auto px-6 py-3 bg-[var(--secondary-color)] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:bg-[var(--third-color)]">
+                            SAVE FOR LATER
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <p class="text-red-500 font-semibold">Access Denied: Role not defined.</p>
+        <script>
+            setTimeout(function () {
+                window.location.href = "/User/Login";
+            }, 3000);
+        </script>
+    }
 </div>
+
+<script>
+    function updatePrice() {
+        let basePrice = @Model.Price;
+        let guestCount = parseInt(document.getElementById('guestCount').value) || 1;
+        let checkInDate = new Date(document.getElementById('checkInDate').value);
+        let checkOutDate = new Date(document.getElementById('checkOutDate').value);
+        let transportService = document.getElementById('transportService').checked;
+
+        // Calculate number of nights
+        let nights = (checkOutDate > checkInDate) ? (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24) : 1;
+
+        // Update price: (base price * guests * nights) + transport fee
+        let totalPrice = (basePrice * guestCount * nights) + (transportService ? 500 : 0);
+        document.getElementById('totalPrice').textContent = `₱${totalPrice.toFixed(2)}`;
+    }
+</script>
