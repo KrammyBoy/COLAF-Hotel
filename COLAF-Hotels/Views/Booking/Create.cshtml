@@ -5,7 +5,7 @@
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
-<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6">
+<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6 pt-20">
     @if (!string.IsNullOrEmpty(role))
     {
         <div class="relative bg-[var(--fourth-color)] shadow-xl rounded-lg w-full max-w-4xl overflow-hidden p-6">
@@ -19,37 +19,182 @@
             <div class="p-6">
                 <h2 class="text-4xl font-bold text-[var(--primary-color)] mb-4">Room @Model.RoomNumber</h2>
                 <p class="text-lg text-gray-700">Category: <span class="text-[var(--secondary-color)] font-semibold">@Model.Category</span></p>
-
+                
+                @if (ViewBag.Error != null)
+                {
+                    <div id="error-alert" class="relative transform bg-red-600 text-white p-2 rounded-lg shadow-lg flex items-center justify-between w-[100%] max-w-md animate-fade-in">
+                        <div class="flex items-center space-x-2">
+                            <!-- Error Icon -->
+                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.519 11.591c.763 1.36-.191 3.047-1.743 3.047H3.48c-1.552 0-2.506-1.687-1.743-3.047l6.52-11.591zM11 14a1 1 0 11-2 0 1 1 0 012 0zm-.25-7a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V7z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-sm font-medium">@ViewBag.Error</span>
+                        </div>
+                        <!-- Close Button -->
+                        <button onclick="document.getElementById('error-alert').remove();" class="ml-4 focus:outline-none">
+                            <svg class="w-5 h-5 text-white hover:text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 8.586L5.707 4.293a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 0 001.414 1.414L10 11.414l4.293 4.293a1 1 0 001.414-1.414L11.414 10l4.293-4.293a1 1 0 00-1.414-1.414L10 8.586z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                }
+                
                 <!-- Booking Form -->
                 <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="mt-6 space-y-4">
                     <input type="hidden" name="RoomId" value="@Model.RoomId" />
-
-                    <!-- Guest Count -->
-                    <div>
-                        <label class="block text-lg font-semibold mb-1">Number of Guests:</label>
-                        <input type="number" id="guestCount" name="GuestCount" value="1" min="1" max="5" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
-                    </div>
 
                     <!-- Check-in & Check-out Dates -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-lg font-semibold mb-1">Check-in Date:</label>
-                            <input type="date" id="checkInDate" name="CheckInDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
-                        </div>
+                            <input type="date" id="checkInDate" name="CheckInDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()"> <!--Should verify that the date inputted is at least one day advanced-->
+                        </div> 
                         <div>
                             <label class="block text-lg font-semibold mb-1">Check-out Date:</label>
                             <input type="date" id="checkOutDate" name="CheckOutDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
                         </div>
                     </div>
 
-                    <!-- Transport Service -->
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="transportService" name="TransportService" class="w-5 h-5" onchange="updatePrice()">
-                        <label for="transportService" class="text-lg">Include Transport Service (+₱500)</label>
+                    <!-- Transport Services -->
+                    <div class="border rounded-lg shadow-lg p-4 bg-white">
+                        <!-- Checkbox for Transport Service -->
+                        <div class="flex items-center gap-3 border-b pb-3">
+                            <input type="checkbox" id="transportService" name="TransportService" class="w-6 h-6 accent-blue-600 cursor-pointer" onchange="toggleTransportDetails()">
+                            <label for="transportService" class="text-lg font-medium cursor-pointer">Include Transport Service (+₱500)</label>
+                        </div>
+
+                        <!-- Transport Service Information (Initially Hidden) -->
+                        <div id="transportDetails" class="hidden mt-4">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-700">Arrival</h3>
+                                    <label class="block text-md font-semibold mt-2">Arrival Time</label>
+                                    <select class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                                        <option>9:00 AM</option>
+                                        <option>10:00 AM</option>
+                                        <option>11:00 AM</option>
+                                        <option>12:00 PM</option>
+                                        <option>1:00 PM</option>
+                                        <option>2:00 PM</option>
+                                        <option>3:00 PM</option>
+                                        <option>4:00 PM</option>
+                                        <option>5:00 PM</option>
+                                        <option>6:00 PM</option>
+                                        <option>7:00 PM</option>
+                                        <option>8:00 PM</option>
+                                    </select>
+                                    <label class="block text-md font-semibold mt-2">Arriving</label>
+                                    <input type="text" class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="Enter location">
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-700">Departure</h3>
+                                    <label class="block text-md font-semibold mt-2">Departure Time</label>
+                                    <select class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                                        <option>9:00 AM</option>
+                                        <option>10:00 AM</option>
+                                        <option>11:00 AM</option>
+                                        <option>12:00 PM</option>
+                                        <option>1:00 PM</option>
+                                        <option>2:00 PM</option>
+                                        <option>3:00 PM</option>
+                                        <option>4:00 PM</option>
+                                        <option>5:00 PM</option>
+                                        <option>6:00 PM</option>
+                                        <option>7:00 PM</option>
+                                        <option>8:00 PM</option>
+                                    </select>
+                                    <label class="block text-md font-semibold mt-2">Departing</label>
+                                    <input type="text" class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="Enter location">
+                                </div>
+                            </div>
+                            <div class="mt-4 text-right">
+                                <button onclick="clearTransportDetails()" class="text-blue-600 hover:text-blue-800 font-semibold">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Payment Options -->
+                    <div class="border rounded-lg shadow-lg p-4 bg-white mt-6">
+                        <h3 class="text-xl font-semibold mb-3">Payment</h3>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                        </div>
+                        <div class="grid grid-cols-1 gap-4">
+                            <label class="block">
+                                <span class="text-md font-semibold">Card Number</span>
+                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="1234 5678 9012 3456">
+                            </label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="block">
+                                    <span class="text-md font-semibold">Expiration Date</span>
+                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="MM/YY">
+                                </label>
+                                <label class="block">
+                                    <span class="text-md font-semibold">CVV</span>
+                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="123">
+                                </label>
+                            </div>
+                            <label class="block">
+                                <span class="text-md font-semibold">Name on Card</span>
+                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="John Doe">
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Updated Price -->
-                    <p class="text-lg font-semibold text-green-400">Total Price: <span id="totalPrice">₱@Model.Price.ToString("N2")</span></p>
+                    <!-- Booking Policies -->
+                    <div class="border rounded-lg shadow-lg p-6 bg-[#3E2723] text-[#D7CCC8] mt-6">
+                        <h2 class="text-2xl font-bold mb-4 text-[#FFCC80] flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4a1 1 0 00-1 1v14a1 1 0 001 1h2a3 3 0 003 3h6a3 3 0 003-3h2a1 1 0 001-1V4a1 1 0 00-1-1zm-6 17h-4a1 1 0 01-1-1h6a1 1 0 01-1 1zM19 16H5V5h14v11z" /></svg>
+                            Booking Policy
+                        </h2>
+                        <ul class="list-disc list-inside text-[#EFEBE9] space-y-3">
+                            <li><strong>☕ Reservation Confirmation:</strong> Your table is set! Confirmation is sent after payment.</li>
+                            <li><strong>🍂 Cancellation Policy:</strong> Need to cancel? Do so 48 hours ahead for a full refund. Last-minute cancellations? No refunds, but we’ll miss you!</li>
+                            <li><strong>🌿 Modification Policy:</strong> Plans changed? You can tweak your booking up to 24 hours before, if space allows.</li>
+                            <li><strong>💳 Payment Terms:</strong> We accept major credit cards and e-money. A full payment ensures your spot at our cosy hotel.</li>
+                            <li><strong>🚶 No-Show Policy:</strong> If you don’t show, your coffee goes cold, and your payment stays with us.</li>
+                            <li><strong>📞 Contact Support:</strong> Questions or changes? Reach out to our friendly baristas at least 24 hours before your visit.</li>
+                        </ul>
+                    </div>
+
+
+                    <!-- Price Details (Coffee-Themed) -->
+                    <div class="bg-[#4E342E] text-[#D7CCC8] rounded-lg shadow-lg p-6 mt-6">
+                        <h2 class="text-2xl font-bold mb-4 text-[#FFCC80]">Price Breakdown</h2>
+
+                        <div class="space-y-3 grid grid-cols-1">
+                            <div class="flex flex-row justify-between items-center">
+                                <p><strong>Room:</strong> @Model.Category Room (R @Model.RoomNumber)</p>
+                                <p class="text-green-500">₱@Model.Price.ToString("N2")</p>
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <p>
+                                    <strong>Nights of Stay:</strong>
+                                    <span id="numberOfNights" class="text-red-400 underline">0</span> Nights
+                                </p>
+                                <p class="text-green-500">₱<span id="nightPrice">0</span></p>
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <strong>Transport Service Fee</strong>
+                                <p class="text-green-500">₱<span id="transportFee">0</span></p>
+                            </div>
+                            <p>
+                                <span id="checkInDay">Check-in Day</span> -
+                                <span id="checkOutDay">Check-out Day</span>
+                            </p>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-[#3E2723] rounded-lg">
+                            <label class="text-lg font-bold text-[#FFCC80]">Total</label>
+                            <p class="text-xl font-semibold text-green-400">
+                                Total Price: ₱<span id="totalPrice">@Model.Price.ToString("N2")</span>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    
 
                     <!-- Buttons -->
                     <div class="mt-6 flex flex-col sm:flex-row gap-4">
@@ -80,16 +225,49 @@
 <script>
     function updatePrice() {
         let basePrice = @Model.Price;
-        let guestCount = parseInt(document.getElementById('guestCount').value) || 1;
         let checkInDate = new Date(document.getElementById('checkInDate').value);
         let checkOutDate = new Date(document.getElementById('checkOutDate').value);
         let transportService = document.getElementById('transportService').checked;
 
+        //Values needed to be changed
+        let numberOfNights = document.getElementById('numberOfNights');
+        let transportFee = document.getElementById('transportFee');
+        let checkInDay = document.getElementById('checkInDay');
+        let checkOutDay = document.getElementById('checkOutDay');
+        let nightPrice = document.getElementById('nightPrice');
+
         // Calculate number of nights
         let nights = (checkOutDate > checkInDate) ? (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24) : 1;
 
+        // Change values in the html
+        numberOfNights.textContent  = nights;
+
+        // Format numbers properly with commas
+        let nightPriceAdded = ((basePrice * nights) - basePrice);
+        let transportFeeAdded  = transportService ? 500.00 : 0.00;
+
+        let formattedNightPrice = nightPriceAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        let formattedTransportFee = transportFeeAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        checkInDay.textContent  = checkInDate.toDateString();
+        checkOutDay.textContent  = checkOutDate.toDateString();
+        nightPrice.textContent = formattedNightPrice;
+        transportFee.textContent = formattedTransportFee;
+ 
+
         // Update price: (base price * guests * nights) + transport fee
-        let totalPrice = (basePrice * guestCount * nights) + (transportService ? 500 : 0);
-        document.getElementById('totalPrice').textContent = `₱${totalPrice.toFixed(2)}`;
+        let totalPrice = (basePrice * nights) + (transportService ? 500 : 0);
+        let formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('totalPrice').textContent = formattedTotalPrice;
+    }
+    function toggleTransportDetails() {
+        updatePrice();
+        const details = document.getElementById("transportDetails");
+        details.classList.toggle("hidden");
+    }
+
+    function clearTransportDetails() {
+        document.getElementById("transportService").checked = false;
+        document.getElementById("transportDetails").classList.add("hidden");
     }
 </script>
