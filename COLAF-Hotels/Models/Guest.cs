@@ -1,9 +1,19 @@
-﻿namespace COLAFHotel.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+
+namespace COLAFHotel.Models
 {
     public class Guest
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        [Key]
+        public int guest_id { get; set; }  // Primary Key
+
+        public int? user_id { get; set; }
+
+        public string? phone { get; set; }
+
+        [ForeignKey("user_id")]
+        public User User { get; set; }  // Navigation property
     }
 }

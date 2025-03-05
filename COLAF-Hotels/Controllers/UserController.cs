@@ -95,34 +95,34 @@ namespace COLAFHotel.Controllers
         {
             return View();
         }
+
         // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            Console.WriteLine($"Received Username: {username}");
-            Console.WriteLine($"Received Password: {password}");
-
-            // Find user by username
             var user = await _context.Users.FirstOrDefaultAsync(u => u.username == username);
-
             if (user == null || !(user.password == password))
             {
                 ViewBag.Error = $"Invalid email or password.";
                 return View();
             }
-            // Debugging: Check the retrieved user role before storing in session
-            Console.WriteLine($"Retrieved Role from DB: {user.role}");
-
-            HttpContext.Session.Clear(); // Clear old session data
-
-            // Store user session
+            HttpContext.Session.Clear();
             HttpContext.Session.SetString("UserId", user.user_id.ToString());
             HttpContext.Session.SetString("User", user.username);
             HttpContext.Session.SetString("Role", user.role);
-
+            /*
+                Check if the user has guest_id.
+                If it has guest_id, the user already interact with the system
+                If not the booking system will create the guest_id for the user
+             */
+            var guest = await _context.Guests.FirstOrDefaultAsync(g => g.user_id == user.user_id);
+            if (guest != null) {
+                HttpContext.Session.SetString("GuestId", guest.guest_id.ToString());
+            }else
+            {
+                HttpContext.Session.SetString("GuestId", "null");
+            }
             Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}");
-
-            // Redirect to dashboard
             return RedirectToAction("Index", "Dashboard");
         }
         public IActionResult Logout()

@@ -4,6 +4,8 @@
     ViewBag.Title = "Create Booking";
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
+    var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
 }
 <div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6 pt-20">
     @if (!string.IsNullOrEmpty(role))
@@ -42,6 +44,8 @@
                 <!-- Booking Form -->
                 <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="mt-6 space-y-4">
                     <input type="hidden" name="RoomId" value="@Model.RoomId" />
+                    <input type="hidden" name="UserId" value="@user_id"/>
+                    <input type="hidden" name="GuestId" value="@isGuest"/>
 
                     <!-- Check-in & Check-out Dates -->
                     <div class="grid grid-cols-2 gap-4">
@@ -190,6 +194,8 @@
                             <p class="text-xl font-semibold text-green-400">
                                 Total Price: ₱<span id="totalPrice">@Model.Price.ToString("N2")</span>
                             </p>
+                            <!--Storing Total Price-->
+                            <input type="hidden" name="totalPrice" id="hiddenTotalPrice"/>
                         </div>
                     </div>
 
@@ -228,6 +234,7 @@
         let checkInDate = new Date(document.getElementById('checkInDate').value);
         let checkOutDate = new Date(document.getElementById('checkOutDate').value);
         let transportService = document.getElementById('transportService').checked;
+        let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
 
         //Values needed to be changed
         let numberOfNights = document.getElementById('numberOfNights');
@@ -259,6 +266,7 @@
         let totalPrice = (basePrice * nights) + (transportService ? 500 : 0);
         let formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('totalPrice').textContent = formattedTotalPrice;
+        hiddenTotalPrice.value = totalPrice;
     }
     function toggleTransportDetails() {
         updatePrice();

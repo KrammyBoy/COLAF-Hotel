@@ -1,50 +1,74 @@
-@model IEnumerable<COLAFHotel.Models.Booking>
+﻿@model IEnumerable<COLAFHotel.Models.Booking>
 @{
     ViewBag.Title = "Bookings";
+    var successMessage = TempData["Success"] as string;
+    var bookingId = TempData["BookingId"] != null ? Convert.ToInt32(TempData["BookingId"]) : 0;
+    var checkInDate = TempData["CheckInDate"] as string;
+    var checkOutDate = TempData["CheckOutDate"] as string;
+    var totalAmount = TempData["TotalAmount"] != null ? Convert.ToDecimal(TempData["TotalAmount"]) : 0;
 }
-
+<!--
+    TODO:
+    1. Improve the design for the table
+    2. If status is pending allow guest to edit and confirmed the booking process
+    3. Allow user to cancel the booking process
+    4. Functional View Details
+-->
 <div class="container mx-auto p-6">
     <h2 class="text-3xl font-semibold text-[var(--primary-color)] mb-4">Bookings</h2>
 
-    <a asp-action="Create" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--third-color)] transition">
-        Create New Booking
-    </a>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        @foreach (var booking in Model)
+        {
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition">
+                <h3 class="text-lg font-semibold text-gray-800">Booking #@booking.booking_id</h3>
+                <p class="text-gray-600"><strong>Room:</strong> @booking.room_id</p>
+                <p class="text-gray-600"><strong>Check-In:</strong> @booking.check_in_date.ToString("yyyy-MM-dd")</p>
+                <p class="text-gray-600"><strong>Check-Out:</strong> @booking.check_out_date.ToString("yyyy-MM-dd")</p>
+                <p class="text-gray-600">
+                    <strong>Status:</strong> <span class="px-2 py-1 text-sm font-medium rounded-md
+                        @(booking.status == "Confirmed" ? "bg-green-200 text-green-800" :
+                                                booking.status == "Pending" ? "bg-yellow-200 text-yellow-800" : "bg-red-200 text-red-800")">
+                    @booking.status
+                </span>
+            </p>
 
-    <div class="overflow-x-auto mt-4">
-        <table class="w-full border-collapse bg-white shadow-md rounded-lg">
-            <thead class="bg-[var(--secondary-color)] text-white">
-                <tr>
-                    <th class="px-4 py-2">ID</th>
-                    <th class="px-4 py-2">Guest Name</th>
-                    <th class="px-4 py-2">Room Number</th>
-                    <th class="px-4 py-2">Check-In</th>
-                    <th class="px-4 py-2">Check-Out</th>
-                    <th class="px-4 py-2">Status</th>
-                    <th class="px-4 py-2">Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var booking in Model)
-                {
-                    <tr class="border-b">
-                        <td class="px-4 py-2">@booking.Id</td>
-                        <td class="px-4 py-2">@booking.GuestName</td>
-                        <td class="px-4 py-2">@booking.RoomNumber</td>
-                        <td class="px-4 py-2">@booking.CheckInDate.ToShortDateString()</td>
-                        <td class="px-4 py-2">@booking.CheckOutDate.ToShortDateString()</td>
-                        <td class="px-4 py-2">
-                            <span class="px-3 py-1 rounded-lg text-white"
-                                  style="background-color: @(booking.Status == "Confirmed" ? "green" : "orange")">
-                                @booking.Status
-                            </span>
-                        </td>
-                        <td class="px-4 py-2">
-                            <a asp-action="Details" asp-route-id="@booking.Id"
-                               class="text-[var(--primary-color)] hover:underline">View</a>
-                        </td>
-                    </tr>
+                <div class="mt-4 flex justify-end">
+                    <a asp-action="Details" asp-route-id="@booking.booking_id"
+                       class="text-blue-600 hover:underline text-sm">View Details</a>
+                </div>
+            </div>
                 }
-            </tbody>
-        </table>
     </div>
 </div>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div id="bookingModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-100">
+            <h2 class="text-xl font-semibold text-gray-800">🎉 Booking Confirmed!</h2>
+            <p class="mt-2 text-gray-600">@successMessage</p>
+
+            <div class="mt-4 space-y-2 text-gray-700">
+                <p><strong>Booking ID:</strong> @bookingId</p>
+                <p><strong>Check-in Date:</strong> @checkInDate</p>
+                <p><strong>Check-out Date:</strong> @checkOutDate</p>
+                <p><strong>Total Amount:</strong> $@totalAmount</p>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button id="closeModal" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("closeModal").addEventListener("click", function () {
+                document.getElementById("bookingModal").style.display = "none";
+            });
+        });
+    </script>
+}

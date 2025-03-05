@@ -1,19 +1,25 @@
-﻿<a href="@Url.Action("List", "Room")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+﻿<a href="@Url.Action("List", "Room")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
     ROOMS
 </a>
-<a href="@Url.Action("Index", "Booking")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("Index", "Booking")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("Index", "Booking") ? "text-[var(--fifth-color)]" : "text-white")">
     MY BOOKINGS
 </a>
-<a href="@Url.Action("Offers", "Discount")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("Offers", "Discount")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("Offers", "Discount") ? "text-[var(--fifth-color)]" : "text-white")">
     OFFERS
 </a>
 <a href="@Url.Action("Profile", "Guest")" class="relative text-white text-lg cursor-pointer
@@ -21,22 +27,28 @@
    after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
    hover:after:w-full hover:after:left-0">
     PROFILE
-</a>
-<a href="@Url.Action("Requests", "Maintenance")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+</a> <!--Should be changed to circle-->
+<a href="@Url.Action("Request", "Maintenance")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("Request", "Maintenance") ? "text-[var(--fifth-color)]" : "text-white")">
     MAINTENANCE
 </a>
-<a href="@Url.Action("SpecialServices", "Services")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("SpecialServices", "Services")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("SpecialServices", "Services") ? "text-[var(--fifth-color)]" : "text-white")">
     SERVICES
 </a>
-<a href="@Url.Action("Index", "Notification")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("Index", "Notification")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-[var(--fifth-color)]" : "text-white")">
     NOTIFICATION
 </a>

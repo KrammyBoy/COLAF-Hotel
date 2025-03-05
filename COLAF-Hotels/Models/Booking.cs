@@ -1,14 +1,43 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace COLAFHotel.Models
 {
     public class Booking
     {
-        public int Id { get; set; } // In-memory identifier
-        public string GuestName { get; set; }
-        public string RoomNumber { get; set; }
-        public DateTime CheckInDate { get; set; }
-        public DateTime CheckOutDate { get; set; }
-        public string Status { get; set; } // Confirmed, Pending, etc.
+        [Key]
+        public int booking_id { get; set; } // Primary Key
+
+        [Required]
+        public int guest_id { get; set; }
+
+        [Required]
+        public int room_id { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime check_in_date { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime check_out_date { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string status { get; set; } // Confirmed, Pending, Cancelled, etc.
+
+        [Required]
+        public decimal total_amount { get; set; }
+
+        public int? discount_id { get; set; }
+
+        // Foreign Key - Relationship with Guest
+        [ForeignKey("guest_id")]
+
+        public virtual Guest Guest { get; set; } // Navigation Property
+
+        [ForeignKey("room_id")]
+        public virtual Room Room { get; set; } // Navigation Property
     }
 }

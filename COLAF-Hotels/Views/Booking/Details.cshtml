@@ -8,22 +8,22 @@
         <h2 class="text-2xl font-semibold text-[var(--primary-color)] text-center mb-4">Booking Details</h2>
 
         <div class="space-y-3">
-            <p class="text-gray-700"><strong>ID:</strong> @Model.Id</p>
-            <p class="text-gray-700"><strong>Guest Name:</strong> @Model.GuestName</p>
-            <p class="text-gray-700"><strong>Room Number:</strong> @Model.RoomNumber</p>
-            <p class="text-gray-700"><strong>Check-In:</strong> @Model.CheckInDate.ToShortDateString()</p>
-            <p class="text-gray-700"><strong>Check-Out:</strong> @Model.CheckOutDate.ToShortDateString()</p>
+            <p class="text-gray-700"><strong>ID:</strong> @Model.booking_id</p>
+            <p class="text-gray-700"><strong>Guest Name:</strong> @Model.guest_id</p>
+            <p class="text-gray-700"><strong>Room Number:</strong> @Model.room_id</p>
+            <p class="text-gray-700"><strong>Check-In:</strong> @Model.check_in_date.ToShortDateString()</p>
+            <p class="text-gray-700"><strong>Check-Out:</strong> @Model.check_out_date.ToShortDateString()</p>
             <p class="text-gray-700">
                 <strong>Status:</strong>
                 <span class="px-3 py-1 rounded-lg text-white"
-                      style="background-color: @(Model.Status == "Confirmed" ? "green" : "orange")">
-                    @Model.Status
+                      style="background-color: @(Model.status == "Confirmed" ? "green" : "orange")">
+                    @Model.status
                 </span>
             </p>
         </div>
 
         <div class="mt-6 flex justify-between">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--third-color)] transition">
+            <a asp-action="Edit" asp-route-id="@Model.booking_id" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--third-color)] transition">
                 Edit
             </a>
             <a asp-action="Index" class="text-[var(--primary-color)] hover:underline">
