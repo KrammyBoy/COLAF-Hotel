@@ -9,7 +9,7 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
 
-<div class="p-6 shadow-lg rounded-lg bg-gray-300">
+<div class="pt-20 p-6 shadow-lg rounded-lg bg-gray-300">
     @if (!string.IsNullOrEmpty(role))
     {
         <div class="flex justify-between items-center mb-4">

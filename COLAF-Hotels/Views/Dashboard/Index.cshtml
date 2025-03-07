@@ -8,12 +8,12 @@
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
-<div class="shadow-lg">
+<div class="shadow-lg pt-[7rem]">
     @if (!string.IsNullOrEmpty(role))
     {
         @if (role == "Guest")
-        {
-            <p class="text-4xl font-bold text-gray-800 text-center">🚧 Under Construction!<br /> Dashboard</p>
+        {   
+            @await Html.PartialAsync("Pages/_GuestDashboard", Model)
         }
         else if (role == "Admin")
         {

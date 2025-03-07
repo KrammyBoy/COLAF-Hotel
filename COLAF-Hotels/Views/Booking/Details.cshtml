@@ -3,32 +3,71 @@
     ViewBag.Title = "Booking Details";
 }
 
-<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)]">
-    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
-        <h2 class="text-2xl font-semibold text-[var(--primary-color)] text-center mb-4">Booking Details</h2>
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-200 to-gray-400 p-10">
+    <div class="bg-white shadow-2xl rounded-3xl overflow-hidden w-full max-w-4xl">
 
-        <div class="space-y-3">
-            <p class="text-gray-700"><strong>ID:</strong> @Model.booking_id</p>
-            <p class="text-gray-700"><strong>Guest Name:</strong> @Model.guest_id</p>
-            <p class="text-gray-700"><strong>Room Number:</strong> @Model.room_id</p>
-            <p class="text-gray-700"><strong>Check-In:</strong> @Model.check_in_date.ToShortDateString()</p>
-            <p class="text-gray-700"><strong>Check-Out:</strong> @Model.check_out_date.ToShortDateString()</p>
-            <p class="text-gray-700">
-                <strong>Status:</strong>
-                <span class="px-3 py-1 rounded-lg text-white"
-                      style="background-color: @(Model.status == "Confirmed" ? "green" : "orange")">
-                    @Model.status
-                </span>
-            </p>
+        <!-- Room Image -->
+        <div class="relative">
+            <img src="@Url.Content(Model.Room.ImageUrl)" alt="Room Image"
+                 class="w-full h-80 object-cover">
+            <div class="absolute bottom-4 left-4 bg-white bg-opacity-80 px-4 py-2 rounded-lg shadow">
+                <p class="text-gray-800 font-semibold text-lg">Room R.@Model.Room.RoomNumber</p>
+            </div>
         </div>
 
-        <div class="mt-6 flex justify-between">
-            <a asp-action="Edit" asp-route-id="@Model.booking_id" class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--third-color)] transition">
-                Edit
-            </a>
-            <a asp-action="Index" class="text-[var(--primary-color)] hover:underline">
-                Back to List
-            </a>
+        <!-- Booking Details -->
+        <div class="p-10">
+            <h2 class="text-3xl font-bold text-[var(--primary-color)] text-center mb-6">
+                Booking Details
+            </h2>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Booking ID:</p>
+                        <p class="text-gray-900 font-medium">#@Model.booking_id</p>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Guest Name:</p>
+                        <p class="text-gray-900 font-medium">@Model.Guest.User.lastname, @Model.Guest.User.firstname</p>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Email:</p>
+                        <p class="text-gray-900 font-medium">@Model.Guest.User.email</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Check-In:</p>
+                        <p class="text-gray-900 font-medium">@Model.check_in_date.ToShortDateString()</p>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Check-Out:</p>
+                        <p class="text-gray-900 font-medium">@Model.check_out_date.ToShortDateString()</p>
+                    </div>
+
+                    <!-- Status Badge -->
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-600 text-lg font-semibold">Status:</p>
+                        <span class="px-4 py-2 rounded-full text-white font-semibold
+                                     @(Model.status == "Confirmed" ? "bg-green-500" : "bg-yellow-500")">
+                            @Model.status
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-8 flex justify-center">
+                <a asp-action="Index" class="px-6 py-3 bg-[var(--primary-color)] text-white font-bold
+                                  rounded-lg shadow-md transition duration-200 hover:bg-opacity-80">
+                    Back to List
+                </a>
+            </div>
         </div>
     </div>
 </div>

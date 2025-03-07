@@ -1,0 +1,70 @@
+﻿<div class="min-h-screen bg-gray-100">
+    <!-- Hero Section -->
+    <header class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white text-center"
+            style="background-image: url('/path-to-hotel-image.jpg');">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="z-10">
+            <h1 class="text-5xl font-extrabold">Welcome to COLAF Hotel</h1>
+            <p class="text-lg mt-4">Experience luxury and comfort like never before.</p>
+            <a href="#" class="mt-6 inline-block px-6 py-3 bg-[var(--primary-color)] text-white font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
+                Explore Rooms
+            </a>
+        </div>
+    </header>
+
+    <!-- Featured Rooms -->
+    <section class="py-16 px-6 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">Featured Rooms</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            @for (int i = 1; i <= 3; i++)
+            {
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition">
+                    <img src="/path-to-room-image.jpg" alt="Room Image" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold">Deluxe Suite</h3>
+                        <p class="text-gray-600 mt-2">Spacious and luxurious with a stunning city view.</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-lg font-bold text-[var(--primary-color)]">$199 / Night</span>
+                            <a href="#" class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-opacity-80 transition">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Offers & Discounts -->
+    <section class="bg-gradient-to-r from-yellow-500 to-red-500 text-white py-16 text-center">
+        <h2 class="text-4xl font-bold">Limited Time Offers!</h2>
+        <p class="mt-4 text-lg">Get up to 30% off on selected rooms. Book now and save!</p>
+        <a href="#" class="mt-6 inline-block px-6 py-3 bg-white text-[var(--primary-color)] font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            View Offers
+        </a>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 px-6 max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">What Our Guests Say</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            @for (int i = 1; i <= 2; i++)
+            {
+                <div class="bg-white shadow-lg rounded-lg p-6 flex items-center space-x-6">
+                    <img src="/path-to-avatar.jpg" alt="Guest Avatar" class="w-16 h-16 rounded-full object-cover">
+                    <div>
+                        <p class="text-gray-600">"Amazing experience! The staff was friendly, and the room was perfect!"</p>
+                        <span class="block mt-2 text-gray-800 font-semibold">- John Doe</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="bg-[var(--primary-color)] text-white text-center py-16">
+        <h2 class="text-4xl font-bold">Ready to Experience Luxury?</h2>
+        <p class="mt-4 text-lg">Book your stay today and enjoy world-class hospitality.</p>
+        <a href="#" class="mt-6 inline-block px-6 py-3 bg-white text-[var(--primary-color)] font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            Book Now
+        </a>
+    </section>
+</div>

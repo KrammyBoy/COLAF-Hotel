@@ -20,7 +20,23 @@ namespace COLAFHotel.Controllers
             return View(bookings ?? new List<Booking>()); // Prevent null exception
         }
 
-        public IActionResult Create(int roomId, string roomNumber, string roomImg, string roomCategory, int roomPrice)
+        public IActionResult Details(int id)
+        {
+            var booking = _context.Bookings
+                .Include(b => b.Guest)
+                    .ThenInclude(g => g.User)
+                .Include(b => b.Room)
+                .FirstOrDefault(b => b.booking_id == id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return View(booking);
+        }
+
+        public IActionResult Create(int roomId, string roomNumber, string roomImg, string roomCategory, decimal roomPrice)
         {
             var room = new Room
             {
@@ -36,7 +52,7 @@ namespace COLAFHotel.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)
         {
-            int guest_id = Convert.ToInt32(GuestId);
+            
             Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}");
             if (GuestId == "null")
             {
@@ -47,8 +63,8 @@ namespace COLAFHotel.Controllers
                 };
                 _context.Guests.Add(guest);
                 await _context.SaveChangesAsync();
-                guest_id = guest.guest_id;
-                Console.WriteLine($"Guest ID: {guest_id}");
+                GuestId = guest.guest_id.ToString();
+                Console.WriteLine($"Guest ID: {GuestId}");
             }
             CheckInDate = DateTime.SpecifyKind(CheckInDate, DateTimeKind.Utc);
             CheckOutDate = DateTime.SpecifyKind(CheckOutDate, DateTimeKind.Utc);
@@ -68,7 +84,7 @@ namespace COLAFHotel.Controllers
 
             var booking = new Booking
             {
-                guest_id = guest_id,
+                guest_id = Convert.ToInt32(GuestId),
                 room_id = Convert.ToInt32(RoomId),
                 check_in_date = CheckInDate,
                 check_out_date = CheckOutDate,
