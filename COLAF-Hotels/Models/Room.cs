@@ -30,7 +30,7 @@ namespace COLAFHotel.Models
 
         [Required]
         [Column("price")]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
 
         [NotMapped]
         public int? Floor { get; set; }
