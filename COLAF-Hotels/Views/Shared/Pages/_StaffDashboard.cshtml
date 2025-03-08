@@ -1,0 +1,75 @@
+﻿<div class="flex min-h-screen bg-gray-100">
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+        <h1 class="text-3xl font-semibold text-gray-800">Dashboard</h1>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-3 gap-6 mt-6">
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Active Bookings</h2>
+                <p class="text-2xl font-bold text-blue-600">24</p>
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Pending Requests</h2>
+                <p class="text-2xl font-bold text-red-500">8</p>
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Available Rooms</h2>
+                <p class="text-2xl font-bold text-green-500">15</p>
+            </div>
+        </div>
+
+        <!-- Booking & Requests Tables -->
+        <div class="grid grid-cols-2 gap-6 mt-6">
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Recent Bookings</h2>
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-700">
+                            <th class="py-2">Guest</th>
+                            <th class="py-2">Room</th>
+                            <th class="py-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2">John Doe</td>
+                            <td class="py-2">Deluxe Suite</td>
+                            <td class="py-2 text-blue-500">Checked In</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Jane Smith</td>
+                            <td class="py-2">Standard Room</td>
+                            <td class="py-2 text-yellow-500">Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Guest Requests</h2>
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-700">
+                            <th class="py-2">Request</th>
+                            <th class="py-2">Room</th>
+                            <th class="py-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2">Extra Towels</td>
+                            <td class="py-2">101</td>
+                            <td class="py-2 text-green-500">Completed</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2">Late Checkout</td>
+                            <td class="py-2">205</td>
+                            <td class="py-2 text-red-500">Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

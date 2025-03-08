@@ -18,6 +18,7 @@ namespace COLAFHotel.Data
         public DbSet<Room> Room { get; set; }
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,7 @@ namespace COLAFHotel.Data
             modelBuilder.Entity<Room>().ToTable("room");
             modelBuilder.Entity<Guest>().ToTable("guest");
             modelBuilder.Entity<Booking>().ToTable("booking");
+            modelBuilder.Entity<Discount>().ToTable("discount");
         }
     }
 }

@@ -1,12 +1,24 @@
-﻿@{
-    ViewBag.Title = "Home";
-}
-@inject IHttpContextAccessor HttpContextAccessor
+﻿@inject IHttpContextAccessor HttpContextAccessor
 @model IEnumerable<COLAFHotel.Models.User>
 
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+}
+
+@{
+    if (role == "Guest"){
+        ViewBag.Title = "Guest";
+    }
+    else if (role == "Admin"){
+        ViewBag.Title = "Admin";
+    }
+    else if (role == "Staff"){
+        ViewBag.Title = "Staff";
+    }
+    else{
+        ViewBag.Title = "Home";
+    }
 }
 <div class="shadow-lg pt-[7rem]">
     @if (!string.IsNullOrEmpty(role))
@@ -18,6 +30,9 @@
         else if (role == "Admin")
         {
             @await Html.PartialAsync("Pages/_AdminDashboard", Model)
+        }
+        else if (role == "Staff"){
+            @await Html.PartialAsync("Pages/_StaffDashboard", Model)
         }
     }
     else
