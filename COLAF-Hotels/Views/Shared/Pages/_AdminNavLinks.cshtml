@@ -5,22 +5,28 @@
     <span class="text-red-500">ADMIN</span> <span class="text-white font-normal">DASHBOARD</span>
 </a>
 
-<a href="@Url.Action("Index", "Security")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("Index", "Security")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("Index", "Security") ? "text-[var(--fifth-color)]" : "text-white")">
     SECURITY
 </a>
 
-<a href="@Url.Action("ManageUsers", "User")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("ManageUsers", "User")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("ManageUsers", "User") ? "text-[var(--fifth-color)]" : "text-white")">
     USERS
 </a>
-<a href="@Url.Action("AdminRoom", "Room")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
+<a href="@Url.Action("AdminRoom", "Room")"
+   class="relative text-lg cursor-pointer
+              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0
+                          @(Context.Request.Path.Value == Url.Action("AdminRoom", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
     ROOMS
 </a>

@@ -16,8 +16,20 @@ namespace COLAFHotel.Controllers
 
         public IActionResult Index()
         {
-            var bookings = _context.Bookings.Include(b => b.Guest).ToList(); // Ensure it retrieves data
-            return View(bookings ?? new List<Booking>()); // Prevent null exception
+            var guest_id = HttpContext.Session.GetString("GuestId");
+
+            if (int.TryParse(guest_id, out int guestId)) // Ensure it's a valid integer
+            {
+                var bookings = _context.Bookings
+                    .Include(b => b.Guest)
+                    .Where(b => b.guest_id == guestId) // Filter by GuestId
+                    .ToList();
+
+                return View(bookings);
+            }
+
+            return View(new List<Booking>()); // If GuestId is invalid, return an empty list
+
         }
 
         public IActionResult Details(int id)

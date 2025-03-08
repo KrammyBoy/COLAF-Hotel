@@ -116,13 +116,12 @@ namespace COLAFHotel.Controllers
                 If not the booking system will create the guest_id for the user
              */
             var guest = await _context.Guests.FirstOrDefaultAsync(g => g.user_id == user.user_id);
-            if (guest != null) {
-                HttpContext.Session.SetString("GuestId", guest.guest_id.ToString());
-            }else
-            {
-                HttpContext.Session.SetString("GuestId", "null");
-            }
-            Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}");
+
+            string guestId = guest?.guest_id.ToString() ?? "null";
+            HttpContext.Session.SetString("GuestId", guestId);
+
+            Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}, GuestId: {guestId}");
+
             return RedirectToAction("Index", "Dashboard");
         }
         public IActionResult Logout()

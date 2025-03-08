@@ -6,6 +6,8 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
     var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
+
+    Console.WriteLine();
 }
 <div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6 pt-20">
     @if (!string.IsNullOrEmpty(role))
