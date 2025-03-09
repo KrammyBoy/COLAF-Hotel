@@ -23,6 +23,7 @@ namespace COLAFHotel.Controllers
                 var bookings = _context.Bookings
                     .Include(b => b.Guest)
                     .Where(b => b.guest_id == guestId) // Filter by GuestId
+                    .Include(b => b.Room)
                     .ToList();
 
                 return View(bookings);
@@ -113,5 +114,20 @@ namespace COLAFHotel.Controllers
             TempData["TotalAmount"] = booking.total_amount.ToString();
             return RedirectToAction("Index", "Booking");
         }
+        
+        [HttpGet("GetUnavailableDates")]
+        public IActionResult GetUnavailableDates(int roomId)
+        {
+            var unavailableDates = _context.Bookings
+                .Where(b => b.room_id == roomId && b.status == "Confirmed")
+                .AsEnumerable() // Move to memory processing
+                .SelectMany(b => Enumerable.Range(0, (b.check_out_date - b.check_in_date).Days)
+                    .Select(d => b.check_in_date.AddDays(d).ToString("yyyy-MM-dd")))
+                .ToList();
+
+            return Ok(unavailableDates);
+        }
+
+
     }
 }

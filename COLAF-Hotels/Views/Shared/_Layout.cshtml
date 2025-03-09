@@ -1,4 +1,4 @@
-@inject IHttpContextAccessor HttpContextAccessor
+﻿@inject IHttpContextAccessor HttpContextAccessor
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
@@ -25,6 +25,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
         --secondary-color: #3E362E;
@@ -119,4 +122,55 @@
 
     @RenderSection("Scripts", required: false)
 </body>
+
 </html>
+
+<style>
+    /* Custom Flatpickr Styles */
+    .flatpickr-calendar {
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .flatpickr-day {
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .flatpickr-day:hover {
+            background: #007bff !important;
+            color: white !important;
+            transform: scale(1.05);
+        }
+
+        .flatpickr-day.today {
+            border: 2px solid #007bff;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .flatpickr-day.selected {
+            background: #007bff !important;
+            color: white !important;
+        }
+
+    .flatpickr-month {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .flatpickr-current-month {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .flatpickr-prev-month, .flatpickr-next-month {
+        transition: all 0.2s ease;
+    }
+
+        .flatpickr-prev-month:hover, .flatpickr-next-month:hover {
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 50%;
+        }
+</style>

@@ -33,8 +33,8 @@
                 @foreach (var booking in Model)
                 {
                     <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-3 px-4 text-gray-800">#@booking.booking_id</td>
-                        <td class="py-3 px-4 text-gray-600">@booking.room_id</td>
+                        <td class="py-3 px-4 text-gray-800">@booking.booking_id</td>
+                        <td class="py-3 px-4 text-gray-600">@booking.Room.RoomNumber</td>
                         <td class="py-3 px-4 text-gray-600">@booking.check_in_date.ToString("yyyy-MM-dd")</td>
                         <td class="py-3 px-4 text-gray-600">@booking.check_out_date.ToString("yyyy-MM-dd")</td>
                         <td class="py-3 px-4">

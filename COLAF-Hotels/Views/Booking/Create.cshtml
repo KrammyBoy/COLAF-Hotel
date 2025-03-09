@@ -51,13 +51,19 @@
 
                     <!-- Check-in & Check-out Dates -->
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
+                        <div class="relative group">
                             <label class="block text-lg font-semibold mb-1">Check-in Date:</label>
-                            <input type="date" id="checkInDate" name="CheckInDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()"> <!--Should verify that the date inputted is at least one day advanced-->
-                        </div> 
-                        <div>
+                            <div class="relative">
+                                <input type="text" id="checkInDate" name="CheckInDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
+                            </div>
+                        </div>
+                        <div class="relative group">
                             <label class="block text-lg font-semibold mb-1">Check-out Date:</label>
-                            <input type="date" id="checkOutDate" name="CheckOutDate" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                            <div class="relative">
+                                <input type="text" id="checkOutDate" name="CheckOutDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -229,7 +235,20 @@
         </script>
     }
 </div>
-
+@if (TempData["Error"] != null)
+{
+    <div id="errorModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-xl font-semibold text-red-600 mb-2">Error</h2>
+            <p class="text-gray-700">@TempData["Error"]</p>
+            <div class="mt-4 flex justify-end">
+                <button onclick="closeErrorModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+}
 <script>
     function updatePrice() {
         let basePrice = @Model.Price;
@@ -276,8 +295,29 @@
         details.classList.toggle("hidden");
     }
 
-    function clearTransportDetails() {
-        document.getElementById("transportService").checked = false;
-        document.getElementById("transportDetails").classList.add("hidden");
+    function closeErrorModal() {
+        document.getElementById("errorModal").style.display = "none";
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var roomId = document.getElementsByName("RoomId")[0].value;
+        let tomorrow = new Date();
+        let today = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1); // Move to next day
+
+        fetch(`/GetUnavailableDates?roomId=${roomId}`)
+            .then(response => response.json())
+            .then(dates => {
+                flatpickr(".datepicker", {
+                    dateFormat: "Y-m-d",
+                    disableMobile: "true",
+                    disable: dates.map(date => new Date(date)), // Disable booked dates
+                    minDate: tomorrow, // Prevent past date selection
+                    maxDate: new Date(today.getFullYear(), today.getMonth() + 12, today.getDate()),
+                    prevArrow: "←",
+                    nextArrow: "→"
+                });
+            });
+    });
+
 </script>
