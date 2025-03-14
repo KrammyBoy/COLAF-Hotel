@@ -1,14 +1,221 @@
-@model COLAFHotel.Models.Guest
 @{
     ViewBag.Title = "Guest Profile";
+
+    // Sample guest data for design purposes
+    var guestData = new
+    {
+        Name = "Darkus Sal",
+        Email = "darkus.sal@example.com",
+        Phone = "+1 (555) 123-4567",
+        Address = "123 Maple Avenue, Cebu, OR 97205",
+        MemberSince = "March 2023",
+        LoyaltyTier = "Gold",
+        LoyaltyPoints = 2450,
+        PreferredRoom = "Deluxe Suite",
+        Preferences = new[] {
+            "Early check-in when available",
+            "Extra pillows",
+            "Room away from elevator",
+            "Organic coffee selection"
+        },
+        UpcomingStays = new[] {
+            new { CheckIn = "April 15, 2025", CheckOut = "April 18, 2025", RoomType = "Deluxe Suite", BookingId = "B78932" }
+        },
+        PastStays = 7
+    };
 }
 
-<div class="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-3xl font-semibold text-[var(--primary-color)] mb-4">Guest Profile</h2>
+<div class="container mx-auto py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        <!-- Profile Header -->
+        <div class="bg-coffee-dark rounded-t-2xl p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFFFFF" d="M40.8,-62.5C53.3,-53.5,64.2,-42.6,70.5,-29.3C76.7,-16,78.3,-0.3,75.5,14.7C72.7,29.8,65.4,44.2,54.5,54.9C43.5,65.6,28.9,72.5,13.8,75.5C-1.4,78.5,-17,77.4,-31.3,71.5C-45.5,65.5,-58.5,54.6,-67.3,41C-76.1,27.3,-80.8,10.8,-78.9,-4.9C-77,-20.7,-68.6,-35.7,-57.2,-45.6C-45.8,-55.5,-31.4,-60.2,-17.5,-65.6C-3.7,-71,10.7,-77,24.5,-75.5C38.3,-74,51.6,-65,40.8,-62.5Z" transform="translate(100 100)" />
+                </svg>
+            </div>
 
-    <div class="space-y-3">
-        <p class="text-lg"><strong>Name:</strong> @Model.user_id</p>
-        <p class="text-lg"><strong>Email:</strong> @Model.guest_id</p>
-        <p class="text-lg"><strong>Phone:</strong> @Model.phone</p>
+            <div class="flex items-center space-x-6 relative z-10">
+                <div class="bg-coffee-accent rounded-full p-1">
+                    <div class="bg-white rounded-full h-20 w-20 flex items-center justify-center text-coffee-dark font-bold text-2xl">
+                        @guestData.Name.Substring(0, 1)@guestData.Name.Split(' ')[1].Substring(0, 1)
+                    </div>
+                </div>
+
+                <div class="text-white">
+                    <h1 class="text-2xl font-serif font-bold">@guestData.Name</h1>
+                    <div class="flex items-center mt-2">
+                        <span class="bg-coffee-accent px-3 py-1 rounded-full text-xs font-medium">@guestData.LoyaltyTier Member</span>
+                        <span class="ml-3 text-coffee-cream text-sm">Member since @guestData.MemberSince</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-white rounded-b-2xl shadow-lg">
+            <!-- Contact Information -->
+            <div class="md:col-span-2">
+                <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Contact Information</h2>
+                <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-coffee-medium text-sm">Email Address</p>
+                            <p class="text-coffee-dark font-medium">@guestData.Email</p>
+                        </div>
+                        <div>
+                            <p class="text-coffee-medium text-sm">Phone Number</p>
+                            <p class="text-coffee-dark font-medium">@guestData.Phone</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-coffee-medium text-sm">Mailing Address</p>
+                            <p class="text-coffee-dark font-medium">@guestData.Address</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-coffee-cream border-opacity-30">
+                        <a href="#" class="text-coffee-accent hover:text-coffee-dark transition-colors text-sm font-medium">
+                            Edit Contact Information
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loyalty Points -->
+            <div>
+                <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Loyalty Status</h2>
+                <div class="bg-gradient-to-br from-coffee-medium to-coffee-dark rounded-xl p-5 text-white">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm opacity-80">Current Points</span>
+                        <span class="text-xl font-bold">@guestData.LoyaltyPoints</span>
+                    </div>
+                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mb-4">
+                        <div class="bg-coffee-accent h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span>@guestData.LoyaltyTier</span>
+                        <span>Platinum (3000 pts)</span>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-white border-opacity-20 text-center">
+                        <a href="#" class="text-white hover:text-coffee-cream transition-colors text-sm font-medium">
+                            View Benefits
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Stays -->
+            <div class="md:col-span-3">
+                <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Upcoming Stays</h2>
+                @if (guestData.UpcomingStays.Any())
+                {
+                    <div class="bg-white rounded-xl border border-coffee-cream shadow-sm overflow-hidden">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-coffee-cream bg-opacity-20">
+                                    <th class="py-3 px-4 text-left text-coffee-dark font-medium text-sm">Check-In</th>
+                                    <th class="py-3 px-4 text-left text-coffee-dark font-medium text-sm">Check-Out</th>
+                                    <th class="py-3 px-4 text-left text-coffee-dark font-medium text-sm">Room Type</th>
+                                    <th class="py-3 px-4 text-left text-coffee-dark font-medium text-sm">Booking ID</th>
+                                    <th class="py-3 px-4 text-left text-coffee-dark font-medium text-sm">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var stay in guestData.UpcomingStays)
+                                {
+                                    <tr class="border-t border-coffee-cream border-opacity-30">
+                                        <td class="py-3 px-4 text-coffee-dark">@stay.CheckIn</td>
+                                        <td class="py-3 px-4 text-coffee-dark">@stay.CheckOut</td>
+                                        <td class="py-3 px-4 text-coffee-dark">@stay.RoomType</td>
+                                        <td class="py-3 px-4 text-coffee-dark">@stay.BookingId</td>
+                                        <td class="py-3 px-4">
+                                            <a href="#" class="text-coffee-accent hover:text-coffee-dark transition-colors text-sm">
+                                                View Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="bg-white rounded-xl border border-coffee-cream shadow-sm p-8 text-center">
+                        <p class="text-coffee-medium mb-4">You don't have any upcoming stays.</p>
+                        <a href="/Rooms" class="inline-block px-4 py-2 bg-coffee-accent text-white rounded-lg hover:bg-coffee-dark transition-colors">
+                            Book a Room
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <!-- Preferences -->
+            <div class="md:col-span-2">
+                <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Stay Preferences</h2>
+                <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-coffee-medium text-sm">Preferred Room Type</p>
+                            <p class="text-coffee-dark font-medium">@guestData.PreferredRoom</p>
+                        </div>
+                        <div>
+                            <p class="text-coffee-medium text-sm">Special Requests</p>
+                            <ul class="mt-2 space-y-2">
+                                @foreach (var preference in guestData.Preferences)
+                                {
+                                    <li class="flex items-center">
+                                        <svg class="h-4 w-4 text-coffee-accent mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-coffee-dark">@preference</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-coffee-cream border-opacity-30">
+                        <a href="#" class="text-coffee-accent hover:text-coffee-dark transition-colors text-sm font-medium">
+                            Update Preferences
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div>
+                <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Guest Stats</h2>
+                <div class="bg-white rounded-xl p-5 border border-coffee-cream shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-coffee-dark">@guestData.PastStays</p>
+                            <p class="text-coffee-medium text-sm">Past Stays</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-coffee-dark">12</p>
+                            <p class="text-coffee-medium text-sm">Nights</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-coffee-dark">3</p>
+                            <p class="text-coffee-medium text-sm">Countries</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-coffee-cream border-opacity-30 text-center">
+                        <a href="#" class="text-coffee-accent hover:text-coffee-dark transition-colors text-sm font-medium">
+                            View Travel History
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Actions -->
+            <div class="md:col-span-3 flex flex-wrap gap-4 justify-end mt-4">
+                <button class="px-4 py-2 bg-white border border-coffee-cream text-coffee-dark rounded-lg hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
+                    Reset Password
+                </button>
+                <button class="px-4 py-2 bg-coffee-dark text-white rounded-lg hover:bg-coffee-medium transition-colors">
+                    Download Profile Data
+                </button>
+            </div>
+        </div>
     </div>
 </div>

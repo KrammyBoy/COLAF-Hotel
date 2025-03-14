@@ -1,32 +1,32 @@
-﻿<a href="@Url.Action("Index", "Dashboard")" class="relative text-lg font-bold cursor-pointer
+﻿<nav class="flex items-center space-x-4 py-3">
+<a href="@Url.Action("Index", "Dashboard")" class="relative text-lg font-medium cursor-pointer
    after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
+   after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
    hover:after:w-full hover:after:left-0">
-    <span class="text-red-500">ADMIN</span> <span class="text-white font-normal">DASHBOARD</span>
+    <span class="text-red-500 font-bold">ADMIN</span> <span class="text-white font-normal">DASHBOARD</span>
 </a>
-
 <a href="@Url.Action("Index", "Security")"
-   class="relative text-lg cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("Index", "Security") ? "text-[var(--fifth-color)]" : "text-white")">
+   class="relative text-lg font-medium cursor-pointer
+          after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+          after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+          hover:after:w-full hover:after:left-0 hover:text-indigo-100
+          @(Context.Request.Path.Value == Url.Action("Index", "Security") ? "text-indigo-300" : "text-white")">
     SECURITY
 </a>
-
 <a href="@Url.Action("ManageUsers", "User")"
-   class="relative text-lg cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("ManageUsers", "User") ? "text-[var(--fifth-color)]" : "text-white")">
+   class="relative text-lg font-medium cursor-pointer
+          after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+          after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+          hover:after:w-full hover:after:left-0 hover:text-indigo-100
+          @(Context.Request.Path.Value == Url.Action("ManageUsers", "User") ? "text-indigo-300" : "text-white")">
     USERS
 </a>
 <a href="@Url.Action("AdminRoom", "Room")"
-   class="relative text-lg cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("AdminRoom", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
+   class="relative text-lg font-medium cursor-pointer
+          after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+          after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+          hover:after:w-full hover:after:left-0 hover:text-indigo-100
+          @(Context.Request.Path.Value == Url.Action("AdminRoom", "Room") ? "text-indigo-300" : "text-white")">
     ROOMS
 </a>
+</nav>

@@ -1,11 +1,160 @@
-﻿@model IEnumerable<string>
-@{
+﻿@{
     ViewBag.Title = "Notifications";
+    // Note: The model directive is commented out as specified
+    // @model IEnumerable<string>
+
+    // Sample notifications for design purposes
+    var sampleNotifications = new[] {
+        new { Message = "Your room is ready for check-in. Room 302 is prepared with your requested amenities.", Date = DateTime.Now.AddHours(-2), IsRead = false },
+        new { Message = "Thank you for booking our Barista Workshop. Your session is confirmed for tomorrow at a9:00 AM.", Date = DateTime.Now.AddDays(-1), IsRead = false },
+        new { Message = "Special dinner event tonight in our restaurant featuring local coffee pairings. Limited seats available!", Date = DateTime.Now.AddDays(-2), IsRead = true },
+        new { Message = "Your scheduled spa treatment has been confirmed. Please arrive 15 minutes before your appointment.", Date = DateTime.Now.AddDays(-3), IsRead = true },
+        new { Message = "Welcome to COLAF Hotel! Your loyalty account has been credited with 500 welcome points.", Date = DateTime.Now.AddDays(-4), IsRead = true }
+    };
 }
-<h2>Notifications</h2>
-<ul>
-    @foreach (var note in Model)
-    {
-        <li>@note</li>
-    }
-</ul>
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="mb-8 flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+                <span class="relative z-10">Notifications</span>
+                <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+            </h2>
+            <p class="text-coffee-medium mt-2">Stay updated with important information</p>
+        </div>
+
+        <div class="flex space-x-2">
+            <button class="px-4 py-2 text-sm bg-white border border-coffee-cream text-coffee-dark rounded-lg hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
+                Mark all as read
+            </button>
+            <button class="px-4 py-2 text-sm bg-coffee-dark text-white rounded-lg hover:bg-coffee-medium transition-colors">
+                Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg border border-coffee-cream overflow-hidden">
+        <div class="p-4 bg-coffee-dark text-coffee-cream flex justify-between items-center">
+            <div class="flex items-center">
+                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <span class="font-medium">Recent Notifications</span>
+            </div>
+            <span class="bg-coffee-accent text-white text-xs px-2 py-1 rounded-full">
+                @sampleNotifications.Count(n => !n.IsRead) new
+            </span>
+        </div>
+
+        <div class="divide-y divide-coffee-cream">
+            @foreach (var notification in sampleNotifications)
+            {
+                <div class="p-4 @(!notification.IsRead ? "bg-coffee-cream bg-opacity-10" : "")">
+                    <div class="flex items-start">
+                        <div class="mr-4 mt-1">
+                            @if (!notification.IsRead)
+                            {
+                                <div class="h-3 w-3 bg-coffee-accent rounded-full"></div>
+                            }
+                            else
+                            {
+                                <div class="h-3 w-3 border border-coffee-light border-opacity-40 rounded-full"></div>
+                            }
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-coffee-dark @(!notification.IsRead ? "font-medium" : "")">
+                                @notification.Message
+                            </p>
+                            <div class="mt-2 flex justify-between items-center">
+                                <span class="text-xs text-coffee-medium">
+                                    @if (notification.Date.Date == DateTime.Now.Date)
+                                    {
+                                        <span>Today at @notification.Date.ToString("h:mm tt")</span>
+                                    }
+                                    else if (notification.Date.Date == DateTime.Now.AddDays(-1).Date)
+                                    {
+                                        <span>Yesterday at @notification.Date.ToString("h:mm tt")</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@notification.Date.ToString("MMM dd, yyyy") at @notification.Date.ToString("h:mm tt")</span>
+                                    }
+                                </span>
+                                <div class="flex space-x-2">
+                                    @if (!notification.IsRead)
+                                    {
+                                        <button class="text-xs text-coffee-accent hover:text-coffee-dark transition-colors">
+                                            Mark as read
+                                        </button>
+                                    }
+                                    <button class="text-xs text-coffee-medium hover:text-coffee-dark transition-colors">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (!sampleNotifications.Any())
+            {
+                <div class="py-16 px-4 text-center">
+                    <svg class="mx-auto h-12 w-12 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <h3 class="mt-4 text-lg font-serif font-medium text-coffee-dark">No notifications</h3>
+                    <p class="mt-2 text-coffee-medium">You're all caught up!</p>
+                </div>
+            }
+        </div>
+
+        @if (sampleNotifications.Any())
+        {
+            <div class="p-4 bg-coffee-cream bg-opacity-5 border-t border-coffee-cream text-center">
+                <a href="#" class="text-sm text-coffee-accent hover:text-coffee-dark transition-colors">
+                    View all notifications
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="mt-8 bg-white rounded-xl shadow-md border border-coffee-cream p-6">
+        <h3 class="font-serif font-bold text-coffee-dark mb-4">Notification Preferences</h3>
+
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-coffee-dark font-medium">Booking Updates</h4>
+                    <p class="text-coffee-medium text-sm">Receive alerts about your reservation status</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-accent"></div>
+                </label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-coffee-dark font-medium">Special Offers</h4>
+                    <p class="text-coffee-medium text-sm">Get notified about discounts and promotions</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-accent"></div>
+                </label>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-coffee-dark font-medium">Event Reminders</h4>
+                    <p class="text-coffee-medium text-sm">Receive reminders about hotel events and activities</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-coffee-accent"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,4 +2,98 @@
 @{
     ViewBag.Title = "Discount Offers";
 }
-<h2>Discount Offers</h2>
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="mb-8">
+        <h2 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+            <span class="relative z-10">Special Offers & Discounts</span>
+            <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+        </h2>
+        <p class="text-coffee-medium mt-2">Exclusive deals to enhance your stay experience</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-coffee-cream hover:shadow-xl transition-shadow duration-300">
+                <div class="h-3 bg-coffee-accent"></div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-serif font-bold text-coffee-dark">Placeholder Anniversary Discount</h3>
+                        <span class="inline-block bg-coffee-accent text-white text-sm font-bold px-3 py-1 rounded-full">
+                            50%
+                        </span>
+                    </div>
+
+                    <p class="text-coffee-medium mb-4">Be with your love placeholder</p>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center text-sm">
+                            <svg class="h-5 w-5 text-coffee-accent mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-coffee-medium">
+                                Valid from: <span class="font-medium text-coffee-dark">Placeholder date</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <svg class="h-5 w-5 text-coffee-accent mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="text-coffee-medium">
+                                Expires: <span class="font-medium text-coffee-dark">Placeholder date</span>
+                            </span>
+                        </div>
+
+                            <div class="flex items-center text-sm">
+                                <svg class="h-5 w-5 text-coffee-accent mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                <span class="text-coffee-medium">
+                                    Promo Code: <span class="font-medium text-coffee-dark">Placeholder promo code</span>
+                                </span>
+                            </div>
+                    </div>
+
+                    <div class="bg-coffee-cream bg-opacity-20 p-4 rounded-lg border border-coffee-cream border-opacity-40">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-coffee-medium">Minimum Stay:</span>
+                            <span class="font-medium text-coffee-dark">Minimum days</span>
+                        </div>
+                        @if (true)
+                        {
+                            <div class="flex justify-between items-center text-sm mt-2">
+                                <span class="text-coffee-medium">Status:</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="flex justify-between items-center text-sm mt-2">
+                                <span class="text-coffee-medium">Status:</span>
+                                <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">Inactive</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-6">
+                        <a href="/Rooms" class="block w-full py-3 bg-coffee-dark text-center text-white font-medium rounded-lg hover:bg-coffee-medium transition-colors duration-150">
+                            Book with this offer
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <p>Kung walay discount offers</p>
+    @if (true)
+    {
+        <div class="bg-white rounded-xl p-12 text-center shadow-lg border border-coffee-cream">
+            <svg class="mx-auto h-16 w-16 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="mt-4 text-xl font-serif font-bold text-coffee-dark">No Active Offers</h3>
+            <p class="mt-2 text-coffee-medium">Check back soon for new discounts and special offers</p>
+            <a href="/Room/List" class="mt-6 inline-block px-6 py-3 bg-coffee-accent text-white rounded-lg hover:bg-coffee-dark transition-colors">
+                Browse Rooms
+            </a>
+        </div>
+    }
+</div>

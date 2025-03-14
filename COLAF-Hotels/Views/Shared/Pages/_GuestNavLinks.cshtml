@@ -1,54 +1,50 @@
-﻿<a href="@Url.Action("List", "Room")"
-   class="relative text-lg cursor-pointer
+﻿<nav class="flex items-center space-x-4 py-3">
+    <a href="@Url.Action("List", "Room")"
+       class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
-    ROOMS
-</a>
-<a href="@Url.Action("Index", "Booking")"
-   class="relative text-lg cursor-pointer
+              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0 hover:text-indigo-100
+              @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-indigo-300" : "text-white")">
+        ROOMS
+    </a>
+    <a href="@Url.Action("Index", "Booking")"
+       class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("Index", "Booking") ? "text-[var(--fifth-color)]" : "text-white")">
-    MY BOOKINGS
-</a>
-<a href="@Url.Action("Offers", "Discount")"
-   class="relative text-lg cursor-pointer
+              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0 hover:text-indigo-100
+              @(Context.Request.Path.Value == Url.Action("Index", "Booking") ? "text-indigo-300" : "text-white")">
+        BOOKINGS
+    </a>
+    <a href="@Url.Action("Offers", "Discount")"
+       class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("Offers", "Discount") ? "text-[var(--fifth-color)]" : "text-white")">
-    OFFERS
-</a>
-<a href="@Url.Action("Profile", "Guest")" class="relative text-white text-lg cursor-pointer
-   after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-   after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-   hover:after:w-full hover:after:left-0">
-    PROFILE
-</a> <!--Should be changed to circle-->
-<a href="@Url.Action("Request", "Maintenance")"
-   class="relative text-lg cursor-pointer
+              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0 hover:text-indigo-100
+              @(Context.Request.Path.Value == Url.Action("Offers", "Discount") ? "text-indigo-300" : "text-white")">
+        OFFERS
+    </a>
+    <a href="@Url.Action("Requests", "Maintenance")"
+       class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("Request", "Maintenance") ? "text-[var(--fifth-color)]" : "text-white")">
-    MAINTENANCE
-</a>
-<a href="@Url.Action("SpecialServices", "Services")"
-   class="relative text-lg cursor-pointer
+              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0 hover:text-indigo-100
+              @(Context.Request.Path.Value == Url.Action("Request", "Maintenance") ? "text-indigo-300" : "text-white")">
+        MAINTENANCE
+    </a>
+    <a href="@Url.Action("SpecialServices", "Services")"
+       class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("SpecialServices", "Services") ? "text-[var(--fifth-color)]" : "text-white")">
-    SERVICES
-</a>
-<a href="@Url.Action("Index", "Notification")"
-   class="relative text-lg cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-[var(--fifth-color)]" : "text-white")">
-    NOTIFICATION
-</a>
+              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+              hover:after:w-full hover:after:left-0 hover:text-indigo-100
+              @(Context.Request.Path.Value == Url.Action("SpecialServices", "Services") ? "text-indigo-300" : "text-white")">
+        SERVICES
+    </a>
+    <a href="@Url.Action("Index", "Notification")"
+       class="relative flex items-center group cursor-pointer">
+        <span class="text-base font-medium transition-colors duration-200
+                   @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-indigo-300" : "text-white")">
+            ALERTS
+        </span>
+        <div class="ml-1 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-xs text-white">2</div>
+    </a>
+</nav>

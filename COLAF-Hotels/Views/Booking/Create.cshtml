@@ -22,30 +22,14 @@
             <!-- Room Details -->
             <div class="p-6">
                 <h2 class="text-4xl font-bold text-[var(--primary-color)] mb-4">Room @Model.RoomNumber</h2>
-                <p class="text-lg text-gray-700">Category: <span class="text-[var(--secondary-color)] font-semibold">@Model.Category</span></p>
-                
-                @if (ViewBag.Error != null)
-                {
-                    <div id="error-alert" class="relative transform bg-red-600 text-white p-2 rounded-lg shadow-lg flex items-center justify-between w-[100%] max-w-md animate-fade-in">
-                        <div class="flex items-center space-x-2">
-                            <!-- Error Icon -->
-                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.519 11.591c.763 1.36-.191 3.047-1.743 3.047H3.48c-1.552 0-2.506-1.687-1.743-3.047l6.52-11.591zM11 14a1 1 0 11-2 0 1 1 0 012 0zm-.25-7a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V7z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="text-sm font-medium">@ViewBag.Error</span>
-                        </div>
-                        <!-- Close Button -->
-                        <button onclick="document.getElementById('error-alert').remove();" class="ml-4 focus:outline-none">
-                            <svg class="w-5 h-5 text-white hover:text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 8.586L5.707 4.293a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 0 001.414 1.414L10 11.414l4.293 4.293a1 1 0 001.414-1.414L11.414 10l4.293-4.293a1 1 0 00-1.414-1.414L10 8.586z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                }
-                
+                <p class="text-lg text-gray-700">Category: <span class="text-[var(--secondary-color)] font-semibold">@Model.Category</span></p>                
                 <!-- Booking Form -->
                 <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="mt-6 space-y-4">
                     <input type="hidden" name="RoomId" value="@Model.RoomId" />
+                    <input type="hidden" name="RoomNumber" value="@Model.RoomNumber"/>
+                    <input type="hidden" name="Category" value="@Model.Category"/>
+                    <input type="hidden" name="ImageUrl" value="@Model.ImageUrl"/>
+                    <input type="hidden" name="Price" value="@Model.Price" />
                     <input type="hidden" name="UserId" value="@user_id"/>
                     <input type="hidden" name="GuestId" value="@isGuest"/>
 
@@ -54,14 +38,14 @@
                         <div class="relative group">
                             <label class="block text-lg font-semibold mb-1">Check-in Date:</label>
                             <div class="relative">
-                                <input type="text" id="checkInDate" name="CheckInDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                                <input type="text" id="checkInDate" name="CheckInDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()" required>
                                 <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
                             </div>
                         </div>
                         <div class="relative group">
                             <label class="block text-lg font-semibold mb-1">Check-out Date:</label>
                             <div class="relative">
-                                <input type="text" id="checkOutDate" name="CheckOutDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()">
+                                <input type="text" id="checkOutDate" name="CheckOutDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()" required>
                                 <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
                             </div>
                         </div>
@@ -135,21 +119,21 @@
                         <div class="grid grid-cols-1 gap-4">
                             <label class="block">
                                 <span class="text-md font-semibold">Card Number</span>
-                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="1234 5678 9012 3456">
+                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="1234 5678 9012 3456" required>
                             </label>
                             <div class="grid grid-cols-2 gap-4">
                                 <label class="block">
                                     <span class="text-md font-semibold">Expiration Date</span>
-                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="MM/YY">
+                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="MM/YY" required>
                                 </label>
                                 <label class="block">
                                     <span class="text-md font-semibold">CVV</span>
-                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="123">
+                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="123" required>
                                 </label>
                             </div>
                             <label class="block">
                                 <span class="text-md font-semibold">Name on Card</span>
-                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="John Doe">
+                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
                             </label>
                         </div>
                     </div>
@@ -157,18 +141,23 @@
                     <!-- Booking Policies -->
                     <div class="border rounded-lg shadow-lg p-6 bg-[#3E2723] text-[#D7CCC8] mt-6">
                         <h2 class="text-2xl font-bold mb-4 text-[#FFCC80] flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4a1 1 0 00-1 1v14a1 1 0 001 1h2a3 3 0 003 3h6a3 3 0 003-3h2a1 1 0 001-1V4a1 1 0 00-1-1zm-6 17h-4a1 1 0 01-1-1h6a1 1 0 01-1 1zM19 16H5V5h14v11z" /></svg>
-                            Booking Policy
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 3H4a1 1 0 00-1 1v14a1 1 0 001 1h2a3 3 0 003 3h6a3 3 0 003-3h2a1 1 0 001-1V4a1 1 0 00-1-1zm-6 17h-4a1 1 0 01-1-1h6a1 1 0 01-1 1zM19 16H5V5h14v11z" />
+                            </svg>
+                            Hotel Booking Policy
                         </h2>
                         <ul class="list-disc list-inside text-[#EFEBE9] space-y-3">
-                            <li><strong>☕ Reservation Confirmation:</strong> Your table is set! Confirmation is sent after payment.</li>
-                            <li><strong>🍂 Cancellation Policy:</strong> Need to cancel? Do so 48 hours ahead for a full refund. Last-minute cancellations? No refunds, but we’ll miss you!</li>
-                            <li><strong>🌿 Modification Policy:</strong> Plans changed? You can tweak your booking up to 24 hours before, if space allows.</li>
-                            <li><strong>💳 Payment Terms:</strong> We accept major credit cards and e-money. A full payment ensures your spot at our cosy hotel.</li>
-                            <li><strong>🚶 No-Show Policy:</strong> If you don’t show, your coffee goes cold, and your payment stays with us.</li>
-                            <li><strong>📞 Contact Support:</strong> Questions or changes? Reach out to our friendly baristas at least 24 hours before your visit.</li>
+                            <li><strong>🛏️ Reservation Confirmation:</strong> Your stay is secured once full payment is received. A confirmation email will be sent immediately.</li>
+                            <li><strong>❌ Cancellation Policy:</strong> Cancel **at least 48 hours** before check-in for a full refund. Late cancellations may incur a charge.</li>
+                            <li><strong>🔄 Modification Policy:</strong> Need to adjust your dates? Changes are allowed up to **24 hours** before check-in, subject to availability.</li>
+                            <li><strong>💳 Payment Terms:</strong> We accept all major credit cards and digital payments. Your booking is only confirmed once payment is processed.</li>
+                            <li><strong>🚪 No-Show Policy:</strong> If you don’t check in on the scheduled date, your reservation will be forfeited, and no refunds will be issued.</li>
+                            <li><strong>🕒 Check-in & Check-out:</strong> Check-in is from **2:00 PM**, and check-out is by **11:00 AM**. Early check-in or late check-out is subject to availability and extra charges.</li>
+                            <li><strong>🏨 Guest Policy:</strong> A valid ID is required at check-in. Additional guests may be subject to extra charges.</li>
+                            <li><strong>📞 Contact Support:</strong> For any booking changes or questions, reach out to our front desk **at least 24 hours** before your stay.</li>
                         </ul>
                     </div>
+
 
 
                     <!-- Price Details (Coffee-Themed) -->
@@ -215,9 +204,7 @@
                         <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-[var(--primary-color)] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:scale-105">
                             BOOK NOW
                         </button>
-
-                        <a href="@Url.Action("SaveForLater", "Booking", new { roomId = Model.RoomId })"
-                           class="w-full sm:w-auto px-6 py-3 bg-[var(--secondary-color)] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:bg-[var(--third-color)]">
+                        <a class="w-full sm:w-auto px-6 py-3 bg-[var(--secondary-color)] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:bg-[var(--third-color)]">
                             SAVE FOR LATER
                         </a>
                     </div>

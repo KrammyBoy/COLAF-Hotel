@@ -1,74 +1,157 @@
-﻿<div class="flex flex-row w-full pt-16 space-x-6 bg-gray-100 min-h-screen p-6">
-    <!-- Main Content -->
-    <div class="flex flex-col w-2/3 space-y-6">
-        <!-- Sites Overview -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-lg font-semibold text-gray-800">Sites Overview</h2>
-            <div class="bg-gray-200 p-6 rounded-lg my-4 h-40 flex items-center justify-center text-gray-700">
-                <span>Graph: Daily Visits</span>
-            </div>
-            <div class="flex justify-between text-sm text-gray-700">
-                <span><strong>Total Visits:</strong> 12,450</span>
-                <span><strong>Daily Visits:</strong> 360</span>
-                <span><strong>Total Sales:</strong> $32,240</span>
+﻿
+<div class="flex flex-col lg:flex-row gap-6">
+    <!-- Left Column - 2/3 width on large screens -->
+    <div class="lg:w-2/3 space-y-6">
+        <!-- Sites Overview Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-coffee-dark">Sites Overview</h2>
+                    <select class="bg-coffee-cream text-coffee-dark rounded-lg px-3 py-1 text-sm font-medium">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>This month</option>
+                    </select>
+                </div>
+                <div class="bg-gray-100 rounded-lg p-4 h-48 flex items-center justify-center mb-4">
+                    <div class="w-full h-full bg-gradient-to-r from-coffee-light to-coffee-accent opacity-20 rounded-lg flex items-center justify-center">
+                        <span class="text-coffee-dark opacity-100 font-medium">Daily Visits Graph</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-coffee-cream bg-opacity-20 p-4 rounded-lg">
+                        <p class="text-sm text-coffee-medium">Total Visits</p>
+                        <p class="text-xl font-bold text-coffee-dark mt-1">12,450</p>
+                    </div>
+                    <div class="bg-coffee-cream bg-opacity-20 p-4 rounded-lg">
+                        <p class="text-sm text-coffee-medium">Daily Visits</p>
+                        <p class="text-xl font-bold text-coffee-dark mt-1">360</p>
+                    </div>
+                    <div class="bg-coffee-cream bg-opacity-20 p-4 rounded-lg">
+                        <p class="text-sm text-coffee-medium">Total Sales</p>
+                        <p class="text-xl font-bold text-coffee-dark mt-1">$32,240</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Guests and Bookings -->
-        <div class="grid grid-cols-2 gap-6">
-            <div class="flex flex-col justify-between bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-gray-800">Guest Overview</h2>
-                <p class="mt-4 text-gray-700"><strong>Total Guests:</strong> 2,800</p>
-                <p class="text-gray-700"><strong>Online Guests:</strong> 74</p>
-                <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg text-sm transition-transform transform hover:scale-105">
+        <!-- Two Column Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Guest Overview Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-coffee-cream">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-users text-coffee-accent mr-3 text-xl"></i>
+                    <h2 class="text-lg font-bold text-coffee-dark">Guest Overview</h2>
+                </div>
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center">
+                        <p class="text-coffee-medium">Total Guests</p>
+                        <p class="font-bold text-coffee-dark">2,800</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <p class="text-coffee-medium">Online Guests</p>
+                        <div class="flex items-center">
+                            <span class="h-2 w-2 bg-green-500 rounded-full mr-2"></span>
+                            <p class="font-bold text-coffee-dark">74</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-full bg-coffee-accent hover:bg-coffee-medium text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
                     Manage Users
                 </button>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-lg font-semibold text-gray-800">Bookings</h2>
-                <p class="mt-4 text-gray-700"><strong>Total Bookings:</strong> 180</p>
-                <p class="text-gray-700"><strong>Current Bookings:</strong> 60</p>
-                <p class="text-gray-700"><strong>Total Check-ins:</strong> 150</p>
-                <p class="text-gray-700"><strong>Current Check-ins:</strong> 30</p>
-                <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg text-sm transition-transform transform hover:scale-105">
+
+            <!-- Bookings Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border border-coffee-cream">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-book-open text-coffee-accent mr-3 text-xl"></i>
+                    <h2 class="text-lg font-bold text-coffee-dark">Bookings</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p class="text-coffee-medium text-sm">Total Bookings</p>
+                        <p class="font-bold text-coffee-dark text-lg">180</p>
+                    </div>
+                    <div>
+                        <p class="text-coffee-medium text-sm">Current Bookings</p>
+                        <p class="font-bold text-coffee-dark text-lg">60</p>
+                    </div>
+                    <div>
+                        <p class="text-coffee-medium text-sm">Total Check-ins</p>
+                        <p class="font-bold text-coffee-dark text-lg">150</p>
+                    </div>
+                    <div>
+                        <p class="text-coffee-medium text-sm">Current Check-ins</p>
+                        <p class="font-bold text-coffee-dark text-lg">30</p>
+                    </div>
+                </div>
+                <button class="w-full bg-coffee-accent hover:bg-coffee-medium text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
                     View Bookings
                 </button>
             </div>
         </div>
 
-        <!-- Rooms Overview -->
-        <div class="grid grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <h3 class="text-xl font-bold text-gray-900">120</h3>
-                <p class="text-gray-700">Occupied Rooms</p>
+        <!-- Rooms Overview Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-coffee-accent border-t border-r border-b border-coffee-cream">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-door-closed text-coffee-accent text-2xl mb-3"></i>
+                    <h3 class="text-3xl font-bold text-coffee-dark">120</h3>
+                    <p class="text-coffee-medium mt-1">Occupied Rooms</p>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <h3 class="text-xl font-bold text-gray-900">15</h3>
-                <p class="text-gray-700">Rooms in Maintenance</p>
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500 border-t border-r border-b border-coffee-cream">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-tools text-yellow-500 text-2xl mb-3"></i>
+                    <h3 class="text-3xl font-bold text-coffee-dark">15</h3>
+                    <p class="text-coffee-medium mt-1">Rooms in Maintenance</p>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition">
-                <h3 class="text-xl font-bold text-gray-900">85</h3>
-                <p class="text-gray-700">Vacant Rooms</p>
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 border-t border-r border-b border-coffee-cream">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-door-open text-green-500 text-2xl mb-3"></i>
+                    <h3 class="text-3xl font-bold text-coffee-dark">85</h3>
+                    <p class="text-coffee-medium mt-1">Vacant Rooms</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Dashboard Sidebar -->
-    <div class="w-1/3 bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-gray-800">Dashboard</h2>
-        <div class="mt-4 bg-gray-200 p-4 rounded-lg text-center">
-            <p id="dateDisplay" class="text-lg text-gray-700"></p>
-            <p id="clockDisplay" class="text-2xl font-bold text-gray-900 mt-2"></p>
+    <!-- Right Column - Sidebar -->
+    <div class="lg:w-1/3 space-y-6">
+        <!-- Time & Date Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-coffee-cream">
+            <h2 class="text-xl font-bold text-coffee-dark mb-4">Dashboard</h2>
+            <div class="bg-coffee-cream bg-opacity-30 rounded-lg p-6 text-center">
+                <p id="dateDisplay" class="text-coffee-medium">March 14, 2025</p>
+                <p id="clockDisplay" class="text-3xl font-bold text-coffee-dark mt-2">12:30 PM</p>
+            </div>
         </div>
-        <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow">
-            <h2 class="text-lg font-bold text-gray-800 flex items-center">
-                <i class="fas fa-calendar-alt text-blue-600 mr-2"></i> Events Calendar
-            </h2>
-            <div id="calendar" class="bg-gray-200 rounded-lg p-4 text-center text-gray-700">Calendar Here</div>
+
+        <!-- Calendar Card -->
+        <div class="bg-white h-[24rem] p-2 rounded-xl shadow-lg border border-coffee-cream">
+                <div id="calendar" class="w-full">
+                </div>
+
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-coffee-cream">
+            <h2 class="text-lg font-bold text-coffee-dark mb-4">Quick Actions</h2>
+            <div class="space-y-3">
+                <button class="w-full bg-coffee-medium hover:bg-coffee-dark text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-plus-circle mr-2"></i> New Booking
+                </button>
+                <button class="w-full bg-coffee-light hover:bg-coffee-medium text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-check-circle mr-2"></i> Quick Check-in
+                </button>
+                <button class="w-full bg-coffee-cream hover:bg-coffee-accent text-coffee-dark font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-clipboard-list mr-2"></i> Room Status
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');

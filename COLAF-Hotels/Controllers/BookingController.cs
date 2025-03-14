@@ -63,7 +63,7 @@ namespace COLAFHotel.Controllers
             return View(room);
         }
         [HttpPost]
-        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)
+        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)
         {
             
             Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}");
@@ -82,17 +82,25 @@ namespace COLAFHotel.Controllers
             CheckInDate = DateTime.SpecifyKind(CheckInDate, DateTimeKind.Utc);
             CheckOutDate = DateTime.SpecifyKind(CheckOutDate, DateTimeKind.Utc);
 
+            var room = new Room
+            {
+                RoomId = Convert.ToInt32(RoomId),
+                RoomNumber = RoomNumber,
+                Category = Category,
+                ImageUrl = ImageUrl,
+                Price = Convert.ToDecimal(Price)
+            };
             // Validate Check-in and Check-out Dates
             if (CheckInDate < DateTime.UtcNow)
             {
                 TempData["Error"] = "Check-in date cannot be in the past.";
-                return RedirectToAction("Create", "Booking");
+                return View("Create", room);
             }
 
             if (CheckOutDate <= CheckInDate)
             {
                 TempData["Error"] = "Check-out date must be after check-in date.";
-                return RedirectToAction("Create", "Booking");
+                return View("Create", room);
             }
 
             var booking = new Booking

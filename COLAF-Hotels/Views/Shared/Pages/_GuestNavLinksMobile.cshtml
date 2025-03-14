@@ -1,0 +1,86 @@
+﻿<div class="flex flex-col space-y-5 py-4 px-4 bg-gray-900 rounded-lg">
+    <a href="@Url.Action("List", "Room")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("List", "Room") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-indigo-300" : "text-white")">
+            ROOMS
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("Index", "Booking")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("Index", "Booking") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("Index", "Booking") ? "text-indigo-300" : "text-white")">
+            MY BOOKINGS
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("Offers", "Discount")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("Offers", "Discount") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("Offers", "Discount") ? "text-indigo-300" : "text-white")">
+            OFFERS
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("Profile", "Guest")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("Profile", "Guest") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <div class="flex items-center">
+            <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center mr-3">
+                <span class="text-white font-medium">P</span>
+            </div>
+            <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("Profile", "Guest") ? "text-indigo-300" : "text-white")">
+                PROFILE
+            </span>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("Request", "Maintenance")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("Request", "Maintenance") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("Request", "Maintenance") ? "text-indigo-300" : "text-white")">
+            MAINTENANCE
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("SpecialServices", "Services")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("SpecialServices", "Services") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("SpecialServices", "Services") ? "text-indigo-300" : "text-white")">
+            SERVICES
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+
+    <a href="@Url.Action("Index", "Notification")"
+       class="flex items-center justify-between py-3 px-4 rounded-lg transition-all duration-200 hover:bg-gray-800
+              @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "bg-gray-800 border-l-4 border-indigo-500" : "")">
+        <div class="flex items-center">
+            <span class="text-lg font-medium @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-indigo-300" : "text-white")">
+                NOTIFICATIONS
+            </span>
+            <div class="ml-2 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-xs text-white">2</div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </a>
+</div>

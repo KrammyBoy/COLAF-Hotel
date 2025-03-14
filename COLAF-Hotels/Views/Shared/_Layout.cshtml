@@ -18,112 +18,223 @@
             case "Admin":
                 <title>@ViewBag.Title - Admin</title>
                 break;
+            default:
+                <title>@ViewBag.Title - COLAF-Hotel</title>
+                break;
         }
     }
-    <title>@ViewBag.Title - COLAF-Hotel</title>
+    else
+    {
+        <title>@ViewBag.Title - COLAF-Hotel</title>
+    }
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            dark: '#2C1E1A',
+                            medium: '#5E4B3B',
+                            light: '#9B7E6B',
+                            cream: '#E6DBCA',
+                            accent: '#D4A067'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        :root {
-        --secondary-color: #3E362E;
-        --primary-color: #865D36;
-        --third-color: #93785B;
-        --fourth-color: #AC8968;
-        --fifth-color: #A69080;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="font-sans bg-[var(--fifth-color)] text-gray-900">
-    <nav class="fixed bg-[var(--secondary-color)] shadow-md w-full p-2 rounded-b-[2rem] z-50">
-
-        <div class="max-w-full mx-auto p-3 flex justify-between items-center">
-            <!-- Logo -->
-            @if (!string.IsNullOrEmpty(role))
-            {
-                <a href="@Url.Action("Index", "Dashboard")"
-                   class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">
-                    COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span>
-                </a>
-            }else {
-            <a href="@Url.Action("Login", "User")"
-               class="text-[var(--fourth-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition">
-                COLAF<span class="text-[var(--third-color)] font-light hover:text-white">-Hotel</span>
-            </a>
-            }
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex space-x-6">
-
-                @if (string.IsNullOrEmpty(role))
-                {
-                    <a href="@Url.Action("List", "Room")"
-                       class="relative text-lg cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-[var(--fourth-color)] after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0
-                          @(Context.Request.Path.Value == Url.Action("List", "Room") ? "text-[var(--fifth-color)]" : "text-white")">
-                        BOOK A ROOM
-                    </a>
-
-                }
-
-                @if (!string.IsNullOrEmpty(role))
-                {
-                    @switch (role)
+<body class="font-['Inter',sans-serif] bg-coffee-cream text-coffee-dark min-h-screen flex flex-col bg-opacity-90 bg-cover bg-center bg-fixed relative">
+    <nav class="fixed top-0 w-full bg-coffee-dark shadow-lg z-50 bg-opacity-90 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    @if (!string.IsNullOrEmpty(role))
                     {
-                        case "Guest":
-                            @await Html.PartialAsync("Pages/_GuestNavLinks")
-                            break;
-                        case "Admin":
-                            @await Html.PartialAsync("Pages/_AdminNavLinks")
-                            break;
-                        case "Housekeeper":
-                            <a href="@Url.Action("Tasks", "Housekeeping")"
-                             lass="text-white hover:text-[var(--primary-color)] transition">Housekeeping</a>
-                            break;
-                        case "Staff":
-                            @await Html.PartialAsync("Pages/_StaffNavLinks")
-                            break;
+                        <a href="@Url.Action("Index", "Dashboard")" class="flex items-center group">
+                            <span class="text-coffee-accent font-['Playfair_Display',serif] text-3xl font-bold tracking-tight">COLAF</span>
+                            <span class="text-white font-['Playfair_Display',serif] text-3xl font-light">-Hotel</span>
+                            <span class="ml-2 text-coffee-light transition-colors duration-300 group-hover:text-coffee-accent">
+                                <i class="fa-solid fa-mug-hot"></i>
+                            </span>
+                        </a>
                     }
-                }
-            </div>
+                    else
+                    {
+                        <a href="@Url.Action("Login", "User")" class="flex items-center group">
+                            <span class="text-coffee-accent font-['Playfair_Display',serif] text-3xl font-bold tracking-tight">COLAF</span>
+                            <span class="text-white font-['Playfair_Display',serif] text-3xl font-light">-Hotel</span>
+                            <span class="ml-2 text-coffee-light transition-colors duration-300 group-hover:text-coffee-accent">
+                                <i class="fa-solid fa-mug-hot"></i>
+                            </span>
+                        </a>
+                    }
+                </div>
 
-            <!-- User Info / Login -->
-            <div class="flex items-center space-x-4">
-                @if (!string.IsNullOrEmpty(user))
-                {
-                    <span class="text-[var(--fourth-color)]">Welcome, @user</span>
-                    <a href="@Url.Action("Logout", "User")"
-                       class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">
-                        Logout
-                    </a>
-                }
-                else
-                {
-                    <a href="@Url.Action("Login", "User")"
-                       class="bg-[var(--primary-color)] text-white px-3 py-2 rounded-md hover:bg-[var(--third-color)] transition">
-                        Login
-                    </a>
-                }
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    @if (string.IsNullOrEmpty(role))
+                    {
+                        <a href="@Url.Action("List", "Room")"
+                           class="group relative text-lg font-medium text-white hover:text-coffee-accent transition-colors duration-300 ease-in-out">
+                            BOOK A ROOM
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-coffee-accent transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                    }
+
+                    @if (!string.IsNullOrEmpty(role))
+                    {
+                        @switch (role)
+                        {
+                            case "Guest":
+                                @await Html.PartialAsync("Pages/_GuestNavLinks")
+                                break;
+                            case "Admin":
+                                @await Html.PartialAsync("Pages/_AdminNavLinks")
+                                break;
+                            case "Housekeeper":
+                                <a href="@Url.Action("Tasks", "Housekeeping")"
+                                   class="group relative text-lg font-medium text-white hover:text-coffee-accent transition-colors duration-300 ease-in-out">
+                                    Housekeeping
+                                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-coffee-accent transition-all duration-300 group-hover:w-full"></span>
+                                </a>
+                                break;
+                            case "Staff":
+                                @await Html.PartialAsync("Pages/_StaffNavLinks")
+                                break;
+                        }
+                    }
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" class="text-coffee-light hover:text-white focus:outline-none transition-colors duration-300" id="mobileMenuButton">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- User Info / Login -->
+                <div class="hidden md:flex items-center space-x-4">
+                    @if (!string.IsNullOrEmpty(user))
+                    {
+                        <div class="flex items-center space-x-3">
+                            <a href="@Url.Action("Profile", "Guest")"
+                               class="w-10 h-10 rounded-full bg-coffee-accent flex items-center justify-center text-coffee-dark shadow-md transition-transform duration-200 hover:scale-110">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                            <span class="text-coffee-light">Welcome, <span class="text-coffee-accent font-medium">@user</span></span>
+                            <a href="@Url.Action("Logout", "User")"
+                               class="bg-coffee-accent text-coffee-dark px-4 py-2 rounded-lg hover:bg-coffee-light transition-colors duration-300 flex items-center space-x-2 shadow-md hover:shadow-lg">
+                                <span>Logout</span>
+                                <i class="fa-solid fa-sign-out-alt"></i>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "User")"
+                           class="bg-coffee-accent text-coffee-dark px-4 py-2 rounded-lg hover:bg-coffee-light transition-colors duration-300 flex items-center space-x-2 shadow-md hover:shadow-lg">
+                            <span>Login</span>
+                            <i class="fa-solid fa-sign-in-alt"></i>
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </nav>
-    <div>
+
+    <main class="flex-grow pt-24 pb-16">
         @RenderBody()
-    </div>
+    </main>
 
-    <footer class="text-center py-6 bg-[var(--secondary-color)] text-white">
-        <p>&copy; @DateTime.Now.Year - COLAF-Hotel. All rights reserved.</p>
+    <footer class="bg-coffee-dark text-white py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="flex items-center">
+                        <span class="text-coffee-accent font-['Playfair_Display',serif] text-3xl font-bold tracking-tight">COLAF</span>
+                        <span class="text-white font-['Playfair_Display',serif] text-3xl font-light">-Hotel</span>
+                    </a>
+                    <p class="mt-2 text-coffee-light">Experience luxury with a coffee twist</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </a>
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-coffee-medium pt-8 flex flex-col md:flex-row justify-between">
+                <p>&copy; @DateTime.Now.Year - COLAF-Hotel. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex space-x-4">
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">Privacy Policy</a>
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">Terms of Service</a>
+                    <a href="#" class="text-coffee-light hover:text-coffee-accent transition-colors duration-300">Contact Us</a>
+                </div>
+            </div>
+        </div>
     </footer>
-
-    @RenderSection("Scripts", required: false)
 </body>
+@RenderSection("Scripts", required: false)
 
-</html>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+    <style>
+        /* Coffee beans background animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #E6DBCA;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #9B7E6B;
+            border-radius: 5px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #5E4B3B;
+            }
+        </style>
 
 <style>
     /* Custom Flatpickr Styles */

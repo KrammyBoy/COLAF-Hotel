@@ -7,72 +7,121 @@
     var checkOutDate = TempData["CheckOutDate"] as string;
     var totalAmount = TempData["TotalAmount"] != null ? Convert.ToDecimal(TempData["TotalAmount"]) : 0;
 }
-<!--
-    TODO:
-    1. Improve the design for the table
-    2. If status is pending allow guest to edit and confirmed the booking process
-    3. Allow user to cancel the booking process
-    4. Functional View Details
--->
-<div class="container mx-auto p-6 pt-[6rem]">
-    <h3 class="text-xl font-semibold text-white rounded-lg bg-[var(--primary-color)] mb-4 p-2 inline-block">Booking History</h3>
 
-    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-        <table class="w-full border-collapse">
-            <thead>
-                <tr class="bg-gray-100 border-b">
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Booking ID</th>
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Room</th>
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Check-In</th>
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Check-Out</th>
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Status</th>
-                    <th class="py-3 px-4 text-left text-gray-700 font-medium">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var booking in Model)
-                {
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-3 px-4 text-gray-800">@booking.booking_id</td>
-                        <td class="py-3 px-4 text-gray-600">@booking.Room.RoomNumber</td>
-                        <td class="py-3 px-4 text-gray-600">@booking.check_in_date.ToString("yyyy-MM-dd")</td>
-                        <td class="py-3 px-4 text-gray-600">@booking.check_out_date.ToString("yyyy-MM-dd")</td>
-                        <td class="py-3 px-4">
-                            <span class="px-2 py-1 text-sm font-medium rounded-md
-                                @(booking.status == "Confirmed" ? "bg-green-200 text-green-800" :
-                                    booking.status == "Pending" ? "bg-yellow-200 text-yellow-800" : "bg-red-200 text-red-800")">
-                                @booking.status
-                            </span>
-                        </td>
-                        <td class="py-3 px-4">
-                            <a asp-action="Details" asp-route-id="@booking.booking_id"
-                               class="text-blue-600 hover:underline text-sm">View Details</a>
-                        </td>
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="mb-8">
+        <h3 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+            <span class="relative z-10">Booking History</span>
+            <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+        </h3>
+        <p class="text-coffee-medium mt-2">View and manage your stay reservations</p>
+    </div>
+
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-coffee-cream">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-coffee-dark text-coffee-cream">
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Booking ID</th>
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Room</th>
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Check-In</th>
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Check-Out</th>
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Status</th>
+                        <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-coffee-cream">
+                    @foreach (var booking in Model)
+                    {
+                        <tr class="hover:bg-coffee-cream hover:bg-opacity-20 transition-colors duration-150">
+                            <td class="py-4 px-6 text-coffee-dark font-medium">#@booking.booking_id</td>
+                            <td class="py-4 px-6 text-coffee-medium">Room @booking.Room.RoomNumber</td>
+                            <td class="py-4 px-6 text-coffee-medium">@booking.check_in_date.ToString("MMM dd, yyyy")</td>
+                            <td class="py-4 px-6 text-coffee-medium">@booking.check_out_date.ToString("MMM dd, yyyy")</td>
+                            <td class="py-4 px-6">
+                                @if (booking.status == "Confirmed")
+                                {
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                        Confirmed
+                                    </span>
+                                }
+                                else if (booking.status == "Pending")
+                                {
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                        Pending
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                                        @booking.status
+                                    </span>
+                                }
+                            </td>
+                            <td class="py-4 px-6">
+                                <a asp-action="Details" asp-route-id="@booking.booking_id"
+                                   class="text-coffee-accent hover:text-coffee-dark font-medium transition-colors">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="py-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+                <p class="mt-4 text-coffee-medium">No bookings found in your history</p>
+                <a href="/Rooms" class="mt-4 inline-block px-4 py-2 bg-coffee-accent text-white rounded-lg hover:bg-coffee-dark transition-colors">
+                    Browse Rooms
+                </a>
+            </div>
+        }
     </div>
 </div>
 
 
 @if (!string.IsNullOrEmpty(successMessage))
 {
-    <div id="bookingModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 scale-100">
-            <h2 class="text-xl font-semibold text-gray-800">🎉 Booking Confirmed!</h2>
-            <p class="mt-2 text-gray-600">@successMessage</p>
+    <div id="bookingModal" class="fixed inset-0 flex items-center justify-center bg-coffee-dark bg-opacity-75 z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 border-t-4 border-coffee-accent">
+            <div class="flex items-center mb-4">
+                <div class="bg-coffee-accent bg-opacity-20 p-3 rounded-full">
+                    <svg class="h-6 w-6 text-coffee-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h2 class="ml-3 text-xl font-serif font-bold text-coffee-dark">Booking Confirmed!</h2>
+            </div>
+            <p class="text-coffee-medium mb-4">@successMessage</p>
 
-            <div class="mt-4 space-y-2 text-gray-700">
-                <p><strong>Booking ID:</strong> @bookingId</p>
-                <p><strong>Check-in Date:</strong> @checkInDate</p>
-                <p><strong>Check-out Date:</strong> @checkOutDate</p>
-                <p><strong>Total Amount:</strong> $@totalAmount</p>
+            <div class="bg-coffee-cream bg-opacity-30 p-4 rounded-lg space-y-2 text-coffee-medium">
+                <div class="flex justify-between">
+                    <span>Booking ID:</span>
+                    <span class="font-medium text-coffee-dark">#@bookingId</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Check-in:</span>
+                    <span class="font-medium text-coffee-dark">@checkInDate</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Check-out:</span>
+                    <span class="font-medium text-coffee-dark">@checkOutDate</span>
+                </div>
+                <div class="flex justify-between border-t border-coffee-cream pt-2 mt-2">
+                    <span class="font-medium">Total Amount:</span>
+                    <span class="font-bold text-coffee-dark">$@totalAmount</span>
+                </div>
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <button id="closeModal" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition">
-                    OK
+            <div class="mt-6">
+                <button id="closeModal" class="w-full py-3 bg-coffee-dark text-white font-medium rounded-lg hover:bg-coffee-medium transition-colors duration-150 flex items-center justify-center">
+                    <span>Close</span>
                 </button>
             </div>
         </div>
@@ -81,7 +130,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("closeModal").addEventListener("click", function () {
-                document.getElementById("bookingModal").style.display = "none";
+                document.getElementById("bookingModal").classList.add("opacity-0");
+                setTimeout(function() {
+                    document.getElementById("bookingModal").style.display = "none";
+                }, 300);
             });
         });
     </script>
