@@ -6,215 +6,447 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
     var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
-
-    Console.WriteLine();
 }
-<div class="flex justify-center items-center min-h-screen bg-[var(--fifth-color)] w-full p-6 pt-20">
+
+<div class="min-h-screen bg-coffee-cream bg-opacity-30 w-full p-6">
     @if (!string.IsNullOrEmpty(role))
     {
-        <div class="relative bg-[var(--fourth-color)] shadow-xl rounded-lg w-full max-w-4xl overflow-hidden p-6">
-            <!-- Room Image -->
-            <div class="relative w-full h-[28rem]">
-                <img src="@Url.Content(Model.ImageUrl)" class="w-full h-full object-cover rounded-lg brightness-90" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Header with Room Image -->
+            <div class="relative h-80 sm:h-96">
+                <img src="@Url.Content(Model.ImageUrl)" class="w-full h-full object-cover" alt="Room @Model.RoomNumber" />
+                <div class="absolute inset-0 bg-gradient-to-t from-coffee-dark to-transparent opacity-60"></div>
+                <div class="absolute bottom-0 left-0 p-6 text-white">
+                    <h1 class="text-4xl font-bold mb-2">Room @Model.RoomNumber</h1>
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-coffee-accent text-white px-3 py-1 rounded-full text-sm">@Model.Category</span>
+                        <span class="bg-coffee-medium text-white px-3 py-1 rounded-full text-sm">₱@Model.Price.ToString("N2")/night</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Room Details -->
-            <div class="p-6">
-                <h2 class="text-4xl font-bold text-[var(--primary-color)] mb-4">Room @Model.RoomNumber</h2>
-                <p class="text-lg text-gray-700">Category: <span class="text-[var(--secondary-color)] font-semibold">@Model.Category</span></p>                
-                <!-- Booking Form -->
-                <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="mt-6 space-y-4">
-                    <input type="hidden" name="RoomId" value="@Model.RoomId" />
-                    <input type="hidden" name="RoomNumber" value="@Model.RoomNumber"/>
-                    <input type="hidden" name="Category" value="@Model.Category"/>
-                    <input type="hidden" name="ImageUrl" value="@Model.ImageUrl"/>
-                    <input type="hidden" name="Price" value="@Model.Price" />
-                    <input type="hidden" name="UserId" value="@user_id"/>
-                    <input type="hidden" name="GuestId" value="@isGuest"/>
+            <!-- Booking Form -->
+            <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="p-6">
+                <input type="hidden" name="RoomId" value="@Model.RoomId" />
+                <input type="hidden" name="RoomNumber" value="@Model.RoomNumber" />
+                <input type="hidden" name="Category" value="@Model.Category" />
+                <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+                <input type="hidden" name="Price" value="@Model.Price" />
+                <input type="hidden" name="UserId" value="@user_id" />
+                <input type="hidden" name="GuestId" value="@isGuest" />
 
-                    <!-- Check-in & Check-out Dates -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="relative group">
-                            <label class="block text-lg font-semibold mb-1">Check-in Date:</label>
+                <!-- Room Features -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Room Details</h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-bed text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">@Model.Category</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-user-friends text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">2-4 Guests</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-wifi text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">Free WiFi</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-snowflake text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">Air Conditioned</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-tv text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">Flat-screen TV</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-coffee-cream bg-opacity-20 rounded-lg">
+                            <i class="fas fa-bath text-coffee-accent mr-3 text-xl"></i>
+                            <span class="text-coffee-medium">Private Bathroom</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dates Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Select Dates</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-coffee-medium font-medium mb-2">Check-in Date</label>
                             <div class="relative">
-                                <input type="text" id="checkInDate" name="CheckInDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()" required>
-                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
+                                <input type="text" id="checkInDate" name="CheckInDate"
+                                       class="datepicker w-full p-3 border border-coffee-cream rounded-lg pl-10 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all"
+                                       onchange="updatePrice()" required>
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-coffee-light group-hover:text-coffee-accent transition-colors duration-200"></i>
                             </div>
                         </div>
-                        <div class="relative group">
-                            <label class="block text-lg font-semibold mb-1">Check-out Date:</label>
+                        <div class="group">
+                            <label class="block text-coffee-medium font-medium mb-2">Check-out Date</label>
                             <div class="relative">
-                                <input type="text" id="checkOutDate" name="CheckOutDate" class="datepicker w-full p-2 border rounded-lg pl-10 focus:ring-2 focus:ring-[var(--primary-color)]" onchange="updatePrice()" required>
-                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-gray-500 group-hover:text-[var(--primary-color)] transition-colors duration-200 cursor-pointer"></i>
+                                <input type="text" id="checkOutDate" name="CheckOutDate"
+                                       class="datepicker w-full p-3 border border-coffee-cream rounded-lg pl-10 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all"
+                                       onchange="updatePrice()" required>
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-coffee-light group-hover:text-coffee-accent transition-colors duration-200"></i>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Transport Services -->
-                    <div class="border rounded-lg shadow-lg p-4 bg-white">
-                        <!-- Checkbox for Transport Service -->
-                        <div class="flex items-center gap-3 border-b pb-3">
-                            <input type="checkbox" id="transportService" name="TransportService" class="w-6 h-6 accent-blue-600 cursor-pointer" onchange="toggleTransportDetails()">
-                            <label for="transportService" class="text-lg font-medium cursor-pointer">Include Transport Service (+₱500)</label>
+                <!-- Transport Services -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Transport Service</h2>
+                    <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
+                        <!-- Header with checkbox -->
+                        <div class="flex items-center gap-3 border-b border-coffee-cream pb-4">
+                            <input type="checkbox" id="transportService" name="TransportService"
+                                   class="w-6 h-6 rounded text-coffee-accent border-coffee-light focus:ring-coffee-accent cursor-pointer"
+                                   onchange="toggleTransportDetails()">
+                            <label for="transportService" class="text-lg font-medium text-coffee-dark cursor-pointer">
+                                Include Hotel Transport Service (+₱500)
+                            </label>
                         </div>
 
-                        <!-- Transport Service Information (Initially Hidden) -->
-                        <div id="transportDetails" class="hidden mt-4">
-                            <div class="grid grid-cols-2 gap-6">
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-700">Arrival</h3>
-                                    <label class="block text-md font-semibold mt-2">Arrival Time</label>
-                                    <select class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                                        <option>9:00 AM</option>
-                                        <option>10:00 AM</option>
-                                        <option>11:00 AM</option>
-                                        <option>12:00 PM</option>
-                                        <option>1:00 PM</option>
-                                        <option>2:00 PM</option>
-                                        <option>3:00 PM</option>
-                                        <option>4:00 PM</option>
-                                        <option>5:00 PM</option>
-                                        <option>6:00 PM</option>
-                                        <option>7:00 PM</option>
-                                        <option>8:00 PM</option>
-                                    </select>
-                                    <label class="block text-md font-semibold mt-2">Arriving</label>
-                                    <input type="text" class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="Enter location">
+                        <!-- Transport Service Information -->
+                        <div id="transportDetails" class="hidden mt-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Arrival -->
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h3 class="text-xl font-semibold text-coffee-dark flex items-center mb-3">
+                                        <i class="fas fa-plane-arrival text-coffee-accent mr-2"></i>
+                                        Arrival
+                                    </h3>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-sm font-medium text-coffee-medium mb-1">Arrival Time</label>
+                                            <select class="w-full p-2 border border-coffee-cream rounded-lg bg-coffee-cream bg-opacity-10 focus:ring-2 focus:ring-coffee-accent">
+                                                <option>9:00 AM</option>
+                                                <option>10:00 AM</option>
+                                                <option>11:00 AM</option>
+                                                <option>12:00 PM</option>
+                                                <option>1:00 PM</option>
+                                                <option>2:00 PM</option>
+                                                <option>3:00 PM</option>
+                                                <option>4:00 PM</option>
+                                                <option>5:00 PM</option>
+                                                <option>6:00 PM</option>
+                                                <option>7:00 PM</option>
+                                                <option>8:00 PM</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-coffee-medium mb-1">Arriving From</label>
+                                            <input type="text" class="w-full p-2 border border-coffee-cream rounded-lg bg-coffee-cream bg-opacity-10 focus:ring-2 focus:ring-coffee-accent" placeholder="Enter pickup location">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-700">Departure</h3>
-                                    <label class="block text-md font-semibold mt-2">Departure Time</label>
-                                    <select class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                                        <option>9:00 AM</option>
-                                        <option>10:00 AM</option>
-                                        <option>11:00 AM</option>
-                                        <option>12:00 PM</option>
-                                        <option>1:00 PM</option>
-                                        <option>2:00 PM</option>
-                                        <option>3:00 PM</option>
-                                        <option>4:00 PM</option>
-                                        <option>5:00 PM</option>
-                                        <option>6:00 PM</option>
-                                        <option>7:00 PM</option>
-                                        <option>8:00 PM</option>
-                                    </select>
-                                    <label class="block text-md font-semibold mt-2">Departing</label>
-                                    <input type="text" class="w-full p-2 border rounded-lg mt-1 bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="Enter location">
+
+                                <!-- Departure -->
+                                <div class="bg-white p-4 rounded-lg shadow-sm">
+                                    <h3 class="text-xl font-semibold text-coffee-dark flex items-center mb-3">
+                                        <i class="fas fa-plane-departure text-coffee-accent mr-2"></i>
+                                        Departure
+                                    </h3>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="block text-sm font-medium text-coffee-medium mb-1">Departure Time</label>
+                                            <select class="w-full p-2 border border-coffee-cream rounded-lg bg-coffee-cream bg-opacity-10 focus:ring-2 focus:ring-coffee-accent">
+                                                <option>9:00 AM</option>
+                                                <option>10:00 AM</option>
+                                                <option>11:00 AM</option>
+                                                <option>12:00 PM</option>
+                                                <option>1:00 PM</option>
+                                                <option>2:00 PM</option>
+                                                <option>3:00 PM</option>
+                                                <option>4:00 PM</option>
+                                                <option>5:00 PM</option>
+                                                <option>6:00 PM</option>
+                                                <option>7:00 PM</option>
+                                                <option>8:00 PM</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-coffee-medium mb-1">Departing To</label>
+                                            <input type="text" class="w-full p-2 border border-coffee-cream rounded-lg bg-coffee-cream bg-opacity-10 focus:ring-2 focus:ring-coffee-accent" placeholder="Enter dropoff location">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-4 text-right">
-                                <button onclick="clearTransportDetails()" class="text-blue-600 hover:text-blue-800 font-semibold">Clear</button>
+                                <button onclick="clearTransportDetails()" type="button" class="text-coffee-accent hover:text-coffee-dark font-medium transition-colors">
+                                    <i class="fas fa-times-circle mr-1"></i> Clear Details
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <!-- Payment Options -->
-                    <div class="border rounded-lg shadow-lg p-4 bg-white mt-6">
-                        <h3 class="text-xl font-semibold mb-3">Payment</h3>
-                        <div class="flex items-center space-x-3 mb-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="w-12 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                        </div>
-                        <div class="grid grid-cols-1 gap-4">
-                            <label class="block">
-                                <span class="text-md font-semibold">Card Number</span>
-                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="1234 5678 9012 3456" required>
-                            </label>
-                            <div class="grid grid-cols-2 gap-4">
-                                <label class="block">
-                                    <span class="text-md font-semibold">Expiration Date</span>
-                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="MM/YY" required>
-                                </label>
-                                <label class="block">
-                                    <span class="text-md font-semibold">CVV</span>
-                                    <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="123" required>
-                                </label>
-                            </div>
-                            <label class="block">
-                                <span class="text-md font-semibold">Name on Card</span>
-                                <input type="text" class="w-full p-2 border rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
-                            </label>
-                        </div>
-                    </div>
+                </div>
 
-                    <!-- Booking Policies -->
-                    <div class="border rounded-lg shadow-lg p-6 bg-[#3E2723] text-[#D7CCC8] mt-6">
-                        <h2 class="text-2xl font-bold mb-4 text-[#FFCC80] flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20 3H4a1 1 0 00-1 1v14a1 1 0 001 1h2a3 3 0 003 3h6a3 3 0 003-3h2a1 1 0 001-1V4a1 1 0 00-1-1zm-6 17h-4a1 1 0 01-1-1h6a1 1 0 01-1 1zM19 16H5V5h14v11z" />
-                            </svg>
+                <!-- Payment Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Payment Information</h2>
+                    <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
+                        <!-- Payment Icons -->
+                        <div class="flex items-center space-x-4 mb-5 justify-center sm:justify-start">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="h-8 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="h-8 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="h-8 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <div class="px-3 py-1 bg-coffee-dark text-coffee-cream rounded-full text-xs font-medium">Secure Payment</div>
+                        </div>
+
+                        <!-- Payment Form -->
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-coffee-medium mb-1">Card Number</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg pl-10 bg-white focus:ring-2 focus:ring-coffee-accent" placeholder="1234 5678 9012 3456" required>
+                                    <i class="fas fa-credit-card absolute left-3 top-3 text-coffee-light"></i>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-1">Expiration Date</label>
+                                    <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" placeholder="MM/YY" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-1">CVV</label>
+                                    <div class="relative">
+                                        <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg pl-10 bg-white focus:ring-2 focus:ring-coffee-accent" placeholder="123" required>
+                                        <i class="fas fa-lock absolute left-3 top-3 text-coffee-light"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-coffee-medium mb-1">Name on Card</label>
+                                <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" placeholder="John Doe" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Policies -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream">
+                    <!-- Header -->
+                    <div class="bg-coffee-dark px-6 py-4 border-b border-coffee-light">
+                        <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
+                            <i class="fas fa-clipboard-list text-coffee-accent mr-3"></i>
                             Hotel Booking Policy
                         </h2>
-                        <ul class="list-disc list-inside text-[#EFEBE9] space-y-3">
-                            <li><strong>🛏️ Reservation Confirmation:</strong> Your stay is secured once full payment is received. A confirmation email will be sent immediately.</li>
-                            <li><strong>❌ Cancellation Policy:</strong> Cancel **at least 48 hours** before check-in for a full refund. Late cancellations may incur a charge.</li>
-                            <li><strong>🔄 Modification Policy:</strong> Need to adjust your dates? Changes are allowed up to **24 hours** before check-in, subject to availability.</li>
-                            <li><strong>💳 Payment Terms:</strong> We accept all major credit cards and digital payments. Your booking is only confirmed once payment is processed.</li>
-                            <li><strong>🚪 No-Show Policy:</strong> If you don’t check in on the scheduled date, your reservation will be forfeited, and no refunds will be issued.</li>
-                            <li><strong>🕒 Check-in & Check-out:</strong> Check-in is from **2:00 PM**, and check-out is by **11:00 AM**. Early check-in or late check-out is subject to availability and extra charges.</li>
-                            <li><strong>🏨 Guest Policy:</strong> A valid ID is required at check-in. Additional guests may be subject to extra charges.</li>
-                            <li><strong>📞 Contact Support:</strong> For any booking changes or questions, reach out to our front desk **at least 24 hours** before your stay.</li>
-                        </ul>
                     </div>
 
+                    <!-- Booking Policy -->
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Left Column -->
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Reservation Confirmation</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Your stay is secured once full payment is received. A confirmation email will be sent immediately.</p>
+                                    </div>
+                                </div>
 
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-ban"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Cancellation Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Cancel <span class="font-medium">at least 48 hours</span> before check-in for a full refund. Late cancellations may incur a charge.</p>
+                                    </div>
+                                </div>
 
-                    <!-- Price Details (Coffee-Themed) -->
-                    <div class="bg-[#4E342E] text-[#D7CCC8] rounded-lg shadow-lg p-6 mt-6">
-                        <h2 class="text-2xl font-bold mb-4 text-[#FFCC80]">Price Breakdown</h2>
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Modification Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Need to adjust your dates? Changes are allowed up to <span class="font-medium">24 hours</span> before check-in, subject to availability.</p>
+                                    </div>
+                                </div>
 
-                        <div class="space-y-3 grid grid-cols-1">
-                            <div class="flex flex-row justify-between items-center">
-                                <p><strong>Room:</strong> @Model.Category Room (R @Model.RoomNumber)</p>
-                                <p class="text-green-500">₱@Model.Price.ToString("N2")</p>
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Payment Terms</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">We accept all major credit cards and digital payments. Your booking is only confirmed once payment is processed.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-row justify-between items-center">
-                                <p>
-                                    <strong>Nights of Stay:</strong>
-                                    <span id="numberOfNights" class="text-red-400 underline">0</span> Nights
-                                </p>
-                                <p class="text-green-500">₱<span id="nightPrice">0</span></p>
-                            </div>
-                            <div class="flex flex-row justify-between items-center">
-                                <strong>Transport Service Fee</strong>
-                                <p class="text-green-500">₱<span id="transportFee">0</span></p>
-                            </div>
-                            <p>
-                                <span id="checkInDay">Check-in Day</span> -
-                                <span id="checkOutDay">Check-out Day</span>
-                            </p>
-                        </div>
 
-                        <div class="mt-4 p-3 bg-[#3E2723] rounded-lg">
-                            <label class="text-lg font-bold text-[#FFCC80]">Total</label>
-                            <p class="text-xl font-semibold text-green-400">
-                                Total Price: ₱<span id="totalPrice">@Model.Price.ToString("N2")</span>
-                            </p>
-                            <!--Storing Total Price-->
-                            <input type="hidden" name="totalPrice" id="hiddenTotalPrice"/>
+                            <!-- Right Column -->
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-user-times"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">No-Show Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">If you don't check in on the scheduled date, your reservation will be forfeited, and no refunds will be issued.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Check-in & Check-out</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Check-in is from <span class="font-medium">2:00 PM</span>, and check-out is by <span class="font-medium">11:00 AM</span>. Early check-in or late check-out is subject to availability and extra charges.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Guest Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">A valid ID is required at check-in. Additional guests may be subject to extra charges.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Contact Support</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">For any booking changes or questions, reach out to our front desk <span class="font-medium">at least 24 hours</span> before your stay.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-
-                    
-
-                    <!-- Buttons -->
-                    <div class="mt-6 flex flex-col sm:flex-row gap-4">
-                        <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-[#8B5A2B] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:scale-105 hover:bg-[#5a3c2a]">
-                            BOOK NOW
-                        </button>
-                        <a class="w-full sm:w-auto px-6 py-3 bg-[#8B5A2B] text-white text-lg font-medium rounded-lg shadow-md transition-all hover:bg-[#6F4E37]">
-                            SAVE FOR LATER
+                    <!-- Footer with help link -->
+                    <div class="bg-coffee-cream bg-opacity-20 px-6 py-3 border-t border-coffee-cream">
+                        <a href="#" class="flex items-center justify-center text-coffee-medium hover:text-coffee-dark transition-colors">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            <span>Need more information? View our full terms and conditions</span>
                         </a>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <!-- Price Details -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream mt-8">
+                    <!-- Header -->
+                    <div class="bg-coffee-dark px-6 py-4">
+                        <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
+                            <i class="fas fa-receipt text-coffee-accent mr-3"></i>
+                            Price Breakdown
+                        </h2>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-6">
+                        <!-- Date Range Summary -->
+                        <div class="mb-6 bg-coffee-cream bg-opacity-20 rounded-lg p-4 flex items-center">
+                            <div class="bg-coffee-medium rounded-lg p-2 mr-4 text-white">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-coffee-medium text-sm">Your Stay</p>
+                                <p class="text-coffee-dark font-medium">
+                                    <span id="checkInDay">Check-in Day</span> -
+                                    <span id="checkOutDay">Check-out Day</span>
+                                    (<span id="numberOfNights" class="text-coffee-accent font-semibold">0</span> Nights)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Price Items -->
+                        <div class="space-y-4">
+                            <!-- Room Price -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">@Model.Category Room (R @Model.RoomNumber)</p>
+                                        <p class="text-coffee-medium text-xs">Base room rate</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold">₱@Model.Price.ToString("N2")</p>
+                            </div>
+
+                            <!-- Nights of Stay -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">Nights of Stay</p>
+                                        <p class="text-coffee-medium text-xs"><span id="numberOfNights2">0</span> nights at room rate</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
+                            </div>
+
+                            <!-- Transport Fee -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-car"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">Transport Service Fee</p>
+                                        <p class="text-coffee-medium text-xs">Optional shuttle service</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold">₱<span id="transportFee">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Section -->
+                    <div class="bg-coffee-cream bg-opacity-30 p-6 border-t border-coffee-cream">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-coffee-medium text-sm">Total Amount</p>
+                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="totalPrice">@Model.Price.ToString("N2")</span></p>
+                            </div>
+                            <div class="bg-coffee-accent text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-check-circle mr-1"></i> Final Price
+                            </div>
+                        </div>
+
+                        <!-- Hidden input for form submission -->
+                        <input type="hidden" name="totalPrice" id="hiddenTotalPrice" />
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-1 px-6 py-4 bg-coffee-accent text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 focus:ring-4 focus:ring-coffee-cream">
+                        <i class="fas fa-check-circle mr-2"></i> CONFIRM BOOKING
+                    </button>
+                    <a href="#" class="flex-1 px-6 py-4 bg-coffee-medium text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 text-center focus:ring-4 focus:ring-coffee-cream">
+                        <i class="fas fa-bookmark mr-2"></i> SAVE FOR LATER
+                    </a>
+                </div>
+            </form>
         </div>
     }
     else
     {
-        <p class="text-red-500 font-semibold">Access Denied: Role not defined.</p>
+        <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg text-center">
+            <div class="text-red-500 mb-4">
+                <i class="fas fa-exclamation-circle text-5xl"></i>
+            </div>
+            <p class="text-red-500 font-semibold text-xl">Access Denied: Role not defined.</p>
+            <p class="text-gray-600 mt-2">You will be redirected to the login page in 3 seconds.</p>
+            <div class="mt-6 bg-gray-100 rounded-lg p-2">
+                <div class="w-full bg-gray-300 rounded-full h-2">
+                    <div class="bg-red-500 h-2 rounded-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
         <script>
             setTimeout(function () {
                 window.location.href = "/User/Login";
@@ -222,15 +454,19 @@
         </script>
     }
 </div>
+
 @if (TempData["Error"] != null)
 {
     <div id="errorModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-xl font-semibold text-red-600 mb-2">Error</h2>
-            <p class="text-gray-700">@TempData["Error"]</p>
-            <div class="mt-4 flex justify-end">
-                <button onclick="closeErrorModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
-                    Close
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100">
+            <div class="flex items-center text-red-500 mb-4">
+                <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
+                <h2 class="text-xl font-bold">Error</h2>
+            </div>
+            <p class="text-coffee-dark mb-4">@TempData["Error"]</p>
+            <div class="flex justify-end">
+                <button onclick="closeErrorModal()" class="bg-coffee-dark hover:bg-coffee-medium text-white px-4 py-2 rounded-lg transition-colors duration-300">
+                    <i class="fas fa-times mr-2"></i> Close
                 </button>
             </div>
         </div>
@@ -255,6 +491,7 @@
         }
 
         let numberOfNights = document.getElementById('numberOfNights');
+        let numberOfNights2 = document.getElementById('numberOfNights2');
         let transportFee = document.getElementById('transportFee');
         let checkInDay = document.getElementById('checkInDay');
         let checkOutDay = document.getElementById('checkOutDay');
@@ -262,6 +499,7 @@
 
         let nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
         numberOfNights.textContent = nights;
+        numberOfNights2.textContent = nights;
 
         let nightPriceAdded = ((basePrice * nights) - basePrice);
         let transportFeeAdded = transportService ? 500.00 : 0.00;

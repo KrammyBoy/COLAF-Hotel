@@ -1,5 +1,314 @@
 ﻿@{
     ViewBag.Title = "Security";
 }
-<h2>Security Settings</h2>
-<p>Access control, login logs, and additional security settings will be implemented here.</p>
+
+<div class="bg-coffee-cream min-h-screen py-6">
+    <div class="container mx-auto px-4">
+        <header class="mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-coffee-dark">Security Settings</h2>
+                    <p class="text-coffee-medium">Manage system-wide security controls and user permissions</p>
+                </div>
+                <div class="flex items-center">
+                    <span class="bg-coffee-dark text-white px-3 py-1 rounded-full text-sm mr-2">Admin Panel</span>
+                    <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">System Secure</span>
+                </div>
+            </div>
+        </header>
+            <!-- Main Content -->
+            <div class="md:col-span-3">
+                <!-- Access Control Section -->
+                <section id="access-control" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+                    <div class="bg-coffee-dark text-white p-4 flex justify-between items-center">
+                        <h3 class="font-semibold">Access Control Management</h3>
+                        <button class="bg-coffee-accent hover:bg-coffee-light text-white text-sm px-3 py-1 rounded-md transition">Add New Role</button>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h4 class="text-coffee-medium font-medium mb-3">Role Management</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Role Name</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Users</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Access Level</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Last Modified</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr class="bg-white">
+                                            <td class="px-4 py-3 text-sm font-medium text-gray-700">Administrator</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">3</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Full Access</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Mar 30, 2025</td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <div class="flex space-x-2">
+                                                    <button class="text-blue-500 hover:text-blue-700">Edit</button>
+                                                    <button class="text-gray-500 hover:text-gray-700">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-gray-50">
+                                            <td class="px-4 py-3 text-sm font-medium text-gray-700">Manager</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">8</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Moderate Access</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Mar 28, 2025</td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <div class="flex space-x-2">
+                                                    <button class="text-blue-500 hover:text-blue-700">Edit</button>
+                                                    <button class="text-gray-500 hover:text-gray-700">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-white">
+                                            <td class="px-4 py-3 text-sm font-medium text-gray-700">Staff</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">24</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Limited Access</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700">Mar 25, 2025</td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <div class="flex space-x-2">
+                                                    <button class="text-blue-500 hover:text-blue-700">Edit</button>
+                                                    <button class="text-gray-500 hover:text-gray-700">View</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-200">
+                            <h4 class="text-coffee-medium font-medium mb-3">Permission Assignment</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex flex-wrap items-center mb-4">
+                                    <label class="text-sm font-medium text-coffee-medium mr-3">Select Role:</label>
+                                    <select class="border border-gray-300 rounded-md py-2 px-3 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent outline-none transition">
+                                        <option>Administrator</option>
+                                        <option>Manager</option>
+                                        <option>Staff</option>
+                                        <option>User</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="p-4 border border-gray-200 rounded-lg bg-white">
+                                        <h5 class="font-medium text-coffee-dark mb-3">User Management</h5>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="create-users" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="create-users" class="text-sm text-coffee-medium">Create Users</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="edit-users" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="edit-users" class="text-sm text-coffee-medium">Edit Users</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="delete-users" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="delete-users" class="text-sm text-coffee-medium">Delete Users</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="reset-passwords" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="reset-passwords" class="text-sm text-coffee-medium">Reset Passwords</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-4 border border-gray-200 rounded-lg bg-white">
+                                        <h5 class="font-medium text-coffee-dark mb-3">Security Controls</h5>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="manage-roles" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="manage-roles" class="text-sm text-coffee-medium">Manage Roles</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="view-logs" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="view-logs" class="text-sm text-coffee-medium">View Audit Logs</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="security-settings" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="security-settings" class="text-sm text-coffee-medium">Modify Security Settings</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="lock-accounts" class="rounded text-coffee-accent mr-2" checked>
+                                                <label for="lock-accounts" class="text-sm text-coffee-medium">Lock/Unlock Accounts</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex justify-end">
+                                    <button class="bg-coffee-accent hover:bg-coffee-light text-white font-medium py-2 px-4 rounded-md transition">Save Permissions</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Activity Logs Section -->
+                <section id="user-audit" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+                    <div class="bg-coffee-dark text-white p-4 flex justify-between items-center">
+                        <h3 class="font-semibold">User Activity Logs</h3>
+                        <div class="flex items-center">
+                            <input type="text" placeholder="Search logs..." class="text-sm p-1 px-2 rounded-md mr-2 text-coffee-dark">
+                            <button class="bg-coffee-medium hover:bg-coffee-light text-white text-sm px-3 py-1 rounded-md transition">Export</button>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="mb-4 flex flex-wrap gap-3">
+                            <span class="bg-coffee-cream px-3 py-1 rounded-full text-coffee-dark text-sm flex items-center">
+                                Date: Last 7 days
+                                <button class="ml-2 text-coffee-medium hover:text-coffee-dark">×</button>
+                            </span>
+                            <span class="bg-coffee-cream px-3 py-1 rounded-full text-coffee-dark text-sm flex items-center">
+                                Event: Login
+                                <button class="ml-2 text-coffee-medium hover:text-coffee-dark">×</button>
+                            </span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Timestamp</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">User</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Event</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">IP Address</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Status</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-coffee-medium uppercase tracking-wider">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="bg-white">
+                                        <td class="px-4 py-3 text-sm text-gray-700">Apr 3, 2025, 08:45:12</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">john.doe@example.com</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">Login</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">192.168.1.42</td>
+                                        <td class="px-4 py-3 text-sm"><span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Failed</span></td>
+                                        <td class="px-4 py-3 text-sm text-blue-500 hover:text-blue-700 cursor-pointer">View</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="px-4 py-3 text-sm text-gray-700">Apr 3, 2025, 08:47:33</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">john.doe@example.com</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">Login</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">192.168.1.42</td>
+                                        <td class="px-4 py-3 text-sm"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Success</span></td>
+                                        <td class="px-4 py-3 text-sm text-blue-500 hover:text-blue-700 cursor-pointer">View</td>
+                                    </tr>
+                                    <tr class="bg-white">
+                                        <td class="px-4 py-3 text-sm text-gray-700">Apr 3, 2025, 09:15:28</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">sarah.smith@example.com</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">Password Change</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700">192.168.1.105</td>
+                                        <td class="px-4 py-3 text-sm"><span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Success</span></td>
+                                        <td class="px-4 py-3 text-sm text-blue-500 hover:text-blue-700 cursor-pointer">View</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="text-sm text-gray-500">Showing 3 of 423 entries</div>
+                            <div class="flex space-x-1">
+                                <button class="px-3 py-1 border border-gray-300 rounded-md text-sm">Previous</button>
+                                <button class="px-3 py-1 bg-coffee-accent text-white border border-coffee-accent rounded-md text-sm">1</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md text-sm">2</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md text-sm">3</button>
+                                <button class="px-3 py-1 border border-gray-300 rounded-md text-sm">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Security Policies Section -->
+                <section id="security-policies" class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-coffee-dark text-white p-4">
+                        <h3 class="font-semibold">Security Policies</h3>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h4 class="text-coffee-medium font-medium mb-3">Password Policy</h4>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1" for="min-length">Minimum Password Length</label>
+                                        <div class="flex">
+                                            <input type="number" id="min-length" value="10" min="8" max="30" class="w-full p-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent outline-none transition">
+                                            <span class="bg-gray-100 border border-l-0 border-gray-300 rounded-r-md px-3 flex items-center text-gray-500">characters</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1" for="password-expiry">Password Expiration</label>
+                                        <div class="flex">
+                                            <input type="number" id="password-expiry" value="90" min="30" max="365" class="w-full p-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent outline-none transition">
+                                            <span class="bg-gray-100 border border-l-0 border-gray-300 rounded-r-md px-3 flex items-center text-gray-500">days</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="require-uppercase" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="require-uppercase" class="text-sm text-coffee-medium">Require uppercase letters</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="require-lowercase" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="require-lowercase" class="text-sm text-coffee-medium">Require lowercase letters</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="require-numbers" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="require-numbers" class="text-sm text-coffee-medium">Require numbers</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="require-special" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="require-special" class="text-sm text-coffee-medium">Require special characters</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-200">
+                            <h4 class="text-coffee-medium font-medium mb-3">Login Security</h4>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1" for="max-attempts">Maximum Login Attempts</label>
+                                        <input type="number" id="max-attempts" value="5" min="3" max="10" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent outline-none transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1" for="lockout-duration">Account Lockout Duration</label>
+                                        <div class="flex">
+                                            <input type="number" id="lockout-duration" value="30" min="15" max="1440" class="w-full p-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent outline-none transition">
+                                            <span class="bg-gray-100 border border-l-0 border-gray-300 rounded-r-md px-3 flex items-center text-gray-500">minutes</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="force-2fa" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="force-2fa" class="text-sm text-coffee-medium">Enforce two-factor authentication for all users</label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="session-timeout" class="rounded text-coffee-accent mr-2" checked>
+                                        <label for="session-timeout" class="text-sm text-coffee-medium">Session timeout after inactivity (30 minutes)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end">
+                            <button class="bg-coffee-medium hover:bg-coffee-light text-white font-medium py-2 px-4 rounded-md transition mr-2">Reset to Defaults</button>
+                            <button class="bg-coffee-accent hover:bg-coffee-light text-white font-medium py-2 px-4 rounded-md transition">Save Changes</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

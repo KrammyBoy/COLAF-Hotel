@@ -40,13 +40,13 @@ namespace COLAFHotel.Controllers
             if (password != confirmPassword)
             {
                 ViewBag.Error = "Passwords do not match!";
-                return View();
+                return View("Login");
             }
 
             if (_context.Users.Any(u => u.username == username))
             {
                 ViewBag.Error = "Username already exists!";
-                return View();
+                return View("Login");
             }
 
             // Check if role is null or empty in the database

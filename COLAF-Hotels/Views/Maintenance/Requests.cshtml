@@ -3,38 +3,100 @@
     ViewBag.Title = "Maintenance Requests";
 }
 
-<div class="max-w-6xl mx-auto mt-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Maintenance Requests</h2>
-    <a class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition" asp-action="CreateRequest">
-        + Create New Request
-    </a>
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div class="flex items-center space-x-3 mb-4 md:mb-0">
+            <h2 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+                <span class="relative z-10">Maintenance Request</span>
+                <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+            </h2>
+        </div>
+        <a class="px-5 py-3 bg-coffee-dark text-coffee-cream rounded-lg shadow-md hover:bg-coffee-medium transition flex items-center space-x-2 transform hover:scale-105 duration-200" asp-action="CreateRequest">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Create New Request</span>
+        </a>
+    </div>
 
-    <div class="mt-4 overflow-x-auto bg-white shadow-md rounded-lg">
-        <table class="w-full border-collapse">
-            <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="py-3 px-4 text-left">ID</th>
-                    <th class="py-3 px-4 text-left">Room Number</th>
-                    <th class="py-3 px-4 text-left">Issue Description</th>
-                    <th class="py-3 px-4 text-left">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var request in Model)
-                {
-                    <tr class="border-b hover:bg-gray-100">
-                        <td class="py-3 px-4">@request.Id</td>
-                        <td class="py-3 px-4">@request.RoomNumber</td>
-                        <td class="py-3 px-4">@request.IssueDescription</td>
-                        <td class="py-3 px-4">
-                            <span class="px-3 py-1 rounded-full text-sm font-medium @GetStatusClass(request.Status)">
-                                @request.Status
-                            </span>
-                        </td>
+    <div class="bg-gradient-to-r from-coffee-cream to-white p-6 rounded-2xl shadow-lg border border-coffee-light">
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="border-b-2 border-coffee-light">
+                        <th class="py-4 px-4 text-left text-coffee-dark font-bold">ID</th>
+                        <th class="py-4 px-4 text-left text-coffee-dark font-bold">Room Number</th>
+                        <th class="py-4 px-4 text-left text-coffee-dark font-bold">Issue Description</th>
+                        <th class="py-4 px-4 text-left text-coffee-dark font-bold">Status</th>
+                        <th class="py-4 px-4 text-left text-coffee-dark font-bold">Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var request in Model)
+                        {
+                            <tr class="border-b border-coffee-cream hover:bg-coffee-cream/30 transition duration-150">
+                                <td class="py-4 px-4 text-coffee-medium">@request.Id</td>
+                                <td class="py-4 px-4 text-coffee-medium">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        R.@request.RoomNumber
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-coffee-medium">@request.IssueDescription</td>
+                                <td class="py-4 px-4">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium @GetStatusClass(request.Status)">
+                                        <span class="h-2 w-2 rounded-full mr-1.5 @GetStatusDotClass(request.Status)"></span>
+                                        @request.Status
+                                    </span>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <div class="flex space-x-2">
+                                        <a href="@Url.Action("Details", new { id = request.Id })" class="p-2 text-coffee-medium hover:text-coffee-dark transition rounded-full hover:bg-coffee-cream">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                        </a>
+                                        <a href="@Url.Action("Edit", new { id = request.Id })" class="p-2 text-coffee-medium hover:text-coffee-dark transition rounded-full hover:bg-coffee-cream">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="py-8 text-center text-coffee-medium">
+                                <div class="flex flex-col items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                    </svg>
+                                    <p class="text-lg font-medium">No maintenance requests found</p>
+                                    <p class="text-coffee-light mt-1">Create a new request to get started</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-6 flex justify-end">
+        <a href="@Url.Action("Index", "Home")" class="px-4 py-2 text-coffee-medium hover:text-coffee-dark flex items-center space-x-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
     </div>
 </div>
 
@@ -43,10 +105,21 @@
     {
         return status switch
         {
-            "Reported" => "bg-yellow-500 text-gray-900",
-            "In Progress" => "bg-blue-500 text-white",
-            "Completed" => "bg-green-500 text-white",
-            _ => "bg-gray-500 text-white"
+            "Reported" => "bg-coffee-cream text-coffee-dark",
+            "In Progress" => "bg-coffee-accent text-white",
+            "Completed" => "bg-green-600 text-white",
+            _ => "bg-gray-300 text-gray-700"
+        };
+    }
+
+    string GetStatusDotClass(string status)
+    {
+        return status switch
+        {
+            "Reported" => "bg-coffee-dark",
+            "In Progress" => "bg-white animate-pulse",
+            "Completed" => "bg-white",
+            _ => "bg-gray-400"
         };
     }
 }
