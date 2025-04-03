@@ -239,58 +239,93 @@
 <script>
     function updatePrice() {
         let basePrice = @Model.Price;
-        let checkInDate = new Date(document.getElementById('checkInDate').value);
-        let checkOutDate = new Date(document.getElementById('checkOutDate').value);
+        let checkInDateInput = document.getElementById('checkInDate');
+        let checkOutDateInput = document.getElementById('checkOutDate');
         let transportService = document.getElementById('transportService').checked;
         let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
 
-        //Values needed to be changed
+        let checkInDate = new Date(checkInDateInput.value);
+        let checkOutDate = new Date(checkOutDateInput.value);
+
+        // Prevent check-out date from being before check-in date
+        if (checkOutDate <= checkInDate) {
+            alert("Check-out date cannot be before or the same as check-in date.");
+            checkOutDateInput.value = ""; // Reset check-out field
+            return;
+        }
+
         let numberOfNights = document.getElementById('numberOfNights');
         let transportFee = document.getElementById('transportFee');
         let checkInDay = document.getElementById('checkInDay');
         let checkOutDay = document.getElementById('checkOutDay');
         let nightPrice = document.getElementById('nightPrice');
 
-        // Calculate number of nights
-        let nights = (checkOutDate > checkInDate) ? (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24) : 1;
+        let nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+        numberOfNights.textContent = nights;
 
-        // Change values in the html
-        numberOfNights.textContent  = nights;
-
-        // Format numbers properly with commas
         let nightPriceAdded = ((basePrice * nights) - basePrice);
-        let transportFeeAdded  = transportService ? 500.00 : 0.00;
+        let transportFeeAdded = transportService ? 500.00 : 0.00;
 
         let formattedNightPrice = nightPriceAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         let formattedTransportFee = transportFeeAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        checkInDay.textContent  = checkInDate.toDateString();
-        checkOutDay.textContent  = checkOutDate.toDateString();
+        checkInDay.textContent = checkInDate.toDateString();
+        checkOutDay.textContent = checkOutDate.toDateString();
         nightPrice.textContent = formattedNightPrice;
         transportFee.textContent = formattedTransportFee;
- 
 
-        // Update price: (base price * guests * nights) + transport fee
-        let totalPrice = (basePrice * nights) + (transportService ? 500 : 0);
+        let totalPrice = (basePrice * nights) + transportFeeAdded;
         let formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('totalPrice').textContent = formattedTotalPrice;
         hiddenTotalPrice.value = totalPrice;
     }
+    function validateDates() {
+        let checkInDateInput = document.getElementById('checkInDate');
+        let checkOutDateInput = document.getElementById('checkOutDate');
+
+        checkInDateInput.addEventListener("change", function () {
+            let checkInDate = new Date(this.value);
+            let minCheckOutDate = new Date(checkInDate);
+            minCheckOutDate.setDate(minCheckOutDate.getDate() + 1);
+
+            // Ensure check-out date is after check-in date
+            if (checkOutDateInput.value) {
+                let checkOutDate = new Date(checkOutDateInput.value);
+                if (checkOutDate <= checkInDate) {
+                    alert("Check-out date cannot be before or the same as check-in date.");
+                    checkOutDateInput.value = ""; // Reset check-out field
+                }
+            }
+
+            // Set minDate for check-out date picker
+            checkOutDateInput.min = minCheckOutDate.toISOString().split("T")[0];
+        });
+    }
+
     function toggleTransportDetails() {
         updatePrice();
         const details = document.getElementById("transportDetails");
-        details.classList.toggle("hidden");
+        const checkbox = document.getElementById("transportService");
+
+        if (checkbox.checked) {
+            details.classList.remove("hidden");
+        } else {
+            details.classList.add("hidden");
+        }
     }
+
 
     function closeErrorModal() {
         document.getElementById("errorModal").style.display = "none";
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        validateDates();
+
         var roomId = document.getElementsByName("RoomId")[0].value;
-        let tomorrow = new Date();
         let today = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1); // Move to next day
+        let tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
 
         fetch(`/GetUnavailableDates?roomId=${roomId}`)
             .then(response => response.json())
@@ -298,8 +333,8 @@
                 flatpickr(".datepicker", {
                     dateFormat: "Y-m-d",
                     disableMobile: "true",
-                    disable: dates.map(date => new Date(date)), // Disable booked dates
-                    minDate: tomorrow, // Prevent past date selection
+                    disable: dates.map(date => new Date(date)),
+                    minDate: tomorrow,
                     maxDate: new Date(today.getFullYear(), today.getMonth() + 12, today.getDate()),
                     prevArrow: "←",
                     nextArrow: "→"

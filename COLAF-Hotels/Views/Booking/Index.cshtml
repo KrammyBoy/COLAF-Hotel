@@ -22,6 +22,10 @@
             <table class="w-full">
                 <thead>
                     <tr class="bg-coffee-dark text-coffee-cream">
+                        @if (Context.Session.GetString("Role") == "Staff" || Context.Session.GetString("Role") == "Admin")
+                        {
+                            <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Guest Name</th>
+                        }
                         <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Booking ID</th>
                         <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Room</th>
                         <th class="py-4 px-6 text-left font-medium text-sm tracking-wider">Check-In</th>
@@ -34,6 +38,10 @@
                     @foreach (var booking in Model)
                     {
                         <tr class="hover:bg-coffee-cream hover:bg-opacity-20 transition-colors duration-150">
+                            @if (Context.Session.GetString("Role") == "Staff" || Context.Session.GetString("Role") == "Admin")
+                            {
+                                <td class="py-4 px-6 text-coffee-medium">@booking.Guest.User.firstname @booking.Guest.User.lastname</td>
+                            }
                             <td class="py-4 px-6 text-coffee-dark font-medium">#@booking.booking_id</td>
                             <td class="py-4 px-6 text-coffee-medium">Room @booking.Room.RoomNumber</td>
                             <td class="py-4 px-6 text-coffee-medium">@booking.check_in_date.ToString("MMM dd, yyyy")</td>

@@ -15,5 +15,7 @@ namespace COLAFHotel.Models
 
         [ForeignKey("user_id")]
         public User User { get; set; }  // Navigation property
+
+        public List<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
