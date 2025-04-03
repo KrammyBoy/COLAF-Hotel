@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<COLAFHotel.Models.Room>
 @{
     ViewBag.Title = "Rooms";
+    var userRole = ViewBag.UserRole; // Get the role from ViewBag
 }
 
 <div class="max-w-7xl mx-auto p-8 bg-amber-50 rounded-2xl shadow-xl border border-amber-800/30 mt-10">
@@ -103,15 +104,17 @@
                             </svg>
                             <span class="text-amber-900">Floor @room.RoomNumber.ToString().Substring(0, 1)</span>
                         </div>
-                        
-                        <a href="@Url.Action("Create", "Booking", new { roomId = room.RoomId, roomNumber = room.RoomNumber, roomImg = room.ImageUrl,
-                            roomCategory = room.Category, roomPrice = room.Price
-                        })" class="inline-flex items-center px-6 py-3 bg-amber-700 text-white font-medium rounded-lg transition-colors duration-300 hover:bg-amber-800 focus:ring-4 focus:ring-amber-600 focus:ring-opacity-50">
-                            BOOK NOW
-                            <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                            </svg>
-                        </a>
+
+                        @if (userRole == "Guest")
+                        {
+                            <a href="@Url.Action("Create", "Booking", new { roomId = room.RoomId, roomNumber = room.RoomNumber, roomImg = room.ImageUrl, roomCategory = room.Category, roomPrice = room.Price })" 
+                                    class="inline-flex items-center px-6 py-3 bg-amber-700 text-white font-medium rounded-lg transition-colors duration-300 hover:bg-amber-800 focus:ring-4 focus:ring-amber-600 focus:ring-opacity-50">
+                                BOOK NOW
+                                <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </a>
+                        }
                     </div>
                 </div>
             </div>

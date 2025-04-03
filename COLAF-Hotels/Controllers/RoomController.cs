@@ -18,7 +18,14 @@ namespace COLAFHotel.Controllers
 
         public IActionResult List()
         {
+            // Get the role from the session
+            var userRole = HttpContext.Session.GetString("Role");
+
+            // Pass the role to the view
+            ViewBag.UserRole = userRole;
+
             var room = _context.Room.ToList();  // Fetch data from PostgreSQL
+
             return View(room);
         }
 
