@@ -48,13 +48,14 @@ namespace COLAFHotel.Controllers
             return View(bookings);
         }
 
-        public IActionResult Details(int id)
+        // GET: Booking/Details/5
+        public async Task<IActionResult> Details(int id)
         {
-            var booking = _context.Bookings
+            var booking = await _context.Bookings
                 .Include(b => b.Guest)
                     .ThenInclude(g => g.User)
                 .Include(b => b.Room)
-                .FirstOrDefault(b => b.booking_id == id);
+                .FirstOrDefaultAsync(b => b.booking_id == id);
 
             if (booking == null)
             {
@@ -62,6 +63,35 @@ namespace COLAFHotel.Controllers
             }
 
             return View(booking);
+        }
+
+        // POST: Booking/UpdateBookingDates/5
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookingDates(int id, DateTime check_in_date, DateTime check_out_date)
+        {
+            var booking = await _context.Bookings
+                .FirstOrDefaultAsync(b => b.booking_id == id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            // Ensure the dates are valid and logical
+            if (check_in_date >= check_out_date)
+            {
+                ModelState.AddModelError("", "Check-out date must be later than check-in date.");
+                return RedirectToAction(nameof(Details), new { id = booking.booking_id });
+            }
+
+            // Convert the dates to UTC before saving to the database
+            booking.check_in_date = check_in_date.ToUniversalTime();
+            booking.check_out_date = check_out_date.ToUniversalTime();
+
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = booking.booking_id });
         }
 
         public IActionResult Create(int roomId, string roomNumber, string roomImg, string roomCategory, decimal roomPrice)
