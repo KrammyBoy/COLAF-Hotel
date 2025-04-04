@@ -26,7 +26,7 @@
             </div>
 
             <!-- Booking Form -->
-            <form method="post" action="@Url.Action("ConfirmBooking", "Booking")" class="p-6">
+            <form method="post" class="p-6" method="POST">
                 <input type="hidden" name="RoomId" value="@Model.RoomId" />
                 <input type="hidden" name="RoomNumber" value="@Model.RoomNumber" />
                 <input type="hidden" name="Category" value="@Model.Category" />
@@ -423,12 +423,12 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                    <button type="submit" class="flex-1 px-6 py-4 bg-coffee-accent text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 focus:ring-4 focus:ring-coffee-cream">
+                    <button type="submit" asp-action="ConfirmBooking" class="flex-1 px-6 py-4 bg-coffee-accent text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 focus:ring-4 focus:ring-coffee-cream">
                         <i class="fas fa-check-circle mr-2"></i> CONFIRM BOOKING
                     </button>
-                    <a href="#" class="flex-1 px-6 py-4 bg-coffee-medium text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 text-center focus:ring-4 focus:ring-coffee-cream">
+                    <button type="submit" asp-action="SaveForLater" class="flex-1 px-6 py-4 bg-coffee-medium text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 text-center focus:ring-4 focus:ring-coffee-cream">
                         <i class="fas fa-bookmark mr-2"></i> SAVE FOR LATER
-                    </a>
+                    </button>
                 </div>
             </form>
         </div>
