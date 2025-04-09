@@ -109,6 +109,100 @@ namespace COLAFHotel.Controllers
             
             return View(room);
         }
+
+        public IActionResult AddBookingWalkIn()
+        {
+            var rooms = _context.Room
+                .Where(r => r.Status == "Vacant")  // Filter only vacant rooms
+                .OrderBy(r => r.RoomNumber)        // Order by room number
+                .ToList();
+
+            return View(rooms);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> StaffAddBooking
+            (
+            string guestId,
+            string userId,
+            string SelectedRoom, // RoomID
+            string roomNumber,
+            string category,
+            string imageUrl,
+            string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, string cardGuestName, string cashGuestName)
+        {
+            Console.WriteLine($"Staff Booking Confirmed: GuestName={cardGuestName} or {cashGuestName}, RoomId={SelectedRoom}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}");
+
+            if (guestId == "null")
+            {
+                // Add Guest for the user
+                var newGuest = new Guest
+                {
+                    user_id = Convert.ToInt32(userId)
+                };
+                _context.Guests.Add(newGuest);
+                await _context.SaveChangesAsync();
+                guestId = newGuest.guest_id.ToString();
+                Console.WriteLine($"Guest ID: {guestId}");
+            }
+
+            var guestName = (cardGuestName != null) ? cardGuestName : cashGuestName;
+            var room = new Room
+            {
+                RoomId = Convert.ToInt32(SelectedRoom),
+                RoomNumber = roomNumber,
+                Category = category,
+                ImageUrl = imageUrl,
+                Price = Convert.ToDecimal(Price)
+            };
+
+            CheckInDate = DateTime.SpecifyKind(CheckInDate, DateTimeKind.Utc);
+            CheckOutDate = DateTime.SpecifyKind(CheckOutDate, DateTimeKind.Utc);
+
+            // Validate Check-in and Check-out Dates
+            if (CheckInDate < DateTime.UtcNow)
+            {
+                TempData["Error"] = "Check-in date cannot be in the past.";
+                return View("AddBookingWalkIn", room);
+            }
+
+            if (CheckOutDate <= CheckInDate)
+            {
+                TempData["Error"] = "Check-out date must be after check-in date.";
+                return View("AddBookingWalkIn", room);
+            }
+
+            var booking = new Booking
+            {
+                guestName = guestName,
+                room_id = Convert.ToInt32(SelectedRoom),
+                check_in_date = CheckInDate,
+                check_out_date = CheckOutDate,
+                status = "Confirmed", // Options: Confirmed, Pending, Cancelled
+                total_amount = totalPrice
+            };
+
+            var guest = await _context.Guests.Include(g => g.Bookings)
+                                             .FirstOrDefaultAsync(g => g.guest_id == Convert.ToInt32(guestId));
+
+            if (guest != null)
+            {
+                guest.Bookings.Add(booking);  // Add the booking to the guest's booking history
+            }
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Your booking has been confirmed";
+            TempData["GuestName"] = booking.guestName;
+            TempData["BookingId"] = booking.booking_id;
+            TempData["CheckInDate"] = booking.check_in_date.ToString("yyyy-MM-dd");
+            TempData["CheckOutDate"] = booking.check_out_date.ToString("yyyy-MM-dd");
+            TempData["TotalAmount"] = booking.total_amount.ToString();
+
+            return RedirectToAction("Index", "Booking");
+        }
+
         [HttpPost]
         public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)
         {

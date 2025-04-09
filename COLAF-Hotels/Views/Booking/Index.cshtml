@@ -1,11 +1,14 @@
-﻿@model IEnumerable<COLAFHotel.Models.Booking>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@model IEnumerable<COLAFHotel.Models.Booking>
 @{
     ViewBag.Title = "Bookings";
+    var guestName = TempData["GuestName"] as string;
     var successMessage = TempData["Success"] as string;
     var bookingId = TempData["BookingId"] != null ? Convert.ToInt32(TempData["BookingId"]) : 0;
     var checkInDate = TempData["CheckInDate"] as string;
     var checkOutDate = TempData["CheckOutDate"] as string;
     var totalAmount = TempData["TotalAmount"] != null ? Convert.ToDecimal(TempData["TotalAmount"]) : 0;
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
 
 <div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
@@ -14,7 +17,19 @@
             <span class="relative z-10">Booking History</span>
             <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
         </h3>
-        <p class="text-coffee-medium mt-2">View and manage your stay reservations</p>
+        @if (role == "Guest")
+        {
+            <p class="text-coffee-medium mt-2">View and manage your stay reservations</p>
+        }
+        else if (role == "Staff")
+        {
+            <a class="px-5 py-3 bg-coffee-dark text-coffee-cream rounded-lg shadow-md hover:bg-coffee-medium transition flex items-center space-x-2" asp-action="AddBookingWalkIn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add Booking for Walk in</span>
+            </a>
+        }
     </div>
 
     <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-coffee-cream">
@@ -40,7 +55,13 @@
                         <tr class="hover:bg-coffee-cream hover:bg-opacity-20 transition-colors duration-150">
                             @if (Context.Session.GetString("Role") == "Staff" || Context.Session.GetString("Role") == "Admin")
                             {
-                                <td class="py-4 px-6 text-coffee-medium">@booking.Guest.User.firstname @booking.Guest.User.lastname</td>
+                                @if (booking.guestName != null)
+                                {
+                                    <td class="py-4 px-6 text-coffee-medium">@booking.guestName (WALK IN)</td>
+                                }else
+                                {
+                                    <td class="py-4 px-6 text-coffee-medium">@booking.Guest.User.firstname @booking.Guest.User.lastname</td>
+                                }
                             }
                             <td class="py-4 px-6 text-coffee-dark font-medium">#@booking.booking_id</td>
                             <td class="py-4 px-6 text-coffee-medium">Room @booking.Room.RoomNumber</td>

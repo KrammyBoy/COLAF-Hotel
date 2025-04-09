@@ -1,0 +1,547 @@
+﻿@model IEnumerable<COLAFHotel.Models.Room>
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Title = "Walk In Booking";
+    var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
+    var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
+}
+
+<div class="min-h-screen bg-coffee-cream bg-opacity-30 w-full p-6">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Booking Form -->
+        <form method="post" class="p-6" method="POST">
+            <!-- Room Selection -->
+            <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Select a Room</h2>
+                    <label class="block text-coffee-medium font-medium mb-2">Available Rooms</label>
+                    <select id="roomSelection" name="SelectedRoom" class="w-full p-3 border border-coffee-cream rounded-lg" onchange="updateRoomDetails()">
+                        <option value="">-- Select a Room --</option>
+                    @foreach (var room in Model)
+                    {
+                        <option value="@room.RoomId"
+                                data-category="@room.Category"
+                                data-status="@room.Status"
+                                data-price="@room.Price"
+                                data-image="@room.ImageUrl"
+                                data-roomnumber="@room.RoomNumber">
+                            Room @room.RoomNumber - @room.Category (@room.Status) - ₱@room.Price.ToString("N2")
+                        </option>
+                    }
+                    </select>
+                </div>
+            <!-- Dates Section -->
+            <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-coffee-dark mb-4">Select Dates</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group">
+                            <label class="block text-coffee-medium font-medium mb-2">Check-in Date</label>
+                            <div class="relative">
+                                <input type="text" id="checkInDate" name="CheckInDate"
+                                       class="datepicker w-full p-3 border border-coffee-cream rounded-lg pl-10 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all"
+                                       onchange="updatePrice()" required>
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-coffee-light group-hover:text-coffee-accent transition-colors duration-200"></i>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="block text-coffee-medium font-medium mb-2">Check-out Date</label>
+                            <div class="relative">
+                                <input type="text" id="checkOutDate" name="CheckOutDate"
+                                       class="datepicker w-full p-3 border border-coffee-cream rounded-lg pl-10 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all"
+                                       onchange="updatePrice()" required>
+                                <i class="fa-solid fa-calendar-days absolute left-3 top-3 text-coffee-light group-hover:text-coffee-accent transition-colors duration-200"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- Booking Policies -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream">
+                    <!-- Header -->
+                    <div class="bg-coffee-dark px-6 py-4 border-b border-coffee-light">
+                        <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
+                            <i class="fas fa-clipboard-list text-coffee-accent mr-3"></i>
+                            Hotel Booking Policy
+                        </h2>
+                    </div>
+
+                    <!-- Booking Policy -->
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Left Column -->
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Reservation Confirmation</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Your stay is secured once full payment is received. A confirmation email will be sent immediately.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-ban"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Cancellation Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Cancel <span class="font-medium">at least 48 hours</span> before check-in for a full refund. Late cancellations may incur a charge.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Modification Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Need to adjust your dates? Changes are allowed up to <span class="font-medium">24 hours</span> before check-in, subject to availability.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Payment Terms</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">We accept all major credit cards and digital payments. Your booking is only confirmed once payment is processed.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-user-times"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">No-Show Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">If you don't check in on the scheduled date, your reservation will be forfeited, and no refunds will be issued.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Check-in & Check-out</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">Check-in is from <span class="font-medium">2:00 PM</span>, and check-out is by <span class="font-medium">11:00 AM</span>. Early check-in or late check-out is subject to availability and extra charges.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Guest Policy</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">A valid ID is required at check-in. Additional guests may be subject to extra charges.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-coffee-cream bg-opacity-30 p-2 rounded-lg text-coffee-accent mr-3">
+                                        <i class="fas fa-headset"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-coffee-dark">Contact Support</h3>
+                                        <p class="text-coffee-medium text-sm mt-1">For any booking changes or questions, reach out to our front desk <span class="font-medium">at least 24 hours</span> before your stay.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer with help link -->
+                    <div class="bg-coffee-cream bg-opacity-20 px-6 py-3 border-t border-coffee-cream">
+                        <a href="#" class="flex items-center justify-center text-coffee-medium hover:text-coffee-dark transition-colors">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            <span>Need more information? View our full terms and conditions</span>
+                        </a>
+                    </div>
+                </div>
+            <!--Payment-->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream p-5">
+                    <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
+                        <!-- Payment Method Selection -->
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="text-coffee-dark font-medium">Payment Method:</span>
+                            <div class="space-x-4">
+                                <button id="paymentCreditCardButton" class="px-4 py-2 bg-coffee-light rounded-md text-white focus:outline-none" onclick="togglePaymentMethod('creditCard')">
+                                    Credit Card
+                                </button>
+                                <button id="paymentCashButton" class="px-4 py-2 bg-coffee-light rounded-md text-white focus:outline-none" onclick="togglePaymentMethod('cash')">
+                                    Cash
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Credit Card Payment Form -->
+                        <div id="creditCardForm" class="hidden">
+                            <div class="flex items-center space-x-4 mb-5 justify-center sm:justify-start">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                                <div class="px-3 py-1 bg-coffee-dark text-coffee-cream rounded-full text-xs font-medium">Secure Payment</div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-1">Card Number</label>
+                                    <div class="relative">
+                                        <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg pl-12 bg-white focus:ring-2 focus:ring-coffee-accent" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                        <i class="fas fa-credit-card absolute left-3 top-3 text-coffee-light"></i>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1">Expiration Date</label>
+                                        <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="expirationDate" placeholder="MM/YY" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-coffee-medium mb-1">CVV</label>
+                                        <div class="relative">
+                                            <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg pl-12 bg-white focus:ring-2 focus:ring-coffee-accent" id="CVV" placeholder="123" required>
+                                            <i class="fas fa-lock absolute left-3 top-3 text-coffee-light"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-1">Name on Card</label>
+                                    <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="cardGuestName" name="cardGuestName" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cash Payment Form -->
+                        <div id="cashForm" class="hidden">
+                            <div class="text-sm text-coffee-dark mb-4">
+                                <label class="block text-sm font-medium text-coffee-medium mb-1">Full Name</label>
+                                <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="walkGuestName" name="cashGuestName" placeholder="John Doe" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deposit or Full Payment Option -->
+                    <!-- Deposit or Full Payment Option -->
+                    <div class="mt-6">
+                        <label for="paymentOption" class="block text-sm font-medium text-coffee-medium mb-1">Payment Type</label>
+                        <select id="paymentOption" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" onchange="updatePrice()">
+                            <option value="Deposit">Deposit</option>
+                            <option value="Full Payment">Full Payment</option>
+                        </select>
+                    </div>
+                </div>
+            <!-- Price Details -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream mt-8">
+                    <!-- Header -->
+                    <div class="bg-coffee-dark px-6 py-4">
+                        <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
+                            <i class="fas fa-receipt text-coffee-accent mr-3"></i>
+                            Price Breakdown
+                        </h2>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-6">
+                        <!-- Date Range Summary -->
+                        <div class="mb-6 bg-coffee-cream bg-opacity-20 rounded-lg p-4 flex items-center">
+                            <div class="bg-coffee-medium rounded-lg p-2 mr-4 text-white">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-coffee-medium text-sm">Your Stay</p>
+                                <p class="text-coffee-dark font-medium">
+                                    <span id="checkInDay">Check-in Day</span> -
+                                    <span id="checkOutDay">Check-out Day</span>
+                                    (<span id="numberOfNights" class="text-coffee-accent font-semibold">0</span> Nights)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Price Items -->
+                        <div class="space-y-4">
+                            <!-- Room Price -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-bed"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium"><span id="selectedRoomCategory">Select a room</span> (R <span id="selectedRoomNumber">-</span>)</p>
+                                        <p class="text-coffee-medium text-xs">Base room rate</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="basePrice">0.00</span></p>
+                            </div>
+
+                            <!-- Nights of Stay -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">Nights of Stay</p>
+                                        <p class="text-coffee-medium text-xs"><span id="numberOfNights2">0</span> nights at room rate</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
+                            </div>
+
+                            <!-- Discount -->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">No Discount</p>
+                                        <p class="text-coffee-medium text-xs">Discount</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
+                            </div>
+
+                            <!-- Payment Type-->
+                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                        <i class="fas fa-moon"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-coffee-dark font-medium">Payment Type</p>
+                                        <p class="text-coffee-medium text-xs">Deposit or Full Payment</p>
+                                    </div>
+                                </div>
+                                <p class="text-coffee-dark font-semibold" id="paymentType">Full Payment</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Section -->
+                    <div class="bg-coffee-cream bg-opacity-30 p-6 border-t border-coffee-cream">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-coffee-medium text-sm">Total Amount</p>
+                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="totalPrice">0.00</span></p>
+                            </div>
+                            <div class="bg-coffee-accent text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-check-circle mr-1"></i> Final Price
+                            </div>
+                        </div>
+                        <!--Deposit Section-->
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-coffee-medium text-sm">Deposit</p>
+                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="totalDeposit">0.00</span></p>
+                            </div>
+                            <div class="bg-coffee-accent text-white px-4 py-2 rounded-lg">
+                            <i class="fas fa-check-circle mr-1"></i> <p id="paymentTypeFinal">Final Deposit</p> <!-- Value can be "Final Deposit" or "No Deposit"-->
+                            </div>
+                        </div>
+                        <!-- Hidden input for form submission -->
+                    <input type="hidden" name="imageUrl" id="hiddenImageUrl" />
+                        <input type="hidden" name="totalPrice" id="hiddenTotalPrice" />
+                        <input type="hidden" name="roomNumber" id="hiddenRoomNumber" />
+                        <input type="hidden" name="category" id="hiddenCategory" />
+                        <input type="hidden" name="guestId" value="@isGuest" />
+                        <input type="hidden" name="userId" value="@user_id"/>
+                      
+                    </div>
+                </div>
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                    <button type="submit" asp-action="StaffAddBooking" class="flex-1 px-6 py-4 bg-coffee-accent text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 focus:ring-4 focus:ring-coffee-cream">
+                        <i class="fas fa-check-circle mr-2"></i> ADD BOOK WALK-IN
+                    </button>
+                </div>
+        </form>
+    </div>
+</div>
+<script>
+    function updateRoomDetails() {
+        let roomSelection = document.getElementById("roomSelection");
+        let selectedOption = roomSelection.options[roomSelection.selectedIndex];
+
+        // Extract data attributes
+        let category = selectedOption.getAttribute("data-category") || "N/A";
+        document.getElementById('hiddenCategory').value = category; 
+
+        let imageUrl = selectedOption.getAttribute("data-image") || "N/A";
+        document.getElementById('hiddenImageUrl').value = imageUrl;
+
+        let status = selectedOption.getAttribute("data-status") || "N/A";
+        
+        let price = selectedOption.getAttribute("data-price") || "0.00";
+
+        // Update UI
+        document.getElementById("selectedRoomCategory").textContent = category;
+        var roomId = roomSelection.value;
+        let today = new Date();
+        let tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // Fetch unavailable dates for the selected room
+        fetch(`/GetUnavailableDates?roomId=${roomId}`)
+            .then(response => response.json())
+            .then(dates => {
+                // Clear previous selected dates by calling 'clear()' on the flatpickr instance
+                let datepickerElements = document.querySelectorAll('.datepicker');
+                datepickerElements.forEach((datepickerElement) => {
+                    if (datepickerElement._flatpickr) {
+                        // Destroy the old datepicker instance if it exists
+                        datepickerElement._flatpickr.clear(); // Clear selected dates
+                        datepickerElement._flatpickr.destroy(); // Destroy the previous instance
+                    }
+                });
+
+                // Re-initialize flatpickr with the updated unavailable dates
+                flatpickr(".datepicker", {
+                    dateFormat: "Y-m-d",
+                    disableMobile: "true",
+                    disable: dates.map(date => new Date(date)),
+                    minDate: tomorrow,
+                    maxDate: new Date(today.getFullYear(), today.getMonth() + 12, today.getDate()),
+                    prevArrow: "←",
+                    nextArrow: "→"
+                });
+
+                updatePrice();
+            });
+    }
+    // Default to showing Credit Card option
+    document.getElementById('creditCardForm').style.display = 'block';
+    document.getElementById('cashForm').style.display = 'none';
+
+    // Function to toggle between credit card and cash payment methods
+    function togglePaymentMethod(method) {
+        const creditCardForm = document.getElementById('creditCardForm');
+        const cashForm = document.getElementById('cashForm');
+        const creditCardButton = document.getElementById('paymentCreditCardButton');
+        const cashButton = document.getElementById('paymentCashButton');
+
+        const cardNameField = document.getElementById('cardGuestName');
+        const cashNameField = document.getElementById('walkGuestName');
+
+        if (method === 'creditCard') {
+            creditCardForm.style.display = 'block';
+            cashForm.style.display = 'none';
+            creditCardButton.classList.add('bg-coffee-dark', 'text-white');
+            cashButton.classList.remove('bg-coffee-dark', 'text-white');
+            cashButton.classList.add('bg-coffee-light', 'text-coffee-dark');
+
+
+            // Remove required attributes from cash form and add to credit card form
+            cashForm.querySelectorAll('[required]').forEach(field => field.removeAttribute('required'));
+            creditCardForm.querySelectorAll('input, select, textarea').forEach(field => field.setAttribute('required', 'true'));
+
+        } else if (method === 'cash') {
+            creditCardForm.style.display = 'none';
+            cashForm.style.display = 'block';
+            cashButton.classList.add('bg-coffee-dark', 'text-white');
+            creditCardButton.classList.remove('bg-coffee-dark', 'text-white');
+            creditCardButton.classList.add('bg-coffee-light', 'text-coffee-dark');
+
+            // Remove required attributes from credit card form and add to cash form
+            creditCardForm.querySelectorAll('[required]').forEach(field => field.removeAttribute('required'));
+            cashForm.querySelectorAll('input, select, textarea').forEach(field => field.setAttribute('required', 'true'));
+        }
+    }
+
+   
+
+    function updatePrice() {
+        let roomSelection = document.getElementById("roomSelection");
+        let selectedOption = roomSelection.options[roomSelection.selectedIndex];
+
+        let roomNumber = selectedOption.getAttribute("data-roomnumber") || "-";
+        document.getElementById('selectedRoomNumber').textContent = roomNumber;
+        document.getElementById('hiddenRoomNumber').value = roomNumber;
+
+        const paymentOption = document.getElementById('paymentOption').value;
+        document.getElementById('paymentType').textContent = paymentOption;
+
+        let paymentTypeFinal = document.getElementById('paymentTypeFinal');
+        if (paymentOption === "Deposit" ){
+            paymentTypeFinal.textContent = "Final Deposit";
+        }
+        else if (paymentOption === "Full Payment"){
+            paymentTypeFinal.textContent = "No Deposit";
+        }
+
+        let basePrice = selectedOption.getAttribute("data-price") || "0.00";
+        let checkInDateInput = document.getElementById('checkInDate');
+        let checkOutDateInput = document.getElementById('checkOutDate');
+        let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
+
+        let checkInDate = new Date(checkInDateInput.value);
+        let checkOutDate = new Date(checkOutDateInput.value);
+
+        // Prevent check-out date from being before check-in date
+        if (checkOutDate <= checkInDate) {
+            alert("Check-out date cannot be before or the same as check-in date.");
+            checkOutDateInput.value = ""; // Reset check-out field
+            return;
+        }
+
+        let numberOfNights = document.getElementById('numberOfNights');
+        let numberOfNights2 = document.getElementById('numberOfNights2');
+        let checkInDay = document.getElementById('checkInDay');
+        let checkOutDay = document.getElementById('checkOutDay');
+        let nightPrice = document.getElementById('nightPrice');
+
+        let nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+        numberOfNights.textContent = nights;
+        numberOfNights2.textContent = nights;
+
+        let nightPriceAdded = ((basePrice * nights) - basePrice);
+
+        let formattedNightPrice = nightPriceAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        checkInDay.textContent = checkInDate.toDateString();
+        checkOutDay.textContent = checkOutDate.toDateString();
+        nightPrice.textContent = formattedNightPrice;
+
+        let totalPrice = (basePrice * nights);
+        let formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        let formattedBasePrice = basePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('totalPrice').textContent = formattedTotalPrice;
+        document.getElementById('basePrice').textContent = formattedBasePrice;
+        hiddenTotalPrice.value = totalPrice;
+    }
+    function validateDates() {
+        let checkInDateInput = document.getElementById('checkInDate');
+        let checkOutDateInput = document.getElementById('checkOutDate');
+
+        checkInDateInput.addEventListener("change", function () {
+            let checkInDate = new Date(this.value);
+            let minCheckOutDate = new Date(checkInDate);
+            minCheckOutDate.setDate(minCheckOutDate.getDate() + 1);
+
+            // Ensure check-out date is after check-in date
+            if (checkOutDateInput.value) {
+                let checkOutDate = new Date(checkOutDateInput.value);
+                if (checkOutDate <= checkInDate) {
+                    alert("Check-out date cannot be before or the same as check-in date.");
+                    checkOutDateInput.value = ""; // Reset check-out field
+                }
+            }
+
+            // Set minDate for check-out date picker
+            checkOutDateInput.min = minCheckOutDate.toISOString().split("T")[0];
+        });
+    }
+
+    function closeErrorModal() {
+        document.getElementById("errorModal").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        validateDates();
+    });
+
+</script>

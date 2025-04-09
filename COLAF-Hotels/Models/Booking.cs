@@ -32,6 +32,8 @@ namespace COLAFHotel.Models
 
         public int? discount_id { get; set; }
 
+        public string? guestName { get; set; }
+
         // Foreign Key - Relationship with Guest
         [ForeignKey("guest_id")]
 
