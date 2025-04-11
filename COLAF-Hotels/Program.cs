@@ -24,6 +24,7 @@ builder.Services.AddSession(); // Add session support
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var app = builder.Build();
 

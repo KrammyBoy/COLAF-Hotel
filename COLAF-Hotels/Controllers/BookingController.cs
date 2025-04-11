@@ -2,7 +2,13 @@
 using COLAFHotel.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Helpers;
 using System.Collections.Generic;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using System;
+using System.IO;
 
 namespace COLAFHotel.Controllers
 {
@@ -66,6 +72,219 @@ namespace COLAFHotel.Controllers
 
             return View(booking);
         }
+        public async Task<IActionResult> Invoice(int id)
+        {
+            Console.WriteLine($"Booking ID: {id}");
+
+            var invoice = await _context.Invoices.Include(i => i.Booking).ThenInclude(b => b.Guest).ThenInclude(g => g.User)
+                .FirstOrDefaultAsync(i => i.booking_id == id);
+
+            if (invoice == null)
+            {
+                Console.WriteLine($"No invoice found for booking_id: {id}");
+                ViewBag.ErrorMessage = "Invoice not found.";
+                return View();
+            }
+
+            Console.WriteLine($"Invoice found: {invoice.invoice_id}");
+            return View(invoice);
+        }
+        public IActionResult DownloadPdf(int id)
+        {
+            var invoice = _context.Invoices
+                .Where(i => i.invoice_id == id)
+                .Select(i => new
+                {
+                    i.invoice_id,
+                    i.booking_id,
+                    i.issue_date,
+                    i.Booking.check_in_date,
+                    i.Booking.check_out_date,
+                    i.Booking.total_amount,
+                    i.Booking.totalBalance
+                })
+                .FirstOrDefault();
+
+            if (invoice == null)
+            {
+                Console.WriteLine("Walay sulod gago");
+                return NotFound();
+            }
+
+            var pdfDocument = CreateInvoicePdf(invoice);
+
+            using (var stream = new MemoryStream())
+            {
+                pdfDocument.GeneratePdf(stream);
+                stream.Position = 0; // Reset the stream position before returning
+                return File(stream.ToArray(), "application/pdf", $"Invoice_{invoice.invoice_id}.pdf");
+            }
+        }
+
+        private Document CreateInvoicePdf(dynamic invoice)
+        {
+            // Define the coffee theme colors
+            var coffeeDark = "#2C1E1A";
+            var coffeeMedium = "#5E4B3B";
+            var coffeeLight = "#9B7E6B";
+            var coffeeCream = "#E6DBCA";
+            var coffeeAccent = "#D4A067";
+
+            return Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(30);
+                    page.DefaultTextStyle(x => x.FontSize(11).FontColor(coffeeMedium));
+
+                    page.Content().Column(col =>
+                    {
+                        // Header with hotel details
+                        col.Item().Row(row =>
+                        {
+                            row.RelativeItem(2).Column(innerCol =>
+                            {
+                                innerCol.Item().Text("LUXE RETREAT").FontSize(24).Bold().FontColor(coffeeDark);
+                                innerCol.Item().Text("Your Home Away from Home").FontSize(12).Italic().FontColor(coffeeLight);
+                                innerCol.Item().Text("123 Seaside Avenue, Beachfront CA 90210").FontSize(10).FontColor(coffeeMedium);
+                                innerCol.Item().Text("reservations@luxeretreat.com | +1 (800) 555-1234").FontSize(10).FontColor(coffeeMedium);
+                            });
+
+                            row.RelativeItem(1).AlignRight().Text(text =>
+                            {
+                                text.Span("INVOICE").FontSize(24).Bold().FontColor(coffeeAccent);
+                            });
+                        });
+
+                        // Divider
+                        col.Item().BorderBottom(1).BorderColor(coffeeCream).PaddingBottom(10);
+
+                        // Invoice details
+                        col.Item().PaddingTop(10).Row(row =>
+                        {
+                            row.RelativeItem().Column(innerCol =>
+                            {
+                                innerCol.Item().Text("INVOICE DETAILS").Bold().FontColor(coffeeDark).FontSize(12);
+                                innerCol.Item().Grid(grid =>
+                                {
+                                    grid.Columns(2);
+                                    grid.Item().Text("Invoice No:").FontColor(coffeeLight);
+                                    grid.Item().Text($"{invoice.invoice_id}").Bold();
+                                    grid.Item().Text("Booking Ref:").FontColor(coffeeLight);
+                                    grid.Item().Text($"{invoice.booking_id}").Bold();
+                                    grid.Item().Text("Issue Date:").FontColor(coffeeLight);
+                                    grid.Item().Text($"{invoice.issue_date:MMM dd, yyyy}").Bold();
+                                    grid.Item().Text("Due Date:").FontColor(coffeeLight);
+                                    grid.Item().Text($"{invoice.issue_date.AddDays(14):MMM dd, yyyy}").Bold();
+                                });
+                            });
+
+                            row.RelativeItem().Column(innerCol =>
+                            {
+                                innerCol.Item().Text("GUEST INFORMATION").Bold().FontColor(coffeeDark).FontSize(12);
+                                // Placeholder for guest information (can be filled in if you have guest details)
+                                innerCol.Item().Text("Guest Name: John Doe").FontColor(coffeeMedium);
+                                innerCol.Item().Text("Phone: +1 (555) 123-4567").FontColor(coffeeMedium);
+                                innerCol.Item().Text("Email: john.doe@example.com").FontColor(coffeeMedium);
+                            });
+                        });
+
+                        // Stay details
+                        col.Item().PaddingTop(20).Column(innerCol =>
+                        {
+                            innerCol.Item().Text("STAY DETAILS").Bold().FontColor(coffeeDark).FontSize(12);
+                            innerCol.Item().Grid(grid =>
+                            {
+                                grid.Columns(2);
+                                grid.Item().Text("Check-in Date:").FontColor(coffeeLight);
+                                grid.Item().Text($"{invoice.check_in_date:dddd, MMM dd, yyyy} (from 3:00 PM)").Bold();
+                                grid.Item().Text("Check-out Date:").FontColor(coffeeLight);
+                                grid.Item().Text($"{invoice.check_out_date:dddd, MMM dd, yyyy} (by 11:00 AM)").Bold();
+                                grid.Item().Text("Length of Stay:").FontColor(coffeeLight);
+                                grid.Item().Text($"{(invoice.check_out_date - invoice.check_in_date).TotalDays} Nights").Bold();
+                            });
+                        });
+
+                        // Charges table
+                        col.Item().PaddingTop(20).Column(innerCol =>
+                        {
+                            innerCol.Item().Text("CHARGES").Bold().FontColor(coffeeDark).FontSize(12);
+
+                            // Table header
+                            innerCol.Item().PaddingTop(5).Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(4);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                });
+
+                                // Header row
+                                table.Header(header =>
+                                {
+                                    header.Cell().Background(coffeeDark).Padding(5).Text("Description").FontColor(Colors.White).Bold();
+                                    header.Cell().Background(coffeeDark).Padding(5).Text("Quantity").FontColor(Colors.White).Bold().AlignRight();
+                                    header.Cell().Background(coffeeDark).Padding(5).Text("Rate").FontColor(Colors.White).Bold().AlignRight();
+                                    header.Cell().Background(coffeeDark).Padding(5).Text("Amount").FontColor(Colors.White).Bold().AlignRight();
+                                });
+
+                                // Room charge (assuming total_amount is the room charge)
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("Room Charge");
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("1").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.total_amount:F2}").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.total_amount:F2}").AlignRight();
+
+                                // Other charges (example)
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("Other Charges (if applicable)");
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("1").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("$0.00").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("$0.00").AlignRight();
+                            });
+                        });
+
+                        // Summary
+                        col.Item().PaddingTop(10).Column(innerCol =>
+                        {
+                            innerCol.Item().AlignRight().Row(row =>
+                            {
+                                row.RelativeItem(4);
+                                row.RelativeItem(6).Grid(grid =>
+                                {
+                                    grid.Columns(2);
+                                    grid.Item().Text("Total:").FontColor(coffeeDark).Bold().AlignRight();
+                                    grid.Item().Text($"${invoice.total_amount:F2}").FontSize(14).Bold().FontColor(coffeeAccent).AlignRight();
+
+                                    grid.Item().Text("Amount Paid:").FontColor(coffeeLight).AlignRight();
+                                    grid.Item().Text($"${(invoice.total_amount - invoice.totalBalance):F2}").Bold().AlignRight();
+
+                                    grid.Item().Text("Balance Due:").FontColor(coffeeDark).Bold().AlignRight();
+                                    grid.Item().Text($"${invoice.totalBalance:F2}").FontSize(14).Bold().FontColor(coffeeDark).AlignRight();
+                                });
+                            });
+                        });
+
+                        // Footer
+                        col.Item().Row(row =>
+                        {
+                            row.RelativeItem().Column(innerCol =>
+                            {
+                                innerCol.Item().BorderTop(1).BorderColor(coffeeCream).PaddingTop(5);
+                                innerCol.Item().Text(text =>
+                                {
+                                    text.Span("Thank you for choosing ").FontColor(coffeeMedium).FontSize(10);
+                                    text.Span("Luxe Retreat").Bold().FontColor(coffeeDark).FontSize(10);
+                                });
+                                innerCol.Item().Text("We look forward to welcoming you back soon!").FontColor(coffeeMedium).FontSize(10);
+                            });
+                        });
+                    });
+                });
+            });
+        }
+
 
         // POST: Booking/UpdateBookingDates/5
         [HttpPost]
@@ -109,7 +328,6 @@ namespace COLAFHotel.Controllers
             
             return View(room);
         }
-
         public IActionResult AddBookingWalkIn()
         {
             var rooms = _context.Room
@@ -129,9 +347,9 @@ namespace COLAFHotel.Controllers
             string roomNumber,
             string category,
             string imageUrl,
-            string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, string cardGuestName, string cashGuestName)
+            string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, string cardGuestName, string cashGuestName, decimal totalBalance)
         {
-            Console.WriteLine($"Staff Booking Confirmed: GuestName={cardGuestName} or {cashGuestName}, RoomId={SelectedRoom}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}");
+            Console.WriteLine($"Staff Booking Confirmed: GuestName={cardGuestName} or {cashGuestName}, RoomId={SelectedRoom}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}, TotalBalance={totalBalance}");
 
             if (guestId == "null")
             {
@@ -179,7 +397,8 @@ namespace COLAFHotel.Controllers
                 check_in_date = CheckInDate,
                 check_out_date = CheckOutDate,
                 status = "Confirmed", // Options: Confirmed, Pending, Cancelled
-                total_amount = totalPrice
+                total_amount = totalPrice,
+                totalBalance = totalBalance
             };
 
             var guest = await _context.Guests.Include(g => g.Bookings)
@@ -193,20 +412,34 @@ namespace COLAFHotel.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
+
             TempData["Success"] = "Your booking has been confirmed";
-            TempData["GuestName"] = booking.guestName;
             TempData["BookingId"] = booking.booking_id;
-            TempData["CheckInDate"] = booking.check_in_date.ToString("yyyy-MM-dd");
-            TempData["CheckOutDate"] = booking.check_out_date.ToString("yyyy-MM-dd");
+            TempData["GuestName"] = guestName;
+            TempData["CheckInDate"] = booking.check_in_date.ToString("MMM d, yyyy");
+            TempData["CheckOutDate"] = booking.check_out_date.ToString("MMM d, yyyy");
             TempData["TotalAmount"] = booking.total_amount.ToString();
+            TempData["CurrentDate"] = DateTime.Now.ToString("MMM d, yyyy");
+            TempData["RoomNumber"] = roomNumber;
+            DateTime checkInDate = booking.check_in_date;
+            DateTime checkOutDate = booking.check_out_date;
+
+            int numberOfNights = (checkOutDate - checkInDate).Days;
+            TempData["NumberOfNights"] = numberOfNights;
+
+            // Prevent division by zero
+            decimal roomRate = numberOfNights > 0 ? totalPrice / numberOfNights : 0;
+            TempData["RoomRate"] = roomRate.ToString();
+
+
 
             return RedirectToAction("Index", "Booking");
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)
+        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, decimal totalBalance)
         {
-            Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}");
+            Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}, TotalBalance={totalBalance}");
 
             if (GuestId == "null")
             {
@@ -254,7 +487,8 @@ namespace COLAFHotel.Controllers
                 check_in_date = CheckInDate,
                 check_out_date = CheckOutDate,
                 status = "Confirmed", // Options: Confirmed, Pending, Cancelled
-                total_amount = totalPrice
+                total_amount = totalPrice,
+                totalBalance = totalBalance
             };
 
             // Find the guest and add the new booking to the guest's bookings list
@@ -270,14 +504,41 @@ namespace COLAFHotel.Controllers
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
+            // Add invoice for the booking
+            await AddInvoice(booking.booking_id, DateTime.UtcNow);
+
             TempData["Success"] = "Your booking has been confirmed";
             TempData["BookingId"] = booking.booking_id;
-            TempData["CheckInDate"] = booking.check_in_date.ToString("yyyy-MM-dd");
-            TempData["CheckOutDate"] = booking.check_out_date.ToString("yyyy-MM-dd");
+            TempData["CheckInDate"] = booking.check_in_date.ToString("MMM d, yyyy");
+            TempData["CheckOutDate"] = booking.check_out_date.ToString("MMM d, yyyy");
             TempData["TotalAmount"] = booking.total_amount.ToString();
+            TempData["CurrentDate"] = DateTime.Now.ToString("MMM d, yyyy");
+            TempData["RoomNumber"] = RoomNumber;
+            DateTime checkInDate = booking.check_in_date;
+            DateTime checkOutDate = booking.check_out_date;
+
+            int numberOfNights = (checkOutDate - checkInDate).Days;
+            TempData["NumberOfNights"] = numberOfNights;
+
+            // Prevent division by zero
+            decimal roomRate = numberOfNights > 0 ? totalPrice / numberOfNights : 0;
+            TempData["RoomRate"] = roomRate.ToString();
+
 
             return RedirectToAction("Index", "Booking");
         }
+
+        public async Task AddInvoice(int bookingId, DateTime issue_date)
+        {
+            var invoice = new Invoice
+            {
+                booking_id = bookingId,
+                issue_date = issue_date,
+            };
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> SaveForLater(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice)

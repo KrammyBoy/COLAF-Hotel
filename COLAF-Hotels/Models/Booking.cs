@@ -30,6 +30,10 @@ namespace COLAFHotel.Models
         [Required]
         public decimal total_amount { get; set; }
 
+        [Required]
+        [Column("totalBalance")]
+        public decimal? totalBalance { get; set; } // Balance: Check if the guest has paid the total amount or not
+
         public int? discount_id { get; set; }
 
         public string? guestName { get; set; }

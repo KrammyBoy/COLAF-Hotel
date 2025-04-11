@@ -1,0 +1,54 @@
+﻿@model COLAFHotel.Models.Invoice
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewBag.Title = "Invoice Viewing";
+    var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
+    var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
+}
+
+<div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-coffee-light">
+    <div class="text-center mb-4">
+        <h2 class="text-xl font-semibold text-coffee-dark">Invoice Details</h2>
+        <p class="text-coffee-medium">Issue Date: <span class="font-medium">@Model.issue_date.ToString("MMMM dd, yyyy")</span></p>
+    </div>
+
+    <div class="border-b border-coffee-light pb-4 mb-4">
+        <div class="flex justify-between">
+            <span class="text-coffee-medium">Invoice ID:</span>
+            <span class="font-semibold text-coffee-dark">#@Model.invoice_id</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-coffee-medium">Booking ID:</span>
+            <span class="font-semibold text-coffee-dark">#@Model.booking_id</span>
+        </div>
+    </div>
+
+    <div class="space-y-2">
+        <div class="flex justify-between">
+            <span class="text-coffee-medium">Check-in Date:</span>
+            <span class="font-semibold text-coffee-dark">@Model.Booking.check_in_date.ToString("MMM dd, yyyy")</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-coffee-medium">Check-out Date:</span>
+            <span class="font-semibold text-coffee-dark">@Model.Booking.check_out_date.ToString("MMM dd, yyyy")</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-coffee-medium">Total Amount:</span>
+            <span class="font-semibold text-coffee-dark">$@Model.Booking.total_amount.ToString("N2")</span>
+        </div>
+        <div class="flex justify-between border-t border-coffee-light pt-2">
+            <span class="text-coffee-medium">Balance Due:</span>
+            <span class="font-semibold text-red-500">$@Model.Booking.totalBalance.ToString()</span>
+        </div>
+    </div>
+
+    <div class="text-center mt-6">
+        <a asp-controller="Booking" asp-action="DownloadPdf" asp-route-id="@Model.invoice_id"
+           class="bg-coffee-accent text-white px-6 py-2 rounded-lg shadow-md hover:bg-coffee-dark transition">
+            Download PDF
+        </a>
+    </div>
+</div>

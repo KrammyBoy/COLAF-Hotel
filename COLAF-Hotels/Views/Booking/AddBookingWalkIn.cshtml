@@ -164,195 +164,257 @@
                     </div>
                 </div>
             <!--Payment-->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream p-5">
-                    <div class="bg-coffee-cream bg-opacity-10 rounded-xl p-5 border border-coffee-cream">
-                        <!-- Payment Method Selection -->
-                        <div class="flex items-center justify-between mb-5">
-                            <span class="text-coffee-dark font-medium">Payment Method:</span>
-                            <div class="space-x-4">
-                                <button id="paymentCreditCardButton" class="px-4 py-2 bg-coffee-light rounded-md text-white focus:outline-none" onclick="togglePaymentMethod('creditCard')">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream p-6">
+                <div class="bg-coffee-cream bg-opacity-10 rounded-lg p-5 border border-coffee-cream mb-6">
+                    <!-- Payment Method Selection -->
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                        <h3 class="text-coffee-dark font-medium text-lg">Payment Method</h3>
+                        <div class="flex gap-3">
+                            <button id="paymentCreditCardButton" class="px-4 py-2 bg-coffee-medium hover:bg-coffee-dark transition-colors duration-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-coffee-accent flex-1 sm:flex-none" onclick="togglePaymentMethod('creditCard')">
+                                <span class="flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
                                     Credit Card
-                                </button>
-                                <button id="paymentCashButton" class="px-4 py-2 bg-coffee-light rounded-md text-white focus:outline-none" onclick="togglePaymentMethod('cash')">
+                                </span>
+                            </button>
+                            <button id="paymentCashButton" class="px-4 py-2 bg-coffee-light hover:bg-coffee-medium transition-colors duration-300 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-coffee-accent flex-1 sm:flex-none" onclick="togglePaymentMethod('cash')">
+                                <span class="flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
                                     Cash
-                                </button>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Payment Form -->
+                    <div id="creditCardForm" class="hidden space-y-6">
+                        <div class="flex items-center justify-center sm:justify-start space-x-4 mb-5">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                            <div class="px-3 py-1 bg-coffee-dark text-coffee-cream rounded-full text-xs font-medium flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                Secure Payment
                             </div>
                         </div>
 
-                        <!-- Credit Card Payment Form -->
-                        <div id="creditCardForm" class="hidden">
-                            <div class="flex items-center space-x-4 mb-5 justify-center sm:justify-start">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" class="h-10 transition-transform duration-300 hover:scale-110 cursor-pointer">
-                                <div class="px-3 py-1 bg-coffee-dark text-coffee-cream rounded-full text-xs font-medium">Secure Payment</div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-coffee-medium mb-2" for="cardNumber">Card Number</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg pl-10 bg-white focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all duration-300" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-3.5 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                    </svg>
+                                </div>
                             </div>
 
-                            <div class="grid grid-cols-1 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-coffee-medium mb-1">Card Number</label>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-2" for="expirationDate">Expiration Date</label>
+                                    <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all duration-300" id="expirationDate" placeholder="MM/YY" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-coffee-medium mb-2" for="CVV">Security Code (CVV)</label>
                                     <div class="relative">
-                                        <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg pl-12 bg-white focus:ring-2 focus:ring-coffee-accent" id="cardNumber" placeholder="1234 5678 9012 3456" required>
-                                        <i class="fas fa-credit-card absolute left-3 top-3 text-coffee-light"></i>
+                                        <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg pl-10 bg-white focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all duration-300" id="CVV" placeholder="123" required>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-3.5 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
                                     </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-coffee-medium mb-1">Expiration Date</label>
-                                        <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="expirationDate" placeholder="MM/YY" required>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-coffee-medium mb-1">CVV</label>
-                                        <div class="relative">
-                                            <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg pl-12 bg-white focus:ring-2 focus:ring-coffee-accent" id="CVV" placeholder="123" required>
-                                            <i class="fas fa-lock absolute left-3 top-3 text-coffee-light"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-coffee-medium mb-1">Name on Card</label>
-                                    <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="cardGuestName" name="cardGuestName" placeholder="John Doe" required>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Cash Payment Form -->
-                        <div id="cashForm" class="hidden">
-                            <div class="text-sm text-coffee-dark mb-4">
-                                <label class="block text-sm font-medium text-coffee-medium mb-1">Full Name</label>
-                                <input type="text" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" id="walkGuestName" name="cashGuestName" placeholder="John Doe" required>
+                            <div>
+                                <label class="block text-sm font-medium text-coffee-medium mb-2" for="cardGuestName">Name on Card</label>
+                                <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all duration-300" id="cardGuestName" name="cardGuestName" placeholder="John Doe" required>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Deposit or Full Payment Option -->
-                    <!-- Deposit or Full Payment Option -->
-                    <div class="mt-6">
-                        <label for="paymentOption" class="block text-sm font-medium text-coffee-medium mb-1">Payment Type</label>
-                        <select id="paymentOption" class="w-full p-4 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent" onchange="updatePrice()">
-                            <option value="Deposit">Deposit</option>
-                            <option value="Full Payment">Full Payment</option>
-                        </select>
+                    <!-- Cash Payment Form -->
+                    <div id="cashForm" class="hidden">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-coffee-medium mb-2" for="walkGuestName">Full Name</label>
+                            <input type="text" class="w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all duration-300" id="walkGuestName" name="cashGuestName" placeholder="John Doe" required>
+                        </div>
+                        <div class="p-4 bg-coffee-cream bg-opacity-30 rounded-lg">
+                            <div class="flex items-center gap-2 text-coffee-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p class="text-sm">Please bring exact amount when paying with cash.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Payment Option Selection -->
+                <div class="mb-6">
+                    <label for="paymentOption" class="block text-sm font-medium text-coffee-medium mb-2">Payment Type</label>
+                    <div class="relative">
+                        <select id="paymentOption" class="appearance-none w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent pr-10 focus:border-coffee-accent transition-all duration-300" onchange="updatePrice()">
+                            <option value="Full Payment">Full Payment</option>
+                            <option value="Deposit">Deposit (25%)</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <svg class="w-5 h-5 text-coffee-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>            
             <!-- Price Details -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-coffee-cream mt-8">
-                    <!-- Header -->
-                    <div class="bg-coffee-dark px-6 py-4">
-                        <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
-                            <i class="fas fa-receipt text-coffee-accent mr-3"></i>
-                            Price Breakdown
-                        </h2>
-                    </div>
+                <!-- Header -->
+                <div class="bg-coffee-dark px-6 py-4">
+                    <h2 class="text-xl font-semibold text-coffee-cream flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-coffee-accent mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        Price Breakdown
+                    </h2>
+                </div>
 
-                    <!-- Content -->
-                    <div class="p-6">
-                        <!-- Date Range Summary -->
-                        <div class="mb-6 bg-coffee-cream bg-opacity-20 rounded-lg p-4 flex items-center">
-                            <div class="bg-coffee-medium rounded-lg p-2 mr-4 text-white">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div>
-                                <p class="text-coffee-medium text-sm">Your Stay</p>
-                                <p class="text-coffee-dark font-medium">
-                                    <span id="checkInDay">Check-in Day</span> -
-                                    <span id="checkOutDay">Check-out Day</span>
-                                    (<span id="numberOfNights" class="text-coffee-accent font-semibold">0</span> Nights)
-                                </p>
-                            </div>
+                <!-- Content -->
+                <div class="p-6">
+                    <!-- Date Range Summary -->
+                    <div class="mb-6 bg-coffee-cream bg-opacity-20 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center">
+                        <div class="bg-coffee-medium rounded-lg p-3 mb-3 sm:mb-0 sm:mr-4 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
                         </div>
-
-                        <!-- Price Items -->
-                        <div class="space-y-4">
-                            <!-- Room Price -->
-                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
-                                        <i class="fas fa-bed"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-coffee-dark font-medium"><span id="selectedRoomCategory">Select a room</span> (R <span id="selectedRoomNumber">-</span>)</p>
-                                        <p class="text-coffee-medium text-xs">Base room rate</p>
-                                    </div>
-                                </div>
-                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="basePrice">0.00</span></p>
-                            </div>
-
-                            <!-- Nights of Stay -->
-                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
-                                        <i class="fas fa-moon"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-coffee-dark font-medium">Nights of Stay</p>
-                                        <p class="text-coffee-medium text-xs"><span id="numberOfNights2">0</span> nights at room rate</p>
-                                    </div>
-                                </div>
-                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
-                            </div>
-
-                            <!-- Discount -->
-                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
-                                        <i class="fas fa-moon"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-coffee-dark font-medium">No Discount</p>
-                                        <p class="text-coffee-medium text-xs">Discount</p>
-                                    </div>
-                                </div>
-                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
-                            </div>
-
-                            <!-- Payment Type-->
-                            <div class="flex justify-between items-center border-b border-coffee-cream pb-4">
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
-                                        <i class="fas fa-moon"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-coffee-dark font-medium">Payment Type</p>
-                                        <p class="text-coffee-medium text-xs">Deposit or Full Payment</p>
-                                    </div>
-                                </div>
-                                <p class="text-coffee-dark font-semibold" id="paymentType">Full Payment</p>
+                        <div>
+                            <p class="text-coffee-medium text-sm font-medium">Your Stay</p>
+                            <p class="text-coffee-dark font-medium mt-1">
+                                <span id="checkInDay">Check-in Day</span> -
+                                <span id="checkOutDay">Check-out Day</span>
+                            </p>
+                            <div class="mt-1 inline-flex items-center bg-coffee-dark bg-opacity-10 px-3 py-1 rounded-full">
+                                <span id="numberOfNights" class="text-coffee-accent font-semibold">0</span>
+                                <span class="text-coffee-medium ml-1">Nights</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Total Section -->
-                    <div class="bg-coffee-cream bg-opacity-30 p-6 border-t border-coffee-cream">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-coffee-medium text-sm">Total Amount</p>
-                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="totalPrice">0.00</span></p>
+                    <!-- Price Items -->
+                    <div class="space-y-5">
+                        <!-- Room Price -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-coffee-cream pb-4 gap-3">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-coffee-dark font-medium"><span id="selectedRoomCategory">Select a room</span> (R <span id="selectedRoomNumber">-</span>)</p>
+                                    <p class="text-coffee-medium text-xs mt-1">Base room rate</p>
+                                </div>
                             </div>
-                            <div class="bg-coffee-accent text-white px-4 py-2 rounded-lg">
-                                <i class="fas fa-check-circle mr-1"></i> Final Price
+                            <p class="text-coffee-dark text-xl sm:text-2xl font-bold ml-13 sm:ml-0">₱<span id="basePrice">0.00</span></p>
+                        </div>
+
+                        <!-- Nights of Stay -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-coffee-cream pb-4 gap-3">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-coffee-dark font-medium">Nights of Stay</p>
+                                    <p class="text-coffee-medium text-xs mt-1"><span id="numberOfNights2">0</span> nights at room rate</p>
+                                </div>
+                            </div>
+                            <p class="text-coffee-dark font-semibold ml-13 sm:ml-0">₱<span id="nightPrice">0</span></p>
+                        </div>
+
+                        <!-- Discount -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-coffee-cream pb-4 gap-3">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-coffee-dark font-medium">No Discount</p>
+                                    <p class="text-coffee-medium text-xs mt-1">Discount</p>
+                                </div>
+                            </div>
+                            <p class="text-coffee-dark font-semibold ml-13 sm:ml-0">₱<span id="discountPrice">0</span></p>
+                        </div>
+
+                        <!-- Payment Type-->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-coffee-cream pb-4 gap-3">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-coffee-cream bg-opacity-30 rounded-lg flex items-center justify-center mr-3 text-coffee-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-coffee-dark font-medium">Payment Type</p>
+                                    <p class="text-coffee-medium text-xs mt-1">Deposit or Full Payment</p>
+                                </div>
+                            </div>
+                            <div class="bg-coffee-medium text-white text-sm px-3 py-1 rounded-full ml-13 sm:ml-0">
+                                <span id="paymentType">Full Payment</span>
                             </div>
                         </div>
-                        <!--Deposit Section-->
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-coffee-medium text-sm">Deposit</p>
-                                <p class="text-coffee-dark text-2xl font-bold">₱<span id="totalDeposit">0.00</span></p>
-                            </div>
-                            <div class="bg-coffee-accent text-white px-4 py-2 rounded-lg">
-                            <i class="fas fa-check-circle mr-1"></i> <p id="paymentTypeFinal">Final Deposit</p> <!-- Value can be "Final Deposit" or "No Deposit"-->
-                            </div>
+                    </div>
+                </div>
+
+                <!-- Total Section -->
+                <div class="bg-coffee-cream bg-opacity-30 p-6 border-t border-coffee-cream">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-coffee-medium text-sm font-medium">Total Amount</p>
+                            <p class="text-coffee-dark text-2xl font-bold mt-1">₱<span id="totalPrice">0.00</span></p>
                         </div>
-                        <!-- Hidden input for form submission -->
-                    <input type="hidden" name="imageUrl" id="hiddenImageUrl" />
+                        <div class="bg-coffee-accent hover:bg-coffee-dark transition-colors duration-300 text-white px-4 py-2 rounded-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Final Price
+                        </div>
+                    </div>
+
+                    <!--Deposit Section-->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 border-t border-coffee-cream border-opacity-50">
+                        <div class="mb-3 sm:mb-0">
+                            <p class="text-coffee-medium text-sm font-medium">Deposit</p>
+                            <p class="text-coffee-dark text-xl font-semibold mt-1">₱<span id="totalDeposit">0.00</span></p>
+                        </div>
+                        <div class="bg-coffee-medium hover:bg-coffee-dark transition-colors duration-300 text-white px-4 py-2 rounded-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span id="paymentTypeFinal">Final Deposit</span> <!-- Value can be "Final Deposit" or "No Deposit"-->
+                        </div>
+                    </div>
+
+                    <!-- Hidden inputs for form submission -->
+                    <div class="hidden">
+                        <input type="hidden" name="imageUrl" id="hiddenImageUrl" />
                         <input type="hidden" name="totalPrice" id="hiddenTotalPrice" />
                         <input type="hidden" name="roomNumber" id="hiddenRoomNumber" />
                         <input type="hidden" name="category" id="hiddenCategory" />
                         <input type="hidden" name="guestId" value="@isGuest" />
-                        <input type="hidden" name="userId" value="@user_id"/>
-                      
+                        <input type="hidden" name="userId" value="@user_id" />
+                        <input type="hidden" name="totalBalance" value="0" id="hiddenTotalBalance" />
                     </div>
                 </div>
+            </div>            
             <!-- Action Buttons -->
             <div class="mt-8 flex flex-col sm:flex-row gap-4">
                     <button type="submit" asp-action="StaffAddBooking" class="flex-1 px-6 py-4 bg-coffee-accent text-white text-lg font-bold rounded-lg shadow-md hover:bg-coffee-dark transition-all duration-300 focus:ring-4 focus:ring-coffee-cream">
@@ -465,18 +527,11 @@
         const paymentOption = document.getElementById('paymentOption').value;
         document.getElementById('paymentType').textContent = paymentOption;
 
-        let paymentTypeFinal = document.getElementById('paymentTypeFinal');
-        if (paymentOption === "Deposit" ){
-            paymentTypeFinal.textContent = "Final Deposit";
-        }
-        else if (paymentOption === "Full Payment"){
-            paymentTypeFinal.textContent = "No Deposit";
-        }
-
         let basePrice = selectedOption.getAttribute("data-price") || "0.00";
         let checkInDateInput = document.getElementById('checkInDate');
         let checkOutDateInput = document.getElementById('checkOutDate');
         let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
+        let hiddenTotalBalance = document.getElementById('hiddenTotalBalance');
 
         let checkInDate = new Date(checkInDateInput.value);
         let checkOutDate = new Date(checkOutDateInput.value);
@@ -493,8 +548,12 @@
         let checkInDay = document.getElementById('checkInDay');
         let checkOutDay = document.getElementById('checkOutDay');
         let nightPrice = document.getElementById('nightPrice');
+        let paymentTypeFinal = document.getElementById('paymentTypeFinal');
+        let totalDeposit = document.getElementById('totalDeposit');
+
 
         let nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+
         numberOfNights.textContent = nights;
         numberOfNights2.textContent = nights;
 
@@ -507,12 +566,32 @@
         nightPrice.textContent = formattedNightPrice;
 
         let totalPrice = (basePrice * nights);
-        let formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        let formattedBasePrice = basePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        let formattedTotalPrice = formatPrice(totalPrice);
+        let formattedBasePrice = formatPrice(basePrice);
+        let currDeposit = 0;
+
+        let depositPercent = 25;
+        let finalDeposit = 0
+        if (paymentOption === "Deposit" ){
+            paymentTypeFinal.textContent = "(25%) Final Deposit";
+            finalDeposit = totalPrice - ((totalPrice * (depositPercent / 100)));
+            currDeposit = totalPrice * (depositPercent / 100);
+            hiddenTotalBalance.value = finalDeposit;
+        }
+        else if (paymentOption === "Full Payment"){
+            paymentTypeFinal.textContent = "No Deposit";
+            hiddenTotalBalance.value = 0;
+        }
+
+        totalDeposit.textContent = formatPrice(currDeposit);
         document.getElementById('totalPrice').textContent = formattedTotalPrice;
         document.getElementById('basePrice').textContent = formattedBasePrice;
         hiddenTotalPrice.value = totalPrice;
     }
+    function formatPrice(price) {
+        return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function validateDates() {
         let checkInDateInput = document.getElementById('checkInDate');
         let checkOutDateInput = document.getElementById('checkOutDate');
