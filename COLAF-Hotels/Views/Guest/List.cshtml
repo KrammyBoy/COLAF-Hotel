@@ -1,0 +1,114 @@
+﻿@model IEnumerable<COLAFHotel.Models.Guest>
+@{
+    ViewData["Title"] = "Guest List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <!-- Page Header -->
+    <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-center">
+        <div>
+            <h3 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+                <span class="relative z-10">Guest Directory</span>
+                <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+            </h3>
+            <nav aria-label="breadcrumb" class="mt-2">
+                <ol class="flex space-x-2 text-coffee-medium">
+                    <li><a href="/Dashboard/Index" class="hover:text-coffee-accent transition-colors">Dashboard</a></li>
+                    <li>/</li>
+                    <li class="text-coffee-accent">Guests</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="mt-4 md:mt-0">
+            <div class="relative">
+                <input type="text" id="searchGuests" class="pl-10 pr-4 py-2 bg-white border border-coffee-cream rounded-lg w-full md:w-64 focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent transition-all" placeholder="Search guests...">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-coffee-medium"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guest List Card -->
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-coffee-cream">
+        <div class="bg-coffee-dark py-4 px-6 flex justify-between items-center">
+            <h6 class="text-coffee-cream font-medium">All Guests</h6>
+            <span class="px-3 py-1 bg-coffee-accent rounded-full text-xs font-medium text-white">
+                @Model.Count() total
+            </span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full" id="guestTable">
+                <thead>
+                    <tr class="bg-coffee-cream bg-opacity-30">
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">ID</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Name</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Email</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Phone</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Bookings</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Last Stay</th>
+                        <th class="py-3 px-6 text-left font-medium text-sm text-coffee-dark">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-coffee-cream">
+                    @foreach (var guest in Model)
+                    {
+                        var lastBooking = guest.Bookings.OrderByDescending(b => b.check_in_date).FirstOrDefault();
+                        var lastStayDate = lastBooking != null ? lastBooking.check_in_date.ToString("MMM dd, yyyy") : "Never";
+
+                        <tr class="hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
+                            <td class="py-4 px-6 font-medium text-coffee-dark">#@guest.guest_id</td>
+                            <td class="py-4 px-6">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-coffee-cream bg-opacity-60 rounded-full flex items-center justify-center mr-3">
+                                        <span class="text-coffee-accent font-medium">@guest.User.firstname[0]@guest.User.lastname[0]</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-coffee-dark">@guest.User.firstname @guest.User.lastname</p>
+                                        <p class="text-xs text-coffee-medium">@guest.User.username</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-coffee-medium">@guest.User.email</td>
+                            <td class="py-4 px-6 text-coffee-medium">@(string.IsNullOrEmpty(guest.phone) ? "Not provided" : guest.phone)</td>
+                            <td class="py-4 px-6">
+                                <span class="px-3 py-1 bg-coffee-accent bg-opacity-20 text-coffee-dark rounded-full text-xs font-medium">
+                                    @guest.Bookings.Count
+                                </span>
+                            </td>
+                            <td class="py-4 px-6 text-coffee-medium">@lastStayDate</td>
+                            <td class="py-4 px-6">
+                                <a href="@Url.Action("Details", "Guest", new { id = guest.guest_id })"
+                                   class="px-4 py-2 bg-coffee-dark text-coffee-cream rounded-lg hover:bg-coffee-medium transition-colors inline-flex items-center space-x-2">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>View Profile</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchGuests');
+        const table = document.getElementById('guestTable');
+        const rows = table.querySelectorAll('tbody tr');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if(text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+```
