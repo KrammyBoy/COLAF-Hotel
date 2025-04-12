@@ -76,8 +76,20 @@ namespace COLAFHotel.Controllers
         {
             Console.WriteLine($"Booking ID: {id}");
 
-            var invoice = await _context.Invoices.Include(i => i.Booking).ThenInclude(b => b.Guest).ThenInclude(g => g.User)
+            var invoice = await _context.Invoices
+                .Include(i => i.Booking)
+                .ThenInclude(b => b.Guest)
+                .ThenInclude(g => g.User)
                 .FirstOrDefaultAsync(i => i.booking_id == id);
+
+            if (invoice?.Booking?.Guest?.User != null)
+            {
+                Console.WriteLine($"{invoice.Booking.Guest.User.firstname} {invoice.Booking.Guest.User.lastname}");
+            }
+            else
+            {
+                Console.WriteLine("Invoice, booking, guest, or user not found.");
+            }
 
             if (invoice == null)
             {
@@ -89,21 +101,13 @@ namespace COLAFHotel.Controllers
             Console.WriteLine($"Invoice found: {invoice.invoice_id}");
             return View(invoice);
         }
-        public IActionResult DownloadPdf(int id)
+        public async Task<IActionResult> DownloadPdf(int id)
         {
-            var invoice = _context.Invoices
-                .Where(i => i.invoice_id == id)
-                .Select(i => new
-                {
-                    i.invoice_id,
-                    i.booking_id,
-                    i.issue_date,
-                    i.Booking.check_in_date,
-                    i.Booking.check_out_date,
-                    i.Booking.total_amount,
-                    i.Booking.totalBalance
-                })
-                .FirstOrDefault();
+            var invoice = await _context.Invoices
+                .Include(i => i.Booking)
+                    .ThenInclude(b => b.Guest)
+                        .ThenInclude(g => g.User)
+                .FirstOrDefaultAsync(i => i.booking_id == id);
 
             if (invoice == null)
             {
@@ -145,10 +149,10 @@ namespace COLAFHotel.Controllers
                         {
                             row.RelativeItem(2).Column(innerCol =>
                             {
-                                innerCol.Item().Text("LUXE RETREAT").FontSize(24).Bold().FontColor(coffeeDark);
-                                innerCol.Item().Text("Your Home Away from Home").FontSize(12).Italic().FontColor(coffeeLight);
-                                innerCol.Item().Text("123 Seaside Avenue, Beachfront CA 90210").FontSize(10).FontColor(coffeeMedium);
-                                innerCol.Item().Text("reservations@luxeretreat.com | +1 (800) 555-1234").FontSize(10).FontColor(coffeeMedium);
+                                innerCol.Item().Text("COLAF HOTEL").FontSize(24).Bold().FontColor(coffeeDark);
+                                innerCol.Item().Text("An unforgettable stay with a coffee-inspired twist").FontSize(12).Italic().FontColor(coffeeLight);
+                                innerCol.Item().Text("R.530 St., UCM Boulevard").FontSize(10).FontColor(coffeeMedium);
+                                innerCol.Item().Text("reservations@colafhotel.com | +1 (800) 420-1337").FontSize(10).FontColor(coffeeMedium);
                             });
 
                             row.RelativeItem(1).AlignRight().Text(text =>
@@ -184,9 +188,9 @@ namespace COLAFHotel.Controllers
                             {
                                 innerCol.Item().Text("GUEST INFORMATION").Bold().FontColor(coffeeDark).FontSize(12);
                                 // Placeholder for guest information (can be filled in if you have guest details)
-                                innerCol.Item().Text("Guest Name: John Doe").FontColor(coffeeMedium);
-                                innerCol.Item().Text("Phone: +1 (555) 123-4567").FontColor(coffeeMedium);
-                                innerCol.Item().Text("Email: john.doe@example.com").FontColor(coffeeMedium);
+                                innerCol.Item().Text($"Name: {invoice.Booking.Guest.User.firstname} {invoice.Booking.Guest.User.lastname}").FontColor(coffeeMedium);
+                                innerCol.Item().Text($"Phone: {invoice.Booking.Guest.phone}").FontColor(coffeeMedium);
+                                innerCol.Item().Text($"Email: {invoice.Booking.Guest.User.email}").FontColor(coffeeMedium);
                             });
                         });
 
@@ -198,11 +202,11 @@ namespace COLAFHotel.Controllers
                             {
                                 grid.Columns(2);
                                 grid.Item().Text("Check-in Date:").FontColor(coffeeLight);
-                                grid.Item().Text($"{invoice.check_in_date:dddd, MMM dd, yyyy} (from 3:00 PM)").Bold();
+                                grid.Item().Text($"{invoice.Booking.check_in_date:dddd, MMM dd, yyyy} (from 3:00 PM)").Bold();
                                 grid.Item().Text("Check-out Date:").FontColor(coffeeLight);
-                                grid.Item().Text($"{invoice.check_out_date:dddd, MMM dd, yyyy} (by 11:00 AM)").Bold();
+                                grid.Item().Text($"{invoice.Booking.check_out_date:dddd, MMM dd, yyyy} (by 11:00 AM)").Bold();
                                 grid.Item().Text("Length of Stay:").FontColor(coffeeLight);
-                                grid.Item().Text($"{(invoice.check_out_date - invoice.check_in_date).TotalDays} Nights").Bold();
+                                grid.Item().Text($"{(invoice.Booking.check_out_date - invoice.Booking.check_in_date).TotalDays} Nights").Bold();
                             });
                         });
 
@@ -234,8 +238,8 @@ namespace COLAFHotel.Controllers
                                 // Room charge (assuming total_amount is the room charge)
                                 table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("Room Charge");
                                 table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("1").AlignRight();
-                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.total_amount:F2}").AlignRight();
-                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.total_amount:F2}").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.Booking.total_amount:F2}").AlignRight();
+                                table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text($"${invoice.Booking.total_amount:F2}").AlignRight();
 
                                 // Other charges (example)
                                 table.Cell().BorderBottom(1).BorderColor(coffeeCream).Padding(5).Text("Other Charges (if applicable)");
@@ -255,13 +259,13 @@ namespace COLAFHotel.Controllers
                                 {
                                     grid.Columns(2);
                                     grid.Item().Text("Total:").FontColor(coffeeDark).Bold().AlignRight();
-                                    grid.Item().Text($"${invoice.total_amount:F2}").FontSize(14).Bold().FontColor(coffeeAccent).AlignRight();
+                                    grid.Item().Text($"${invoice.Booking.total_amount:F2}").FontSize(14).Bold().FontColor(coffeeAccent).AlignRight();
 
                                     grid.Item().Text("Amount Paid:").FontColor(coffeeLight).AlignRight();
-                                    grid.Item().Text($"${(invoice.total_amount - invoice.totalBalance):F2}").Bold().AlignRight();
+                                    grid.Item().Text($"${(invoice.Booking.total_amount - invoice.Booking.totalBalance):F2}").Bold().AlignRight();
 
                                     grid.Item().Text("Balance Due:").FontColor(coffeeDark).Bold().AlignRight();
-                                    grid.Item().Text($"${invoice.totalBalance:F2}").FontSize(14).Bold().FontColor(coffeeDark).AlignRight();
+                                    grid.Item().Text($"${invoice.Booking.totalBalance:F2}").FontSize(14).Bold().FontColor(coffeeDark).AlignRight();
                                 });
                             });
                         });
@@ -275,7 +279,7 @@ namespace COLAFHotel.Controllers
                                 innerCol.Item().Text(text =>
                                 {
                                     text.Span("Thank you for choosing ").FontColor(coffeeMedium).FontSize(10);
-                                    text.Span("Luxe Retreat").Bold().FontColor(coffeeDark).FontSize(10);
+                                    text.Span("COLAF Hotel").Bold().FontColor(coffeeDark).FontSize(10);
                                 });
                                 innerCol.Item().Text("We look forward to welcoming you back soon!").FontColor(coffeeMedium).FontSize(10);
                             });
