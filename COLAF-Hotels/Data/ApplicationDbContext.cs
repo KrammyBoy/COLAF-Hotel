@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using COLAFHotel.Models;
+using COLAF_Hotels.Models;
 
 namespace COLAFHotel.Data
 {
@@ -19,7 +20,9 @@ namespace COLAFHotel.Data
         public DbSet<Guest> Guests { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-        public DbSet<Invoice> Invoices { get; set; } // Assuming you have an Invoice model
+        public DbSet<Invoice> Invoices { get; set; } 
+        public DbSet<Service> Services { get; set; } 
+        public DbSet<Booking_Service> Booking_Services { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +35,22 @@ namespace COLAFHotel.Data
             modelBuilder.Entity<Booking>().ToTable("booking");
             modelBuilder.Entity<Discount>().ToTable("discount");
             modelBuilder.Entity<Invoice>().ToTable("invoice");
+            modelBuilder.Entity<Service>().ToTable("special_service");
+            modelBuilder.Entity<Booking_Service>().ToTable("booking_service");
+
+            //Booking-Service relationship
+            modelBuilder.Entity<Booking_Service>()
+                .HasKey(bs => new { bs.booking_id, bs.service_id });
+
+            modelBuilder.Entity<Booking_Service>()
+                .HasOne(bs => bs.Booking)
+                .WithMany(b => b.BookingServices)
+                .HasForeignKey(bs => bs.booking_id);
+
+            modelBuilder.Entity<Booking_Service>()
+                .HasOne(bs => bs.Service)
+                .WithMany(s => s.BookingServices)
+                .HasForeignKey(bs => bs.service_id);
         }
     }
 }

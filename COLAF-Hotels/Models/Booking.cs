@@ -45,5 +45,8 @@ namespace COLAFHotel.Models
 
         [ForeignKey("room_id")]
         public virtual Room Room { get; set; } // Navigation Property
+
+        public ICollection<Booking_Service> BookingServices { get; set; }
+
     }
 }

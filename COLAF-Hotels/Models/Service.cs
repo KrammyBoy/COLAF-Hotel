@@ -1,8 +1,25 @@
-﻿namespace COLAFHotel.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace COLAFHotel.Models
 {
     public class Service
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+
+        [Key]
+        public int service_id { get; set; }
+
+        [Required]
+        public string name { get; set; }
+        
+        [Required]
+        public string description { get; set; } //Description of the service
+
+        [Required]
+        public decimal price { get; set; }
+
+        public ICollection<Booking_Service> BookingServices { get; set; }
+
+
     }
 }

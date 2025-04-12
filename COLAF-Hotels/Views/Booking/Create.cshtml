@@ -36,6 +36,7 @@
                 <input type="hidden" name="GuestId" value="@isGuest" />
                 <input type="hidden" name="totalBalance" value="0" id="hiddenTotalBalance" />
                 <input type="hidden" name="totalPrice" id="hiddenTotalPrice" />
+                <input type="hidden" name="haveTransport" id="hiddenTransportService" />
 
                 <!-- Room Features -->
                 <div class="mb-8">
@@ -550,11 +551,15 @@
         let basePrice = @Model.Price;
         let checkInDateInput = document.getElementById('checkInDate');
         let checkOutDateInput = document.getElementById('checkOutDate');
-        let transportService = document.getElementById('transportService').checked;
+        let transportService = document.getElementById('transportService');
         let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
 
         const paymentOption = document.getElementById('paymentOption').value;
         document.getElementById('paymentType').textContent = paymentOption;
+
+      
+        let haveTransportService = (transportService.checked)?true:false;
+        document.getElementById('hiddenTransportService').value = haveTransportService;
 
         let checkInDate = new Date(checkInDateInput.value);
         let checkOutDate = new Date(checkOutDateInput.value);
