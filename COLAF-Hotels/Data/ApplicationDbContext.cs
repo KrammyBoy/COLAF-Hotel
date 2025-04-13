@@ -23,6 +23,8 @@ namespace COLAFHotel.Data
         public DbSet<Invoice> Invoices { get; set; } 
         public DbSet<Service> Services { get; set; } 
         public DbSet<Booking_Service> Booking_Services { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<HousekeepingTask> HousekeepingTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,7 +38,10 @@ namespace COLAFHotel.Data
             modelBuilder.Entity<Discount>().ToTable("discount");
             modelBuilder.Entity<Invoice>().ToTable("invoice");
             modelBuilder.Entity<Service>().ToTable("special_service");
+            modelBuilder.Entity<HousekeepingTask>().ToTable("housekeeping_task");
+            modelBuilder.Entity<Payment>().ToTable("payment");
             modelBuilder.Entity<Booking_Service>().ToTable("booking_service");
+          
 
             //Booking-Service relationship
             modelBuilder.Entity<Booking_Service>()

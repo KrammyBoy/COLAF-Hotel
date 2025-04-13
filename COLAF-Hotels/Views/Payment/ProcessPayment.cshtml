@@ -2,20 +2,93 @@
 @{
     ViewBag.Title = "Process Payment";
 }
-<h2>Process Payment</h2>
-<form asp-action="ProcessPayment" method="post">
-    <div class="form-group">
-        <label>Payment Method:</label>
-        <select asp-for="PaymentMethod" class="form-control">
-            <option value="Credit Card">Credit Card</option>
-            <option value="Debit Card">Debit Card</option>
-            <option value="Online Wallet">Online Wallet</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-        </select>
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="mb-8">
+        <h3 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+            <span class="relative z-10">Process Payment</span>
+            <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+        </h3>
     </div>
-    <div class="form-group">
-        <label>Amount:</label>
-        <input type="number" step="0.01" asp-for="Amount" class="form-control" required />
+
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-6 border border-coffee-cream">
+        <h4 class="text-xl font-medium text-coffee-dark mb-6">Payment Details</h4>
+
+        <form asp-action="ProcessPayment" method="post" class="space-y-6">
+            <input type="hidden" asp-for="booking_id" value="@Model.booking_id" />
+            <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl"/>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="PaymentMethod" class="block text-sm font-medium text-coffee-dark mb-2">Payment Method</label>
+                    <select asp-for="PaymentMethod" class="w-full px-3 py-2 border border-coffee-cream rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Online Wallet">Online Wallet</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                    <span asp-validation-for="PaymentMethod" class="text-red-500 text-xs"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Amount" class="block text-sm font-medium text-coffee-dark mb-2">Amount (₱)</label>
+                    <input type="number" step="0.01" asp-for="Amount" class="w-full px-3 py-2 border border-coffee-cream rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-accent" required />
+                    <span asp-validation-for="Amount" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+
+            <div id="creditCardFields" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="cardNumber" class="block text-sm font-medium text-coffee-dark mb-2">Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber" class="w-full px-3 py-2 border border-coffee-cream rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-accent" placeholder="•••• •••• •••• ••••" />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="expiryDate" class="block text-sm font-medium text-coffee-dark mb-2">Expiry Date</label>
+                        <input type="text" id="expiryDate" name="expiryDate" class="w-full px-3 py-2 border border-coffee-cream rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-accent" placeholder="MM/YY" />
+                    </div>
+
+                    <div>
+                        <label for="cvv" class="block text-sm font-medium text-coffee-dark mb-2">CVV</label>
+                        <input type="text" id="cvv" name="cvv" class="w-full px-3 py-2 border border-coffee-cream rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-accent" placeholder="•••" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200">
+                <button type="submit" class="w-full px-6 py-3 bg-coffee-accent hover:bg-coffee-dark text-white font-medium rounded-md transition-colors duration-200">
+                    Process Payment
+                </button>
+            </div>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Pay</button>
-</form>
+
+    <div class="text-center">
+        <a href="@Url.Action("CheckIn", "CheckInCheckOut")" class="text-coffee-medium hover:text-coffee-dark underline transition-colors duration-150">
+            Cancel and Return to Check-In/Check-Out Process
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethodSelect = document.getElementById('PaymentMethod');
+        const creditCardFields = document.getElementById('creditCardFields');
+
+        function toggleCreditCardFields() {
+            if (paymentMethodSelect.value === 'Credit Card' || paymentMethodSelect.value === 'Debit Card') {
+                creditCardFields.style.display = 'grid';
+            } else {
+                creditCardFields.style.display = 'none';
+            }
+        }
+
+        // Initial toggle
+        toggleCreditCardFields();
+
+        // Toggle on change
+        paymentMethodSelect.addEventListener('change', toggleCreditCardFields);
+    });
+</script>

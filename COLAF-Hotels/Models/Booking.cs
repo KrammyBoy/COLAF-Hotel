@@ -25,7 +25,7 @@ namespace COLAFHotel.Models
 
         [Required]
         [StringLength(50)]
-        public string status { get; set; } // Confirmed, Pending, Cancelled, etc.
+        public string status { get; set; } // Confirmed, Pending, Cancelled, Checked In, Checked Out, Paid etc.
 
         [Required]
         public decimal total_amount { get; set; }

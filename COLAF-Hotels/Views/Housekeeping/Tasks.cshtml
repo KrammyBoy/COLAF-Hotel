@@ -23,12 +23,12 @@
                 @foreach (var task in Model)
                 {
                     <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-2 border-b">@task.Id</td>
-                        <td class="px-4 py-2 border-b">@task.RoomNumber</td>
-                        <td class="px-4 py-2 border-b">@task.TaskDescription</td>
+                        <td class="px-4 py-2 border-b">@task.task_id</td>
+                        <td class="px-4 py-2 border-b">@task.Room.RoomNumber</td>
+                        <td class="px-4 py-2 border-b">@task.description</td>
                         <td class="px-4 py-2 border-b">
-                            <span class="px-3 py-1 rounded-full text-white text-sm @(task.Status == "Completed" ? "bg-green-500" : "bg-yellow-500")">
-                                @task.Status
+                            <span class="px-3 py-1 rounded-full text-white text-sm @(task.status == "Completed" ? "bg-green-500" : "bg-yellow-500")">
+                                @task.status
                             </span>
                         </td>
                     </tr>

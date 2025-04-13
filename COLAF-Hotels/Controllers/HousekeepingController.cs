@@ -22,7 +22,7 @@ namespace COLAFHotel.Controllers
         [HttpPost]
         public IActionResult CreateTask(HousekeepingTask task)
         {
-            task.Id = tasks.Count + 1;
+            task.task_id = tasks.Count + 1;
             tasks.Add(task);
             return RedirectToAction("Tasks");
         }

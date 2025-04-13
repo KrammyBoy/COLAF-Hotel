@@ -1,0 +1,85 @@
+﻿@model COLAFHotel.Models.Booking
+
+@{
+    ViewBag.Title = "Check-In Payment Options";
+}
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="mb-8">
+        <h3 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+            <span class="relative z-10">Check-In Payment Options</span>
+            <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+        </h3>
+    </div>
+
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-6 border border-coffee-cream">
+        <h4 class="text-xl font-medium text-coffee-dark mb-4">Booking Details</h4>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+                <p class="text-sm text-gray-600">Booking ID</p>
+                <p class="font-medium text-coffee-dark">#@Model.booking_id</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Room</p>
+                <p class="font-medium text-coffee-dark">Room @Model.Room.RoomNumber (@Model.Room.Category)</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Guest Name</p>
+                @if (Model.guestName != null)
+                {
+                    <p class="font-medium text-coffee-dark">@Model.guestName (WALK IN)</p>
+                }
+                else
+                {
+                    <p class="font-medium text-coffee-dark">@Model.Guest.User.firstname @Model.Guest.User.lastname</p>
+                }
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Check-in Date</p>
+                <p class="font-medium text-coffee-dark">@Model.check_in_date.ToString("MMM dd, yyyy")</p>
+            </div>
+        </div>
+
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        Guest has an outstanding balance of <span class="font-bold">₱ @Model.totalBalance</span> that needs to be addressed.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="text-lg font-medium text-coffee-dark mb-4">Please choose an option:</h4>
+
+        <div class="flex flex-col md:flex-row gap-4">
+            <form asp-action="ProcessCheckInConfirm" asp-controller="CheckInCheckOut" method="post">
+                <input type="hidden" name="id" value="@Model.booking_id" />
+                <input type="hidden" name="payNow" value="true" />
+                <button type="submit" class="px-6 py-3 bg-coffee-accent hover:bg-coffee-dark text-white font-medium rounded-md transition-colors duration-200">
+                    Pay Balance Now
+                </button>
+            </form>
+
+            <form asp-action="ProcessCheckInConfirm" asp-controller="CheckInCheckOut" method="post">
+                <input type="hidden" name="id" value="@Model.booking_id" />
+                <input type="hidden" name="payNow" value="false" />
+                <button type="submit" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-coffee-dark font-medium rounded-md transition-colors duration-200">
+                    Check In Without Payment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="@Url.Action("CheckIn", "CheckInCheckOut")" class="text-coffee-medium hover:text-coffee-dark underline transition-colors duration-150">
+            Return to Check-In/Check-Out Process
+        </a>
+    </div>
+</div>
