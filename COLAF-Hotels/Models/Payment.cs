@@ -12,19 +12,17 @@ namespace COLAFHotel.Models
         public int? booking_id { get; set; }
 
         [StringLength(50)]
-        [Display(Name = "Payment Method")]
-        public string PaymentMethod { get; set; }
+        public string payment_method { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(10, 2)")]
-        [Display(Name = "Amount")]
-        public decimal Amount { get; set; }
+        public decimal amount { get; set; }
 
-        [Display(Name = "Payment Date")]
         public DateTime payment_date { get; set; } = DateTime.Now;
 
         // Navigation property
-        public virtual Booking Booking { get; set; }
+        [ForeignKey("booking_id")]
+        public Booking Booking { get; set; }
 
         // Not stored in database, used for MVC flow
         [NotMapped]

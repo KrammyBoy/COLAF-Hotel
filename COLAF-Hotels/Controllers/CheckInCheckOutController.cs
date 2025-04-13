@@ -248,7 +248,7 @@ namespace COLAFHotel.Controllers
             }
 
             // Update booking status
-            booking.status = "Paid";
+            booking.status = "Checked Out";
             booking.totalBalance = 0; // Payment completed
 
             // Update room status and schedule housekeeping

@@ -20,7 +20,7 @@ namespace COLAFHotel.Models
 
         [Required]
         [Column("status")]
-        public string Status { get; set; }    // Occupied, Vacant, Under Maintenance
+        public string Status { get; set; }    //Possible Statuses: Occupied, Vacant, Under Maintenance, Needs Cleaning
 
         [Column("image_url")]
         public string ImageUrl { get; set; }

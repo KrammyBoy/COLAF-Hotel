@@ -177,7 +177,7 @@
                             </td>
                             <td class="py-4 px-6 text-coffee-medium @(booking.totalBalance > 0 ? "text-red-700" : "text-green-700")">₱ @booking.totalBalance</td>
                             <td class="py-4 px-6">
-                                @if (booking.status == "Paid")
+                                @if (booking.status == "Checked Out")
                                 {
                                     <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                         Completed
@@ -185,7 +185,7 @@
                                 }
                                 else if (isCheckOutDay && booking.status == "Checked In")
                                 {
-                                    <a href="@Url.Action("CheckOut", "CheckInCheckOut", new { id = booking.booking_id })"
+                                    <a href="@Url.Action("ProcessCheckOut", "CheckInCheckOut", new { id = booking.booking_id })"
                                        class="px-4 py-2 bg-coffee-accent hover:bg-coffee-dark text-white rounded-md transition-colors duration-150 inline-block text-sm font-medium">
                                         Check Out
                                     </a>
@@ -204,6 +204,12 @@
                                        class="px-4 py-2 bg-coffee-medium hover:bg-coffee-dark text-white rounded-md transition-colors duration-150 inline-block text-sm font-medium">
                                         Check In
                                     </a>
+                                }
+                                else if (booking.status == "Checked Out")
+                                {
+                                    <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                                        Paid
+                                    </span>
                                 }
                                 else if (isReservationExpired)
                                 {

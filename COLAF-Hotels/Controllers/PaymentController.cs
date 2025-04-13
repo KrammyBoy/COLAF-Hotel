@@ -31,9 +31,11 @@ namespace COLAFHotel.Controllers
             var payment = new Payment
             {
                 booking_id = bookingId,
-                Amount = (decimal)booking.totalBalance,
+                amount = (decimal)booking.totalBalance,
                 ReturnUrl = returnUrl
             };
+
+            Console.WriteLine($"Payment created - booking_id: {payment.booking_id}, Amount: {payment.amount}, ReturnUrl: {payment.ReturnUrl}");
 
             return View(payment);
         }
@@ -41,11 +43,27 @@ namespace COLAFHotel.Controllers
         [HttpPost]
         public IActionResult ProcessPayment(Payment payment)
         {
+            ModelState.Remove("Booking");
+
             Console.WriteLine("Process Payment");
             if (!ModelState.IsValid)
             {
+                Console.WriteLine($"Valid Model: {ModelState.IsValid}");
+
+                foreach (var entry in ModelState)
+                {
+                    var key = entry.Key;
+                    var errors = entry.Value.Errors;
+
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"ModelState Error - Field: {key}, Error: {error.ErrorMessage}");
+                    }
+                }
+
                 return View(payment);
             }
+
 
             var booking = _context.Bookings.Find(payment.booking_id);
             if (booking == null)
@@ -55,21 +73,21 @@ namespace COLAFHotel.Controllers
             }
 
             // Process the payment
-            booking.totalBalance -= payment.Amount;
+            booking.totalBalance -= payment.amount   ;
 
             // Create payment record
             _context.Payments.Add(new Payment
             {
                 booking_id = payment.booking_id,
-                PaymentMethod = payment.PaymentMethod,
-                Amount = payment.Amount,
-                payment_date = DateTime.Now
+                payment_method = payment.payment_method,
+                amount = payment.amount,
+                payment_date = DateTime.UtcNow
             });
 
             _context.SaveChanges();
 
             // Set payment confirmation message
-            ViewBag.Message = $"Payment of ₱{payment.Amount} processed successfully using {payment.PaymentMethod}.";
+            ViewBag.Message = $"Payment of ₱{payment.amount} processed successfully using {payment.payment_method}.";
 
             // If a return URL was specified, store it for the confirmation page
             ViewBag.ReturnUrl = payment.ReturnUrl;

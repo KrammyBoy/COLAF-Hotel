@@ -24,7 +24,10 @@ namespace COLAFHotel.Controllers
             // Pass the role to the view
             ViewBag.UserRole = userRole;
 
-            var room = _context.Room.ToList();  // Fetch data from PostgreSQL
+            // Only show rooms with status Vacant or Occupied
+            var room = _context.Room
+                .Where(r => r.Status == "Vacant" || r.Status == "Occupied")
+                .ToList();
 
             return View(room);
         }

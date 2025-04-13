@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace COLAFHotel.Models
 {
@@ -18,6 +19,7 @@ namespace COLAFHotel.Models
         public int? assigned_to { get; set; } //IDK why is this int but maybe if we have a employee table??
 
         // Navigation properties
+        [ForeignKey("room_id")]
         public virtual Room Room { get; set; }
     }
 }
