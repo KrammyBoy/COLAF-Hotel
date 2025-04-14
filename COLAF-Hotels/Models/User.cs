@@ -20,5 +20,7 @@ namespace COLAFHotel.Models
 
         [NotMapped]
         public string fullname => $"{firstname} {lastname}";
+        [NotMapped]
+        public string? profile_image_alt => $"{firstname.Substring(0, 1)}{lastname.Substring(0, 1)}".ToUpper();
     }
 }

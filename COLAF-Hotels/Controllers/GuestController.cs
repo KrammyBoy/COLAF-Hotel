@@ -17,9 +17,30 @@ namespace COLAFHotel.Controllers
             _context = context;
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            return View();
+            // Get current user's ID from session
+            var guestIdString = HttpContext.Session.GetString("GuestId");
+
+            if (string.IsNullOrEmpty(guestIdString) || !int.TryParse(guestIdString, out int guestId))
+            {
+                // Redirect to login if no valid guest ID in session
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Retrieve the complete guest information with related data
+            var guest = await _context.Guests
+                .Include(g => g.User)
+                .Include(g => g.Bookings)
+                    .ThenInclude(b => b.Room)
+                .FirstOrDefaultAsync(g => g.guest_id == guestId);
+
+            if (guest == null)
+            {
+                return NotFound();
+            }
+
+            return View(guest);
         }
 
         // List all guests for staff view
