@@ -11,6 +11,8 @@ namespace COLAFHotel.Models
 
         public int? room_id { get; set; }
 
+        public string? task_type { get; set; } // e.g., Room Cleaning, Facility Maintenance, add if needed
+
         [Required]
         public string description { get; set; }
 
@@ -21,5 +23,8 @@ namespace COLAFHotel.Models
         // Navigation properties
         [ForeignKey("room_id")]
         public virtual Room Room { get; set; }
+
+        [ForeignKey("assigned_to")]
+        public virtual User User { get; set; }
     }
 }

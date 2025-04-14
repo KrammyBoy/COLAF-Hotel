@@ -3,34 +3,123 @@
     ViewBag.Title = "Housekeeping Tasks";
 }
 
-<div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-semibold text-[var(--primary-color)] mb-4">Housekeeping Tasks</h2>
+<div class="max-w-[90%] mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-coffee-dark">Housekeeping Tasks</h2>
+        <a class="bg-coffee-accent text-white py-2 px-4 rounded-lg hover:bg-coffee-medium transition"
+           asp-action="CreateTask">+ Create New Task</a>
+    </div>
+    @if (TempData["Message"] != null)
+    {
+        <div id="successMessage" class="mb-4 p-4 bg-green-100 text-green-800 rounded-md border border-green-300 relative">
+            <span>@TempData["Message"]</span>
+            <button type="button" onclick="document.getElementById('successMessage').remove()"
+                    class="absolute top-2 right-2 text-green-700 hover:text-green-900">
+                &times;
+            </button>
+        </div>
+    }
 
-    <a class="bg-[var(--primary-color)] text-white py-2 px-4 rounded-lg hover:bg-[var(--third-color)] transition"
-       asp-action="CreateTask">+ Create New Task</a>
+    <div class="mb-4 flex space-x-2">
+        <a asp-action="Tasks" asp-route-filter="all" class="px-4 py-2 rounded-lg @(ViewBag.CurrentFilter == "all" || ViewBag.CurrentFilter == null ? "bg-coffee-dark text-white" : "bg-coffee-cream text-coffee-dark")">
+            All
+        </a>
+        <a asp-action="Tasks" asp-route-filter="pending" class="px-4 py-2 rounded-lg @(ViewBag.CurrentFilter == "pending" ? "bg-coffee-dark text-white" : "bg-coffee-cream text-coffee-dark")">
+            Pending
+        </a>
+        <a asp-action="Tasks" asp-route-filter="in-progress" class="px-4 py-2 rounded-lg @(ViewBag.CurrentFilter == "in-progress" ? "bg-coffee-dark text-white" : "bg-coffee-cream text-coffee-dark")">
+            In Progress
+        </a>
+        <a asp-action="Tasks" asp-route-filter="completed" class="px-4 py-2 rounded-lg @(ViewBag.CurrentFilter == "completed" ? "bg-coffee-dark text-white" : "bg-coffee-cream text-coffee-dark")">
+            Completed
+        </a>
+    </div>
 
     <div class="overflow-x-auto mt-4">
         <table class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
-            <thead class="bg-gray-100">
+            <thead class="bg-coffee-cream">
                 <tr>
-                    <th class="px-4 py-2 border-b">ID</th>
-                    <th class="px-4 py-2 border-b">Room Number</th>
-                    <th class="px-4 py-2 border-b">Task Description</th>
-                    <th class="px-4 py-2 border-b">Status</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">ID</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Room</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Type</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Description</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Status</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Assigned To</th>
+                    <th class="px-4 py-3 border-b text-left text-coffee-dark">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var task in Model)
+                @if (Model != null && Model.Any())
                 {
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-2 border-b">@task.task_id</td>
-                        <td class="px-4 py-2 border-b">@task.Room.RoomNumber</td>
-                        <td class="px-4 py-2 border-b">@task.description</td>
-                        <td class="px-4 py-2 border-b">
-                            <span class="px-3 py-1 rounded-full text-white text-sm @(task.status == "Completed" ? "bg-green-500" : "bg-yellow-500")">
-                                @task.status
-                            </span>
+                    @foreach (var task in Model)
+                    {
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-4 py-3 border-b">@task.task_id</td>
+                            <td class="px-4 py-3 border-b">
+                                @if (task.Room != null)
+                                {
+                                    @task.Room.RoomNumber
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400">N/A</span>
+                                }
                         </td>
+                        <td class="px-4 py-3 border-b">@task.task_type</td>
+                        <td class="px-4 py-3 border-b">@task.description</td>
+                        <td class="px-4 py-3 border-b">
+                            <span class="px-3 py-1 rounded-full text-white text-sm
+                                        @(task.status == "Completed" ? "bg-green-500" :
+                                                                        task.status == "In Progress" ? "bg-blue-500" : "bg-yellow-500")">
+                            @task.status
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 border-b">
+                        @if (task.assigned_to.HasValue)
+                                {
+                                    @ViewBag.StaffNames[task.assigned_to.Value]
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400">Unassigned</span>
+                                }
+                            </td>
+                            <td class="px-4 py-3 border-b">
+                                @if (task.status == "Pending")
+                                {
+                                    <form asp-action="AcceptTask" method="post" class="inline">
+                                        <input type="hidden" name="taskId" value="@task.task_id" />
+                                        <input type="hidden" name="userId" value="@task.assigned_to" />
+                                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-1">
+                                            Accept
+                                        </button>
+                                    </form>
+                                }
+
+                                @if (task.status == "In Progress")
+                                {
+                                    <form asp-action="CompleteTask" method="post" class="inline">
+                                        <input type="hidden" name="taskId" value="@task.task_id" />
+                                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                            Complete
+                                        </button>
+                                    </form>
+                                }
+
+                                @if (task.status != "Completed")
+                                {
+                                    <a asp-action="EditTask" asp-route-id="@task.task_id" class="text-coffee-accent hover:underline ml-2">
+                                        Edit
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="px-4 py-6 text-center text-gray-500">No housekeeping tasks found.</td>
                     </tr>
                 }
             </tbody>

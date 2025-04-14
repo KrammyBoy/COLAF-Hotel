@@ -1,0 +1,88 @@
+﻿@model COLAFHotel.Models.HousekeepingTask
+@{
+    ViewBag.Title = "Task Details";
+}
+
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-coffee-dark">Task Details</h2>
+        <div>
+            <a asp-action="Tasks" class="bg-gray-300 text-coffee-dark py-2 px-4 rounded-lg hover:bg-gray-400 transition mr-2">Back to List</a>
+            @if (Model.status != "Completed")
+            {
+                <a asp-action="EditTask" asp-route-id="@Model.task_id" class="bg-coffee-medium text-white py-2 px-4 rounded-lg hover:bg-coffee-dark transition">Edit</a>
+            }
+        </div>
+    </div>
+
+    <div class="bg-coffee-cream p-6 rounded-lg mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <p class="text-coffee-medium mb-2">Task ID</p>
+                <p class="font-semibold">@Model.task_id</p>
+            </div>
+            <div>
+                <p class="text-coffee-medium mb-2">Status</p>
+                <span class="px-3 py-1 rounded-full text-white text-sm
+                    @(Model.status == "Completed" ? "bg-green-500" :
+                                            Model.status == "In Progress" ? "bg-blue-500" : "bg-yellow-500")">
+                    @Model.status
+                </span>
+            </div>
+            <div>
+                <p class="text-coffee-medium mb-2">Room Number</p>
+                <p class="font-semibold">
+                    @if (Model.Room != null)
+                    {
+                        @Model.Room.RoomNumber
+                    }
+                    else
+                    {
+                        <span class="text-gray-400">N/A</span>
+                    }
+                </p>
+            </div>
+            <div>
+                <p class="text-coffee-medium mb-2">Task Type</p>
+                <p class="font-semibold">@Model.task_type</p>
+            </div>
+            <div class="md:col-span-2">
+                <p class="text-coffee-medium mb-2">Description</p>
+                <p class="font-semibold">@Model.description</p>
+            </div>
+            <div>
+                <p class="text-coffee-medium mb-2">Assigned To</p>
+                <p class="font-semibold">
+                    @if (Model.assigned_to.HasValue)
+                    {
+                        @ViewBag.StaffName
+                    }
+                    else
+                    {
+                        <span class="text-gray-400">Unassigned</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.status == "Pending")
+    {
+        <form asp-action="AcceptTask" method="post" class="mb-4">
+            <input type="hidden" name="taskId" value="@Model.task_id" />
+            <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition">
+                Accept Task
+            </button>
+        </form>
+    }
+
+    @if (Model.status == "In Progress")
+    {
+        <form asp-action="CompleteTask" method="post">
+            <input type="hidden" name="taskId" value="@Model.task_id" />
+            <button type="submit" class="w-full bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition">
+                Mark as Completed
+            </button>
+        </form>
+    }
+</div>

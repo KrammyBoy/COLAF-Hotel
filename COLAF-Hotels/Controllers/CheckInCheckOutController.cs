@@ -225,7 +225,8 @@ namespace COLAFHotel.Controllers
                 {
                     room_id = room.RoomId,
                     description = $"Room cleaning after checkout from booking #{booking.booking_id}",
-                    status = "Pending"
+                    status = "Pending",
+                    task_type = "Room Cleaning"
                 });
             }
 
@@ -262,7 +263,8 @@ namespace COLAFHotel.Controllers
                 {
                     room_id = room.RoomId,
                     description = $"Room cleaning after checkout from booking #{booking.booking_id}",
-                    status = "Pending"
+                    status = "Pending",
+                    task_type = "Room Cleaning"
                 });
             }
 
