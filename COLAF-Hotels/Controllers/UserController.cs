@@ -110,6 +110,7 @@ namespace COLAFHotel.Controllers
             HttpContext.Session.SetString("UserId", user.user_id.ToString());
             HttpContext.Session.SetString("User", user.username);
             HttpContext.Session.SetString("Role", user.role);
+
             /*
                 Check if the user has guest_id.
                 If it has guest_id, the user already interact with the system
@@ -118,9 +119,31 @@ namespace COLAFHotel.Controllers
             var guest = await _context.Guests.FirstOrDefaultAsync(g => g.user_id == user.user_id);
 
             string guestId = guest?.guest_id.ToString() ?? "null";
+
+            if (guestId == "null")
+            {
+                // Add Guest for the user
+                var newGuest = new Guest
+                {
+                    user_id = Convert.ToInt32(user.user_id)
+                };
+                _context.Guests.Add(newGuest);
+                await _context.SaveChangesAsync();
+                guestId = newGuest.guest_id.ToString();
+                Console.WriteLine($"Guest ID: {guestId}");
+            }
+
+            string profile_image = guest?.profile_image ?? "null" ;
+
+            HttpContext.Session.SetString("ProfileImageAlt", user.profile_image_alt);
+
+            HttpContext.Session.SetString("ProfileImage", profile_image);
+
+
+
             HttpContext.Session.SetString("GuestId", guestId);
 
-            Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}, GuestId: {guestId}");
+            Console.WriteLine($"Stored in Session - Username: {user.username}, Role: {HttpContext.Session.GetString("Role")}, GuestId: {guestId}, Profile: {profile_image}");
 
             return RedirectToAction("Index", "Dashboard");
         }

@@ -2,6 +2,9 @@
 @{
     var user = HttpContextAccessor.HttpContext?.Session.GetString("User");
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var guestId = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
+    var profileImageAlt = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImageAlt");
+    var profileImage = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImage");
     string currentPath = Context.Request.Path.Value;
 
     Console.WriteLine($"Retrieved from Session in Layout - Username: {user}, Role: {role}");
@@ -130,10 +133,22 @@
                     @if (!string.IsNullOrEmpty(user))
                     {
                         <div class="flex items-center space-x-3">
-                            <a href="@Url.Action("Profile", "Guest")"
-                               class="w-10 h-10 rounded-full bg-coffee-accent flex items-center justify-center text-coffee-dark shadow-md transition-transform duration-200 hover:scale-110">
-                                <i class="fa-solid fa-user"></i>
-                            </a>
+                            @if (profileImage == "null" && guestId != null)
+                            {
+                                <div class="bg-coffee-accent rounded-full p-1 transition-transform duration-200 hover:scale-110">
+                                    <a href="@Url.Action("Profile", "Guest")"
+                                       class="bg-white rounded-full h-10 w-10 flex items-center justify-center text-coffee-dark font-bold text-sm">
+                                        @profileImageAlt
+                                    </a>
+                                </div>
+                            }
+                            else if (guestId != null)
+                            {
+                                <a href="@Url.Action("Profile", "Guest")"
+                                   class="bg-coffee-accent rounded-full p-1 transition-transform duration-200 hover:scale-110">
+                                    <img src="@profileImage" alt="@profileImageAlt" class="h-10 w-10 rounded-full object-cover" />
+                                </a>
+                            }
                             <span class="text-coffee-light">Welcome, <span class="text-coffee-accent font-medium">@user</span></span>
                             <a href="@Url.Action("Logout", "User")"
                                class="bg-coffee-accent text-coffee-dark px-4 py-2 rounded-lg hover:bg-coffee-light transition-colors duration-300 flex items-center space-x-2 shadow-md hover:shadow-lg">

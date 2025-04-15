@@ -1,0 +1,231 @@
+﻿@model COLAFHotel.Models.Guest
+
+@{
+    ViewBag.Title = "Edit Profile";
+}
+
+<div class="container mx-auto py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+        <!-- Profile Header -->
+        <div class="bg-coffee-dark rounded-t-2xl p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 opacity-10">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFFFFF" d="M40.8,-62.5C53.3,-53.5,64.2,-42.6,70.5,-29.3C76.7,-16,78.3,-0.3,75.5,14.7C72.7,29.8,65.4,44.2,54.5,54.9C43.5,65.6,28.9,72.5,13.8,75.5C-1.4,78.5,-17,77.4,-31.3,71.5C-45.5,65.5,-58.5,54.6,-67.3,41C-76.1,27.3,-80.8,10.8,-78.9,-4.9C-77,-20.7,-68.6,-35.7,-57.2,-45.6C-45.8,-55.5,-31.4,-60.2,-17.5,-65.6C-3.7,-71,10.7,-77,24.5,-75.5C38.3,-74,51.6,-65,40.8,-62.5Z" transform="translate(100 100)" />
+                </svg>
+            </div>
+
+            <div class="flex items-center space-x-6 relative z-10">
+                @if (!string.IsNullOrEmpty(Model.profile_image))
+                {
+                    <div class="bg-coffee-accent rounded-full p-1">
+                        <img src="@Model.profile_image" alt="@Model.User.profile_image_alt" class="h-20 w-20 rounded-full object-cover" />
+                    </div>
+                }
+                else
+                {
+                    <div class="bg-coffee-accent rounded-full p-1">
+                        <div class="bg-white rounded-full h-20 w-20 flex items-center justify-center text-coffee-dark font-bold text-2xl">
+                            @Model.User.profile_image_alt
+                        </div>
+                    </div>
+                }
+
+                <div class="text-white">
+                    <h1 class="text-2xl font-serif font-bold">Edit Profile</h1>
+                    <div class="flex items-center mt-2">
+                        <span class="bg-coffee-accent px-3 py-1 rounded-full text-xs font-medium">Guest</span>
+                        <span class="ml-3 text-coffee-cream text-sm">@Model.User.email</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="bg-white rounded-b-2xl shadow-lg p-6">
+            <form asp-action="UpdateProfile" asp-controller="Guest" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="guest_id" />
+                <input type="hidden" asp-for="User.user_id" />
+
+                <!-- Profile Photo Upload -->
+                <div class="mb-6 pb-6 border-b border-coffee-cream border-opacity-20">
+                    <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Profile Photo</h2>
+                    <div class="flex items-center space-x-4">
+                        @if (!string.IsNullOrEmpty(Model.profile_image))
+                        {
+                            <div class="bg-coffee-accent rounded-full p-1">
+                                <img src="@Model.profile_image" alt="@Model.User.profile_image_alt" class="h-20 w-20 rounded-full object-cover" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="bg-coffee-accent rounded-full p-1">
+                                <div class="bg-white rounded-full h-20 w-20 flex items-center justify-center text-coffee-dark font-bold text-2xl">
+                                    @Model.User.profile_image_alt
+                                </div>
+                            </div>
+                        }
+
+                        <div>
+                            <label class="inline-block px-4 py-2 bg-coffee-cream bg-opacity-20 text-coffee-dark rounded-lg cursor-pointer hover:bg-opacity-30 transition-colors">
+                                <input type="file" name="ProfileImage" accept="image/*" class="hidden" />
+                                Upload New Photo
+                            </label>
+                            <p class="text-coffee-medium text-xs mt-2">Maximum file size: 5MB. JPG, PNG formats.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Basic Information -->
+                <div class="mb-6 pb-6 border-b border-coffee-cream border-opacity-20">
+                    <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Basic Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="firstname" class="block text-coffee-medium text-sm mb-1">First Name</label>
+                            <input type="text" id="firstname" name="User.firstname" value="@Model.User.firstname" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" required />
+                        </div>
+                        <div>
+                            <label for="lastname" class="block text-coffee-medium text-sm mb-1">Last Name</label>
+                            <input type="text" id="lastname" name="User.lastname" value="@Model.User.lastname" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" required />
+                        </div>
+                        <div>
+                            <label for="date_of_birth" class="block text-coffee-medium text-sm mb-1">Date of Birth</label>
+                            <input type="date" id="date_of_birth" name="date_of_birth" value="@(Model.date_of_birth?.ToString("yyyy-MM-dd"))" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" />
+                        </div>
+                        <div>
+                            <label for="gender" class="block text-coffee-medium text-sm mb-1">Gender</label>
+                            <select id="gender" name="gender" class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                                <option value="" selected=@(string.IsNullOrEmpty(Model.gender) ? "selected" : "")>Not specified</option>
+                                <option value="Male" selected=@(Model.gender == "Male" ? "selected" : "")>Male</option>
+                                <option value="Female" selected=@(Model.gender == "Female" ? "selected" : "")>Female</option>
+                                <option value="Non-binary" selected=@(Model.gender == "Non-binary" ? "selected" : "")>Non-binary</option>
+                                <option value="Other" selected=@(Model.gender == "Other" ? "selected" : "")>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="pronouns" class="block text-coffee-medium text-sm mb-1">Pronouns</label>
+                            <select id="pronouns" name="pronouns" class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                                <option value="" selected=@(string.IsNullOrEmpty(Model.pronouns) ? "selected" : "")>Not specified</option>
+                                <option value="He/Him" selected=@(Model.pronouns == "He/Him" ? "selected" : "")>He/Him</option>
+                                <option value="She/Her" selected=@(Model.pronouns == "She/Her" ? "selected" : "")>She/Her</option>
+                                <option value="They/Them" selected=@(Model.pronouns == "They/Them" ? "selected" : "")>They/Them</option>
+                                <option value="Other" selected=@(Model.pronouns == "Other" ? "selected" : "")>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="mb-6 pb-6 border-b border-coffee-cream border-opacity-20">
+                    <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Contact Information</h2>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="email" class="block text-coffee-medium text-sm mb-1">Email Address</label>
+                            <input type="email" id="email" name="User.email" value="@Model.User.email" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" required />
+                        </div>
+                        <div>
+                            <label for="username" class="block text-coffee-medium text-sm mb-1">Username</label>
+                            <input type="text" id="username" name="User.username" value="@Model.User.username" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent bg-gray-100" readonly />
+                            <p class="text-coffee-medium text-xs mt-1">Username cannot be changed</p>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-coffee-medium text-sm mb-1">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" value="@Model.phone" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" />
+                        </div>
+                        <div>
+                            <label for="mail_address" class="block text-coffee-medium text-sm mb-1">Mailing Address</label>
+                            <textarea id="mail_address" name="mail_address" rows="3"
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent">@Model.mail_address</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stay Preferences -->
+                <div class="mb-6 pb-6 border-b border-coffee-cream border-opacity-20">
+                    <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Stay Preferences</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="preferred_room_type" class="block text-coffee-medium text-sm mb-1">Preferred Room Type</label>
+                            <select id="preferred_room_type" name="preferred_room_type" class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                                <option value="" selected=@(string.IsNullOrEmpty(Model.preferred_room_type) ? "selected" : "")>Not specified</option>
+                                <option value="Standard" selected=@(Model.preferred_room_type == "Standard" ? "selected" : "")>Standard</option>
+                                <option value="Deluxe" selected=@(Model.preferred_room_type == "Deluxe" ? "selected" : "")>Deluxe</option>
+                                <option value="Suite" selected=@(Model.preferred_room_type == "Suite" ? "selected" : "")>Suite</option>
+                                <option value="Executive" selected=@(Model.preferred_room_type == "Executive" ? "selected" : "")>Executive</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="location_pref" class="block text-coffee-medium text-sm mb-1">Location Preference</label>
+                            <select id="location_pref" name="location_pref" class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                                <option value="" selected=@(string.IsNullOrEmpty(Model.location_pref) ? "selected" : "")>Not specified</option>
+                                <option value="High Floor" selected=@(Model.location_pref == "High Floor" ? "selected" : "")>High Floor</option>
+                                <option value="Low Floor" selected=@(Model.location_pref == "Low Floor" ? "selected" : "")>Low Floor</option>
+                                <option value="Near Elevator" selected=@(Model.location_pref == "Near Elevator" ? "selected" : "")>Near Elevator</option>
+                                <option value="Away from Elevator" selected=@(Model.location_pref == "Away from Elevator" ? "selected" : "")>Away from Elevator</option>
+                                <option value="Near Facilities" selected=@(Model.location_pref == "Near Facilities" ? "selected" : "")>Near Facilities</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="favorite_facilities" class="block text-coffee-medium text-sm mb-1">Favorite Facilities</label>
+                            <input type="text" id="favorite_facilities" name="favorite_facilities" value="@Model.favorite_facilities" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Pool, Gym, Spa" />
+                        </div>
+                        <div>
+                            <label for="wellness_preference" class="block text-coffee-medium text-sm mb-1">Wellness Preference</label>
+                            <input type="text" id="wellness_preference" name="wellness_preference" value="@Model.wellness_preference" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Spa, Gym, Meditation" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health & Dietary Information -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-serif font-bold text-coffee-dark mb-4">Health & Dietary Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="dietary_restrictions" class="block text-coffee-medium text-sm mb-1">Dietary Restrictions</label>
+                            <input type="text" id="dietary_restrictions" name="dietary_restrictions" value="@Model.dietary_restrictions" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Vegetarian, Vegan, Gluten-Free" />
+                        </div>
+                        <div>
+                            <label for="food_allergy" class="block text-coffee-medium text-sm mb-1">Food Allergies</label>
+                            <input type="text" id="food_allergy" name="food_allergy" value="@Model.food_allergy" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Peanuts, Shellfish, Dairy" />
+                        </div>
+                        <div>
+                            <label for="medical_condition" class="block text-coffee-medium text-sm mb-1">Medical Conditions</label>
+                            <input type="text" id="medical_condition" name="medical_condition" value="@Model.medical_condition" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Diabetes, Asthma" />
+                        </div>
+                        <div>
+                            <label for="special_needs" class="block text-coffee-medium text-sm mb-1">Special Needs</label>
+                            <input type="text" id="special_needs" name="special_needs" value="@Model.special_needs" 
+                                   class="w-full px-4 py-2 rounded-lg border border-coffee-cream focus:outline-none focus:ring-2 focus:ring-coffee-accent" 
+                                   placeholder="e.g. Wheelchair Access, Hearing Aid" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 mt-8">
+                    <a href="/Guest/Profile" class="px-6 py-3 bg-white border border-coffee-cream text-coffee-dark rounded-lg hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-6 py-3 bg-coffee-accent text-white rounded-lg hover:bg-coffee-dark transition-colors">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
