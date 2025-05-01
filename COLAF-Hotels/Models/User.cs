@@ -16,7 +16,7 @@ namespace COLAFHotel.Models
         public string firstname { get; set; }
         [Required]
         public string lastname { get; set; }
-        public string? role { get; set; } //Guest, Staff, Admin, Housekeeper
+        public string? role { get; set; } //Guest, Staff, Admin, Housekeeper, Housekeeping Manager, Revenue Manager
 
         [NotMapped]
         public string fullname => $"{firstname} {lastname}";

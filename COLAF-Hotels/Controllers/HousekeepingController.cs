@@ -24,11 +24,28 @@ namespace COLAFHotel.Controllers
         {
             ViewBag.CurrentFilter = filter;
 
+            // Get the current user's role and ID from session
+            var role = HttpContext.Session.GetString("Role");
+            var userIdString = HttpContext.Session.GetString("UserId");
+
+            Console.WriteLine($"Role: {role}");
+            int userId;
+            bool hasUserId = int.TryParse(userIdString, out userId);
+
+            Console.WriteLine($"UserID: {userId}");
+
             var query = _context.HousekeepingTasks
                 .Include(t => t.Room)
                 .AsQueryable();
 
-            // Apply filters
+            // Filter by role: Housekeepers can only see their assigned tasks
+            if (role == "Housekeeper" && hasUserId)
+            {
+                query = query.Where(t => t.assigned_to == userId);
+            }
+
+
+            // Apply status filters
             switch (filter)
             {
                 case "pending":
@@ -44,17 +61,15 @@ namespace COLAFHotel.Controllers
 
             var tasks = await query.OrderByDescending(t => t.task_id).ToListAsync();
 
-            // Get ALL user IDs that are referenced in tasks
+            // Get all user IDs referenced in tasks
             var userIds = tasks.Where(t => t.assigned_to.HasValue)
                                .Select(t => t.assigned_to.Value)
                                .Distinct()
                                .ToList();
 
-            // Get staff names for display - getting all potentially referenced users
             var staffDict = new Dictionary<int, string>();
-
             var staff = await _context.Users
-                          .Where(u => userIds.Contains(u.user_id)) // Get all users referenced in tasks
+                          .Where(u => userIds.Contains(u.user_id))
                           .ToListAsync();
 
             foreach (var employee in staff)
@@ -62,7 +77,6 @@ namespace COLAFHotel.Controllers
                 staffDict[employee.user_id] = employee.fullname;
             }
 
-            // Now make sure that any missing IDs get a placeholder
             foreach (var id in userIds)
             {
                 if (!staffDict.ContainsKey(id))
@@ -72,7 +86,6 @@ namespace COLAFHotel.Controllers
             }
 
             ViewBag.StaffNames = staffDict;
-
             return View(tasks);
         }
 

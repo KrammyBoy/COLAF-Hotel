@@ -107,11 +107,15 @@
                             case "Admin":
                                 @await Html.PartialAsync("Pages/_AdminNavLinks")
                                 break;
+                            case "Housekeeping Manager":
                             case "Housekeeper":
                                 <a href="@Url.Action("Tasks", "Housekeeping")"
-                                   class="group relative text-lg font-medium text-white hover:text-coffee-accent transition-colors duration-300 ease-in-out">
-                                    Housekeeping
-                                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-coffee-accent transition-all duration-300 group-hover:w-full"></span>
+                                   class="relative text-sm font-medium cursor-pointer
+                          after:content-[''] after:absolute after:-bottom-1 after:left-1/2
+                          after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
+                          hover:after:w-full hover:after:left-0 hover:text-indigo-100
+                          @(Context.Request.Path.Value == Url.Action("Tasks", "Housekeeping") ? "text-indigo-300" : "text-white")">
+                                    HOUSEKEEPING
                                 </a>
                                 break;
                             case "Staff":

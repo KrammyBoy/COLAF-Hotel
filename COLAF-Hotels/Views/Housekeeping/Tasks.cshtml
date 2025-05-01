@@ -1,13 +1,18 @@
 @model IEnumerable<COLAFHotel.Models.HousekeepingTask>
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewBag.Title = "Housekeeping Tasks";
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
 }
 
 <div class="max-w-[90%] mx-auto p-6 bg-white shadow-lg rounded-lg">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-semibold text-coffee-dark">Housekeeping Tasks</h2>
+        @if (role == "Housekeeping Manager"){
         <a class="bg-coffee-accent text-white py-2 px-4 rounded-lg hover:bg-coffee-medium transition"
            asp-action="CreateTask">+ Create New Task</a>
+        }
     </div>
     @if (TempData["Message"] != null)
     {
@@ -85,7 +90,7 @@
                                 }
                             </td>
                             <td class="px-4 py-3 border-b">
-                                @if (task.status == "Pending")
+                                @if (task.status == "Pending" && role == "Housekeeper")
                                 {
                                     <form asp-action="AcceptTask" method="post" class="inline">
                                         <input type="hidden" name="taskId" value="@task.task_id" />
@@ -96,7 +101,7 @@
                                     </form>
                                 }
 
-                                @if (task.status == "In Progress")
+                                @if (task.status == "In Progress" && role == "Housekeeper")
                                 {
                                     <form asp-action="CompleteTask" method="post" class="inline">
                                         <input type="hidden" name="taskId" value="@task.task_id" />
@@ -106,7 +111,7 @@
                                     </form>
                                 }
 
-                                @if (task.status != "Completed")
+                                @if (task.status != "Completed" && role == "Housekeeping Manager")
                                 {
                                     <a asp-action="EditTask" asp-route-id="@task.task_id" class="text-coffee-accent hover:underline ml-2">
                                         Edit
