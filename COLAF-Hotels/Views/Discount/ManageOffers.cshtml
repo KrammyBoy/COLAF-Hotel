@@ -1,7 +1,385 @@
 ﻿@model IEnumerable<COLAFHotel.Models.Discount>
 @{
-    ViewBag.Title = "Manage Offers";
+    ViewBag.Title = "Staff Discount Management";
 }
-<div>
-	<h2>Manage Offers</h2>
+
+<div class="bg-coffee-cream min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Page Header -->
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-coffee-dark">Discount Management</h1>
+                <p class="text-coffee-medium mt-1">Create and manage promotional offers for guests</p>
+            </div>
+            <button onclick="showCreateModal()" class="bg-coffee-accent hover:bg-coffee-dark text-white font-semibold py-2 px-4 rounded shadow transition duration-200">
+                <i class="fas fa-plus mr-2"></i>New Discount
+            </button>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div id="successAlert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">@TempData["SuccessMessage"]</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="document.getElementById('successAlert').style.display='none'">
+                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" /></svg>
+                </span>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div id="errorAlert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">@TempData["ErrorMessage"]</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="document.getElementById('errorAlert').style.display='none'">
+                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" /></svg>
+                </span>
+            </div>
+        }
+
+        <!-- Discounts Table -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-coffee-cream">
+                    <thead class="bg-coffee-dark text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Discount Info</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Value</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Code</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Expiration</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-coffee-cream bg-white">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var discount in Model)
+                            {
+                                <tr class="hover:bg-coffee-cream/20 transition duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-coffee-dark">@discount.name</div>
+                                        <div class="text-xs font-semibold text-coffee-accent">@discount.title</div>
+                                        <div class="text-xs text-coffee-medium">@discount.description</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-coffee-accent/20 text-coffee-dark">
+                                            @discount.promo_code
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-medium">
+                                        @discount.expiration_date.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if (discount.status == "Active")
+                                        {
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right space-x-2">
+                                        <button onclick="showEditModal('@discount.discount_id', '@discount.name', '@discount.description', '@discount.discount_value', '@discount.promo_code', '@discount.expiration_date.ToString("yyyy-MM-dd")', '@discount.status')"
+                                                data-title="@discount.title"
+                                                class="text-coffee-accent hover:text-coffee-dark transition duration-150">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        @if (discount.status == "Active")
+                                        {
+                                            <a href="@Url.Action("DeactivateDiscount", "Discount", new { id = discount.discount_id })"
+                                               class="text-yellow-500 hover:text-yellow-700 transition duration-150"
+                                               onclick="return confirm('Are you sure you want to deactivate this discount?');">
+                                                <i class="fas fa-toggle-off"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("ActivateDiscount", "Discount", new { id = discount.discount_id })"
+                                               class="text-green-500 hover:text-green-700 transition duration-150">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </a>
+                                        }
+
+                                        <button onclick="confirmDelete('@discount.discount_id', '@discount.name')"
+                                                class="text-red-500 hover:text-red-700 transition duration-150">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-coffee-medium italic">No discounts found. Create one to get started.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Create Discount Modal -->
+<div id="createModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+        <button onclick="hideCreateModal()" class="absolute top-4 right-4 text-coffee-medium hover:text-coffee-dark">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-coffee-dark border-b border-coffee-cream pb-3 mb-4">Create New Discount</h2>
+
+        <form asp-action="CreateDiscount" asp-controller="Discount" method="post">
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Name</label>
+                        <input type="text" name="name" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Title</label>
+                        <input type="text" name="title" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Description</label>
+                        <textarea name="description" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent"></textarea>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Type</label>
+                        <select name="discount_type" id="discountType" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                            <option value="Percentage">Percentage</option>
+                            <option value="Fixed">Fixed Amount</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Value</label>
+                        <div class="relative">
+                            <input type="number" name="discount_value" required min="0" step="0.01" class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                            <span id="discountSymbol" class="absolute right-3 top-2 text-coffee-medium">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Promo Code</label>
+                        <input type="text" name="promo_code" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent uppercase">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Expiration Date</label>
+                        <input type="date" name="expiration_date" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-coffee-dark font-medium mb-1">Status</label>
+                    <select name="status" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t border-coffee-cream">
+                    <button type="button" onclick="hideCreateModal()" class="px-4 py-2 text-coffee-medium hover:text-coffee-dark rounded font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-coffee-accent hover:bg-coffee-dark text-white rounded font-medium transition duration-200">
+                        Create Discount
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Discount Modal -->
+<div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+        <button onclick="hideEditModal()" class="absolute top-4 right-4 text-coffee-medium hover:text-coffee-dark">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-coffee-dark border-b border-coffee-cream pb-3 mb-4">Edit Discount</h2>
+
+        <form asp-action="EditDiscount" asp-controller="Discount" method="post">
+            <input type="hidden" id="edit_discount_id" name="discount_id">
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Name</label>
+                        <input type="text" id="edit_name" name="name" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Title</label>
+                        <input type="text" id="edit_title" name="title" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Description</label>
+                        <textarea id="edit_description" name="description" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent"></textarea>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Type</label>
+                        <select id="edit_discount_type" name="discount_type" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                            <option value="Percentage">Percentage</option>
+                            <option value="Fixed">Fixed Amount</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Discount Value</label>
+                        <div class="relative">
+                            <input type="number" id="edit_discount_value" name="discount_value" required min="0" step="0.01" class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                            <span id="editDiscountSymbol" class="absolute right-3 top-2 text-coffee-medium">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Promo Code</label>
+                        <input type="text" id="edit_promo_code" name="promo_code" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent uppercase">
+                    </div>
+
+                    <div>
+                        <label class="block text-coffee-dark font-medium mb-1">Expiration Date</label>
+                        <input type="date" id="edit_expiration_date" name="expiration_date" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-coffee-dark font-medium mb-1">Status</label>
+                    <select id="edit_status" name="status" required class="w-full rounded border border-coffee-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t border-coffee-cream">
+                    <button type="button" onclick="hideEditModal()" class="px-4 py-2 text-coffee-medium hover:text-coffee-dark rounded font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-coffee-accent hover:bg-coffee-dark text-white rounded font-medium transition duration-200">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+        <h2 class="text-2xl font-bold text-coffee-dark border-b border-coffee-cream pb-3 mb-4">Confirm Deletion</h2>
+
+        <p class="text-coffee-medium mb-6">Are you sure you want to delete the discount <span id="discountToDelete" class="font-semibold text-coffee-dark"></span>? This action cannot be undone.</p>
+
+        <form asp-action="DeleteDiscount" asp-controller="Discount" method="post">
+            <input type="hidden" id="delete_discount_id" name="discount_id">
+
+            <div class="flex justify-end space-x-3">
+                <button type="button" onclick="hideDeleteModal()" class="px-4 py-2 text-coffee-medium hover:text-coffee-dark rounded font-medium">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded font-medium transition duration-200">
+                    Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Helper function to format dates
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // YYYY-MM-DD format for input[type="date"]
+    }
+
+    // Modal functions
+    function showCreateModal() {
+        document.getElementById('createModal').classList.remove('hidden');
+    }
+
+    function hideCreateModal() {
+        document.getElementById('createModal').classList.add('hidden');
+    }
+
+            function showEditModal(id, name, description, type, value, code, expiration, status) {
+        document.getElementById('edit_discount_id').value = id;
+        document.getElementById('edit_name').value = name;
+        document.getElementById('edit_description').value = description;
+        document.getElementById('edit_discount_type').value = type;
+        document.getElementById('edit_discount_value').value = value;
+        document.getElementById('edit_promo_code').value = code;
+        document.getElementById('edit_expiration_date').value = expiration;
+        document.getElementById('edit_status').value = status;
+        document.getElementById('edit_title').value = event.currentTarget.getAttribute('data-title');
+
+        // Update the symbol based on the discount type
+        updateSymbol('edit_discount_type', 'editDiscountSymbol');
+
+        document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function hideEditModal() {
+        document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function confirmDelete(id, name) {
+        document.getElementById('delete_discount_id').value = id;
+        document.getElementById('discountToDelete').textContent = name;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function hideDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    // Function to update the symbol (% or $) based on discount type
+    function updateSymbol(selectId, symbolId) {
+        const select = document.getElementById(selectId);
+        const symbol = document.getElementById(symbolId);
+
+        if (select.value === 'Percentage') {
+            symbol.textContent = '%';
+        } else {
+            symbol.textContent = '$';
+        }
+    }
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up discount type change listeners
+        document.getElementById('discountType').addEventListener('change', function() {
+            updateSymbol('discountType', 'discountSymbol');
+        });
+
+        document.getElementById('edit_discount_type').addEventListener('change', function() {
+            updateSymbol('edit_discount_type', 'editDiscountSymbol');
+        });
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('[role="alert"]');
+            alerts.forEach(alert => {
+                alert.style.display = 'none';
+            });
+        }, 5000);
+    });
+</script>

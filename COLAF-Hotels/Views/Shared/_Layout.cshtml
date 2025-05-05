@@ -56,6 +56,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
+    <script>AOS.init();</script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="font-['Inter',sans-serif] bg-coffee-cream text-coffee-dark min-h-screen flex flex-col bg-opacity-90 bg-cover bg-center bg-fixed relative">
@@ -219,6 +221,32 @@
             const mobileMenu = document.getElementById('mobileMenu');
             mobileMenu.classList.toggle('hidden');
         });
+        document.addEventListener("DOMContentLoaded", function () {
+        // Make the fetch call to get the unread notification count
+            fetch('/Notification/GetUnreadNotificationCount')
+                .then(response => response.json())
+                .then(data => {
+                    const count = data.count;
+                    const notificationCountElement = document.getElementById('notificationCount');
+                    console.log("Getting unread notification");
+
+                    if (count > 99) {
+                        notificationCountElement.textContent = 99;  // Cap the count at 99
+                        notificationCountElement.hidden = false;    // Make sure it's visible
+                    } else if (count > 0) {
+                        notificationCountElement.textContent = count;  // Update the count
+                        notificationCountElement.hidden = false;      // Make sure it's visible
+                    } else {
+                        notificationCountElement.textContent = 0;    // Clear if no unread notifications
+                        notificationCountElement.hidden = true;      // Hide the element
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error fetching notification count:', error);
+                    document.getElementById('notificationCount').textContent = '';  // Handle any errors
+                });
+        });
     </script>
 
     <style>
@@ -303,4 +331,5 @@
             background: rgba(0, 123, 255, 0.1);
             border-radius: 50%;
         }
+
 </style>

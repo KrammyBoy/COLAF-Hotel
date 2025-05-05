@@ -6,12 +6,27 @@ namespace COLAFHotel.Models
     public class Discount
     {
         [Key]
-        public string discount_id { get; set; }
+        public int discount_id { get; set; }
         [Required]
         public string name { get; set; }
         [Required]
         public string description { get; set; }
         [Required]
-        public decimal discount_percentage { get; set; }
+        [Column(TypeName = "decimal(5, 2)")]
+        public decimal discount_value { get; set; }
+
+        [Required]
+        public string status { get; set; }
+
+        [Required]
+        public DateTime expiration_date { get; set; }
+
+        [Required]
+        public string title { get; set; }
+
+        [Required]
+
+        public string promo_code { get; set; }
+
     }
 }

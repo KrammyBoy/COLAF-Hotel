@@ -558,8 +558,10 @@
         document.getElementById('paymentType').textContent = paymentOption;
 
       
-        let haveTransportService = (transportService.checked)?true:false;
+        let haveTransportService = transportService.checked;
         document.getElementById('hiddenTransportService').value = haveTransportService;
+
+
 
         let checkInDate = new Date(checkInDateInput.value);
         let checkOutDate = new Date(checkOutDateInput.value);
@@ -583,7 +585,7 @@
         numberOfNights2.textContent = nights;
 
         let nightPriceAdded = ((basePrice * nights) - basePrice);
-        let transportFeeAdded = transportService ? 500.00 : 0.00;
+        let transportFeeAdded = haveTransportService ? 500.00 : 0.00;
 
         let formattedNightPrice = nightPriceAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         let formattedTransportFee = transportFeeAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

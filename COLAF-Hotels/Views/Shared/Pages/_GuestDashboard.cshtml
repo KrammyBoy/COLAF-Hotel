@@ -1,54 +1,68 @@
-﻿<div class="min-h-screen bg-gray-100">
+﻿@{
+    var backgroundImage = Url.Content("~/assets/hotel_assets/hotel-image-front.jpg");
+    var featuredRooms = new[]
+    {
+        new { Title = "Standard Room", Image = Url.Content("~/assets/hotel_assets/hotel-standard.jpg"), Price = 3500, Description = "Comfortable and affordable with all essential amenities." },
+        new { Title = "Deluxe Room", Image = Url.Content("~/assets/hotel_assets/hotel-deluxe2.jpeg"), Price = 6000, Description = "Modern decor with premium comfort and city view." },
+        new { Title = "Executive Suite", Image = Url.Content("~/assets/hotel_assets/hotel-suite2.jpg"), Price = 4500, Description = "Elegant space perfect for business or leisure." }
+    };
+}
+<div class="min-h-screen bg-gray-100">
     <!-- Hero Section -->
     <header class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white text-center"
-            style="background-image: url('/path-to-hotel-image.jpg');">
+            style="background-image: url('@backgroundImage');">
         <div class="absolute inset-0 bg-black bg-opacity-50"></div>
         <div class="z-10">
             <h1 class="text-5xl font-extrabold">Welcome to COLAF Hotel</h1>
             <p class="text-lg mt-4">Experience luxury and comfort like never before.</p>
-            <a href="../Room/List" class="mt-6 inline-block px-6 py-3 bg-[var(--primary-color)] text-white font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
+            <a href="../Room/List" class="mt-6 inline-block px-6 py-3 bg-coffee-medium text-white font-bold rounded-lg shadow-md hover:bg-coffee-dark transition">
                 Explore Rooms
             </a>
         </div>
     </header>
 
     <!-- Featured Rooms -->
-    <section class="py-16 px-6 max-w-7xl mx-auto">
-        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">Featured Rooms</h2>
-        <div class="grid md:grid-cols-3 gap-6">
-            @for (int i = 1; i <= 3; i++)
+    <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-10">Featured Rooms</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var room in featuredRooms)
             {
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition">
-                    <img src="/path-to-room-image.jpg" alt="Room Image" class="w-full h-56 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-semibold">Deluxe Suite</h3>
-                        <p class="text-gray-600 mt-2">Spacious and luxurious with a stunning city view.</p>
-                        <div class="mt-4 flex justify-between items-center">
-                            <span class="text-lg font-bold text-[var(--primary-color)]">$199 / Night</span>
-                            <a href="#" class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-opacity-80 transition">Book Now</a>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                    <img src="@room.Image" alt="@room.Title Image" class="w-full h-56 sm:h-64 object-cover">
+
+                    <div class="p-4 sm:p-6">
+                        <h3 class="text-xl sm:text-2xl font-semibold">@room.Title</h3>
+                        <p class="text-gray-600 mt-2 text-sm sm:text-base">@room.Description</p>
+                        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+                            <span class="text-base font-bold text-coffee-dark">₱@room.Price / Night</span>
+                            <a href="../Room/List" class="w-full sm:w-auto px-4 py-2 bg-coffee-dark text-white text-center rounded-lg hover:bg-coffee-light transition">
+                                Book Now
+                            </a>
                         </div>
                     </div>
                 </div>
             }
         </div>
     </section>
-
-    <!-- Offers & Discounts -->
-    <section class="bg-gradient-to-r from-yellow-500 to-red-500 text-white py-16 text-center">
-        <h2 class="text-4xl font-bold">Limited Time Offers!</h2>
-        <p class="mt-4 text-lg">Get up to 30% off on selected rooms. Book now and save!</p>
-        <a href="#" class="mt-6 inline-block px-6 py-3 bg-white text-[var(--primary-color)] font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
-            View Offers
-        </a>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="py-16 px-6 max-w-7xl mx-auto">
-        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">What Our Guests Say</h2>
+    <!-- What Our Guests Say with Alpine.js -->
+    <section class="py-16 px-6 max-w-7xl mx-auto" x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10"
+            x-show="show"
+            x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0 transform -translate-y-4"
+            x-transition:enter-end="opacity-100 transform translate-y-0">
+            What Our Guests Say
+        </h2>
         <div class="grid md:grid-cols-2 gap-6">
             @for (int i = 1; i <= 2; i++)
             {
-                <div class="bg-white shadow-lg rounded-lg p-6 flex items-center space-x-6">
+                <div class="bg-white shadow-lg rounded-lg p-6 flex items-center space-x-6 transition hover:shadow-xl"
+                     x-show="show"
+                     x-transition:enter="transition ease-out duration-500"
+                     x-transition:enter-start="opacity-0 transform translate-y-4"
+                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                     x-transition:enter-delay="@(i * 200)">
                     <img src="/path-to-avatar.jpg" alt="Guest Avatar" class="w-16 h-16 rounded-full object-cover">
                     <div>
                         <p class="text-gray-600">"Amazing experience! The staff was friendly, and the room was perfect!"</p>
@@ -59,12 +73,24 @@
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="bg-[var(--primary-color)] text-white text-center py-16">
-        <h2 class="text-4xl font-bold">Ready to Experience Luxury?</h2>
-        <p class="mt-4 text-lg">Book your stay today and enjoy world-class hospitality.</p>
-        <a href="#" class="mt-6 inline-block px-6 py-3 bg-white text-[var(--primary-color)] font-bold rounded-lg shadow-md hover:bg-opacity-80 transition">
-            Book Now
-        </a>
+    <!-- Call to Action with Alpine.js -->
+    <section class="bg-coffee-cream text-white text-center py-16"
+             x-data="{ show: false }"
+             x-intersect="show = true">
+        <div x-show="show"
+             x-transition:enter="transition ease-out duration-700"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100">
+            <h2 class="text-4xl font-bold">Ready to Experience Luxury?</h2>
+            <p class="mt-4 text-lg">
+                Book your stay today and enjoy world-class hospitality.
+            </p>
+            <a href="../Room/List"
+               class="mt-6 inline-block px-6 py-3 bg-white text-coffee-accent font-bold rounded-lg
+                  shadow-md hover:bg-opacity-90 hover:shadow-lg transform hover:scale-105
+                  transition-all duration-300">
+                Book Now
+            </a>
+        </div>
     </section>
 </div>

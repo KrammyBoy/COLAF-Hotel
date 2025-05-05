@@ -1,16 +1,7 @@
-﻿@{
-    ViewBag.Title = "Notifications";
-    // Note: The model directive is commented out as specified
-    // @model IEnumerable<string>
+﻿@model List<COLAFHotel.Models.Notification>
 
-    // Sample notifications for design purposes
-    var sampleNotifications = new[] {
-        new { Message = "Your room is ready for check-in. Room 302 is prepared with your requested amenities.", Date = DateTime.Now.AddHours(-2), IsRead = false },
-        new { Message = "Thank you for booking our Barista Workshop. Your session is confirmed for tomorrow at a9:00 AM.", Date = DateTime.Now.AddDays(-1), IsRead = false },
-        new { Message = "Special dinner event tonight in our restaurant featuring local coffee pairings. Limited seats available!", Date = DateTime.Now.AddDays(-2), IsRead = true },
-        new { Message = "Your scheduled spa treatment has been confirmed. Please arrive 15 minutes before your appointment.", Date = DateTime.Now.AddDays(-3), IsRead = true },
-        new { Message = "Welcome to COLAF Hotel! Your loyalty account has been credited with 500 welcome points.", Date = DateTime.Now.AddDays(-4), IsRead = true }
-    };
+@{
+    ViewBag.Title = "Notifications";
 }
 
 <div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
@@ -24,7 +15,7 @@
         </div>
 
         <div class="flex space-x-2">
-            <button class="px-4 py-2 text-sm bg-white border border-coffee-cream text-coffee-dark rounded-lg hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
+            <button id="markAllReadBtn" class="px-4 py-2 text-sm bg-white border border-coffee-cream text-coffee-dark rounded-lg hover:bg-coffee-cream hover:bg-opacity-20 transition-colors">
                 Mark all as read
             </button>
             <button class="px-4 py-2 text-sm bg-coffee-dark text-white rounded-lg hover:bg-coffee-medium transition-colors">
@@ -42,17 +33,17 @@
                 <span class="font-medium">Recent Notifications</span>
             </div>
             <span class="bg-coffee-accent text-white text-xs px-2 py-1 rounded-full">
-                @sampleNotifications.Count(n => !n.IsRead) new
+                @Model.Count(n => !n.read_status) new
             </span>
         </div>
 
         <div class="divide-y divide-coffee-cream">
-            @foreach (var notification in sampleNotifications)
+            @foreach (var notification in Model)
             {
-                <div class="p-4 @(!notification.IsRead ? "bg-coffee-cream bg-opacity-10" : "")">
+                <div class="p-4 @(!notification.read_status ? "bg-coffee-cream bg-opacity-10" : "")" data-notification-id="@notification.notification_id">
                     <div class="flex items-start">
                         <div class="mr-4 mt-1">
-                            @if (!notification.IsRead)
+                            @if (!notification.read_status)
                             {
                                 <div class="h-3 w-3 bg-coffee-accent rounded-full"></div>
                             }
@@ -62,32 +53,36 @@
                             }
                         </div>
                         <div class="flex-1">
-                            <p class="text-coffee-dark @(!notification.IsRead ? "font-medium" : "")">
-                                @notification.Message
+                            <p class="text-coffee-dark @(!notification.read_status ? "font-medium" : "")">
+                                @notification.message
                             </p>
                             <div class="mt-2 flex justify-between items-center">
                                 <span class="text-xs text-coffee-medium">
-                                    @if (notification.Date.Date == DateTime.Now.Date)
+                                    @if (notification.sent_date.Date == DateTime.Now.Date)
                                     {
-                                        <span>Today at @notification.Date.ToString("h:mm tt")</span>
+                                        <span>Today at @notification.sent_date.ToString("h:mm tt")</span>
                                     }
-                                    else if (notification.Date.Date == DateTime.Now.AddDays(-1).Date)
+                                    else if (notification.sent_date.Date == DateTime.Now.AddDays(-1).Date)
                                     {
-                                        <span>Yesterday at @notification.Date.ToString("h:mm tt")</span>
+                                        <span>Yesterday at @notification.sent_date.ToString("h:mm tt")</span>
                                     }
                                     else
                                     {
-                                        <span>@notification.Date.ToString("MMM dd, yyyy") at @notification.Date.ToString("h:mm tt")</span>
+                                        <span>@notification.sent_date.ToString("MMM dd, yyyy") at @notification.sent_date.ToString("h:mm tt")</span>
                                     }
                                 </span>
                                 <div class="flex space-x-2">
-                                    @if (!notification.IsRead)
+                                    @if (!notification.read_status)
                                     {
-                                        <button class="text-xs text-coffee-accent hover:text-coffee-dark transition-colors">
-                                            Mark as read
-                                        </button>
+                                        <form asp-controller="Notification" asp-action="MarkAsRead" method="post" class="inline">
+                                            <input type="hidden" name="notification_Id" value="@notification.notification_id" />
+                                            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                            <button type="submit" class="mark-read-btn text-xs text-coffee-accent hover:text-coffee-dark transition-colors">
+                                                Mark as read
+                                            </button>
+                                        </form>
                                     }
-                                    <button class="text-xs text-coffee-medium hover:text-coffee-dark transition-colors">
+                                    <button class="delete-btn text-xs text-coffee-medium hover:text-coffee-dark transition-colors">
                                         Delete
                                     </button>
                                 </div>
@@ -97,7 +92,7 @@
                 </div>
             }
 
-            @if (!sampleNotifications.Any())
+            @if (!Model.Any())
             {
                 <div class="py-16 px-4 text-center">
                     <svg class="mx-auto h-12 w-12 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,10 +104,10 @@
             }
         </div>
 
-        @if (sampleNotifications.Any())
+        @if (Model.Any())
         {
             <div class="p-4 bg-coffee-cream bg-opacity-5 border-t border-coffee-cream text-center">
-                <a href="#" class="text-sm text-coffee-accent hover:text-coffee-dark transition-colors">
+                <a href="#" id="view-all-btn" class="text-sm text-coffee-accent hover:text-coffee-dark transition-colors">
                     View all notifications
                 </a>
             </div>
@@ -158,3 +153,106 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Mark single notification as read
+            $(".mark-read-btn").click(function() {
+                var notificationContainer = $(this).closest("[data-notification-id]");
+                var notificationId = notificationContainer.data("notification-id");
+
+                $.ajax({
+                    url: '@Url.Action("MarkAsRead", "Notification")/' + notificationId,
+                    type: 'POST',
+                    success: function(result) {
+                        // Update the UI
+                        notificationContainer.removeClass("bg-coffee-cream bg-opacity-10");
+                        notificationContainer.find(".h-3.w-3.bg-coffee-accent").removeClass("bg-coffee-accent").addClass("border border-coffee-light border-opacity-40");
+                        notificationContainer.find(".mark-read-btn").remove();
+                        updateUnreadCount();
+                    },
+                    error: function(error) {
+                        console.error('Error marking notification as read:', error);
+                    }
+                });
+            });
+
+            // Mark all notifications as read
+            $("#markAllReadBtn").click(function() {
+                $.ajax({
+                    url: '@Url.Action("MarkAllAsRead", "Notification")',
+                    type: 'POST',
+                    success: function(result) {
+                        // Update the UI for all unread notifications
+                        $("[data-notification-id]").removeClass("bg-coffee-cream bg-opacity-10");
+                        $(".h-3.w-3.bg-coffee-accent").removeClass("bg-coffee-accent").addClass("border border-coffee-light border-opacity-40");
+                        $(".mark-read-btn").remove();
+                        updateUnreadCount();
+                    },
+                    error: function(error) {
+                        console.error('Error marking all notifications as read:', error);
+                    }
+                });
+            });
+
+            // Delete notification
+            $(".delete-btn").click(function() {
+                var notificationContainer = $(this).closest("[data-notification-id]");
+                var notificationId = notificationContainer.data("notification-id");
+
+                if (confirm("Are you sure you want to delete this notification?")) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteNotification", "Notification")/' + notificationId,
+                        type: 'POST',
+                        success: function(result) {
+                            // Remove the notification from the UI
+                            notificationContainer.fadeOut(300, function() {
+                                $(this).remove();
+                                if ($("[data-notification-id]").length === 0) {
+                                    // Show "no notifications" message if all are deleted
+                                    var noNotificationsHtml = `
+                                        <div class="py-16 px-4 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-coffee-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                            </svg>
+                                            <h3 class="mt-4 text-lg font-serif font-medium text-coffee-dark">No notifications</h3>
+                                            <p class="mt-2 text-coffee-medium">You're all caught up!</p>
+                                        </div>
+                                    `;
+                                    $(".divide-y.divide-coffee-cream").html(noNotificationsHtml);
+                                    $("#view-all-btn").parent().remove();
+                                }
+                                updateUnreadCount();
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error deleting notification:', error);
+                        }
+                    });
+                }
+            });
+
+            // Function to update the unread notification count
+            function updateUnreadCount() {
+                $.ajax({
+                    url: '@Url.Action("GetUnreadNotificationCount", "Notification")',
+                    type: 'GET',
+                    success: function(result) {
+                        var countElement = $(".bg-coffee-accent.text-white.text-xs.px-2.py-1.rounded-full");
+                        countElement.text(result.count + " new");
+
+                        // If there's a notification badge in the navbar, update it too
+                        if ($("#notification-badge").length) {
+                            if (result.count > 0) {
+                                $("#notification-badge").text(result.count).show();
+                            } else {
+                                $("#notification-badge").hide();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

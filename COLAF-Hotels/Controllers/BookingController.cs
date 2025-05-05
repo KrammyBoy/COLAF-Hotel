@@ -580,6 +580,16 @@ namespace COLAFHotel.Controllers
             // Add invoice for the booking
             await AddInvoice(booking.booking_id, DateTime.UtcNow);
 
+
+            // Add notification to user
+            string formattedCheckIn = booking.check_in_date.ToString("MMM d, yyyy");
+            string formattedCheckOut = booking.check_out_date.ToString("MMM d, yyyy");
+            string formattedAmount = totalPrice.ToString("N2");
+
+            string message = $"Your booking for Room {RoomNumber} has been confirmed from {formattedCheckIn} to {formattedCheckOut}. Total amount: ₱{formattedAmount}.";
+
+            await AddNotification(Convert.ToInt32(UserId), message, DateTime.UtcNow);
+
             TempData["Success"] = "Your booking has been confirmed";
             TempData["BookingId"] = booking.booking_id;
             TempData["CheckInDate"] = booking.check_in_date.ToString("MMM d, yyyy");
@@ -633,6 +643,19 @@ namespace COLAFHotel.Controllers
                 issue_date = issue_date,
             };
             _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddNotification(int user_id, string message, DateTime sent_date)
+        {
+            var notification = new Notification
+            {
+                user_id = user_id,
+                message = message,
+                sent_date = sent_date,
+                read_status = false
+            };
+            _context.Notifications.Add(notification);
             await _context.SaveChangesAsync();
         }
 

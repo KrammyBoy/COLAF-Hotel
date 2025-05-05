@@ -1,4 +1,7 @@
-﻿<nav class="flex items-center space-x-4 py-3">
+﻿@{
+    var notificationCount = 0;
+}
+<nav class="flex items-center space-x-4 py-3">
     <a href="@Url.Action("List", "Room")"
        class="relative text-base font-medium transition-colors duration-200 cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2
@@ -45,6 +48,7 @@
                    @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-indigo-300" : "text-white")">
             ALERTS
         </span>
-        <div class="ml-1 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-xs text-white">2</div>
+        <div class="ml-1 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-xs text-white" id="notificationCount">
+        </div>
     </a>
 </nav>

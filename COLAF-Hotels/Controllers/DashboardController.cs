@@ -16,6 +16,13 @@ namespace COLAFHotel.Controllers
         public IActionResult Index()
         {
             var users = _context.Users.ToList(); // Fetch users from the database
+
+            var role = HttpContext.Session.GetString("Role");
+
+            if (role == "Housekeeper" || role == "Housekeeping Manager")
+            {
+                return Redirect("/Housekeeping/Tasks");
+            }
             return View(users);
         }
     }
