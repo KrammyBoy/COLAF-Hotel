@@ -499,9 +499,9 @@ namespace COLAFHotel.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, decimal totalBalance, string haveTransport)
+        public async Task<IActionResult> ConfirmBooking(string GuestId, string UserId, string RoomId, string RoomNumber, string Category, string ImageUrl, string Price, DateTime CheckInDate, DateTime CheckOutDate, decimal totalPrice, decimal totalBalance, string haveTransport, string discountPromoCode)
         {
-            Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}, TotalBalance={totalBalance}, Transport={haveTransport}");
+            Console.WriteLine($"Booking Confirmed: GuestId={GuestId}, UserId={UserId}, RoomId={RoomId}, CheckIn={CheckInDate}, CheckOut={CheckOutDate}, TotalPrice={totalPrice}, TotalBalance={totalBalance}, Transport={haveTransport}, DiscountPromoCode={discountPromoCode}");
 
             if (GuestId == "null")
             {
@@ -540,17 +540,42 @@ namespace COLAFHotel.Controllers
                 TempData["Error"] = "Check-out date must be after check-in date.";
                 return View("Create", room);
             }
-
-            var booking = new Booking
+            var booking = new Booking { };
+            if (discountPromoCode != "NONE")
             {
-                guest_id = Convert.ToInt32(GuestId),
-                room_id = Convert.ToInt32(RoomId),
-                check_in_date = CheckInDate,
-                check_out_date = CheckOutDate,
-                status = "Confirmed", // Options: Confirmed, Pending, Cancelled
-                total_amount = totalPrice,
-                totalBalance = totalBalance
-            };
+                string discount_id = HttpContext.Session.GetString("discountID");
+                Console.WriteLine($"Discount ID: {discount_id}");
+
+                int discountId = 0;
+                if (!string.IsNullOrEmpty(discount_id))
+                {
+                    int.TryParse(discount_id, out discountId);
+                }
+
+                booking = new Booking
+                {
+                    guest_id = Convert.ToInt32(GuestId),
+                    room_id = Convert.ToInt32(RoomId),
+                    check_in_date = CheckInDate,
+                    check_out_date = CheckOutDate,
+                    status = "Confirmed", // Options: Confirmed, Pending, Cancelled
+                    total_amount = totalPrice,
+                    totalBalance = totalBalance,
+                    discount_id = discountId
+                };
+            } else
+            {
+                booking = new Booking
+                {
+                    guest_id = Convert.ToInt32(GuestId),
+                    room_id = Convert.ToInt32(RoomId),
+                    check_in_date = CheckInDate,
+                    check_out_date = CheckOutDate,
+                    status = "Confirmed", // Options: Confirmed, Pending, Cancelled
+                    total_amount = totalPrice,
+                    totalBalance = totalBalance
+                };
+            }
 
             // Find the guest and add the new booking to the guest's bookings list
             var guest = await _context.Guests.Include(g => g.Bookings)
@@ -599,6 +624,12 @@ namespace COLAFHotel.Controllers
             TempData["RoomNumber"] = RoomNumber;
             DateTime checkInDate = booking.check_in_date;
             DateTime checkOutDate = booking.check_out_date;
+
+            //Remove session from booking
+            HttpContext.Session.Remove("activeDiscount");
+            HttpContext.Session.Remove("discountValue");
+            HttpContext.Session.Remove("promoCode");
+            HttpContext.Session.Remove("discountID");
 
             int numberOfNights = (checkOutDate - checkInDate).Days;
             TempData["NumberOfNights"] = numberOfNights;

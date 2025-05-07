@@ -6,6 +6,12 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var isGuest = HttpContextAccessor.HttpContext?.Session.GetString("GuestId");
     var user_id = HttpContextAccessor.HttpContext?.Session.GetString("UserId");
+
+    // Check for active discount from session
+    bool hasActiveDiscount = Context.Session.GetString("activeDiscount") == "true";
+    string discountValueString = Context.Session.GetString("discountValue");
+    decimal discountValue = string.IsNullOrEmpty(discountValueString) ? 0 : decimal.Parse(discountValueString);
+    string promoCode = Context.Session.GetString("promoCode") ?? "";
 }
 
 <div class="min-h-screen bg-coffee-cream bg-opacity-30 w-full p-6">
@@ -37,6 +43,7 @@
                 <input type="hidden" name="totalBalance" value="0" id="hiddenTotalBalance" />
                 <input type="hidden" name="totalPrice" id="hiddenTotalPrice" />
                 <input type="hidden" name="haveTransport" id="hiddenTransportService" />
+                <input type="hidden" name="discountPromoCode" id="hiddenDiscountPromoCode" />
 
                 <!-- Room Features -->
                 <div class="mb-8">
@@ -437,12 +444,21 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="text-coffee-dark font-medium">No Discount</p>
+                                        @if (hasActiveDiscount)
+                                        {
+                                            <!-- Optionally put some content here if discount is active -->
+                                            <p class="text-amber-500 font-medium">@promoCode</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-coffee-dark font-medium">No Discount</p>
+                                        }
                                         <p class="text-coffee-medium text-xs mt-1">Discount</p>
                                     </div>
                                 </div>
                                 <p class="text-coffee-dark font-semibold ml-13 sm:ml-0">₱<span id="discountPrice">0</span></p>
                             </div>
+
 
                             <!-- Payment Type-->
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-coffee-cream pb-4 gap-3">
@@ -553,6 +569,7 @@
         let checkOutDateInput = document.getElementById('checkOutDate');
         let transportService = document.getElementById('transportService');
         let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
+        let discountPrice = document.getElementById('discountPrice');
 
         const paymentOption = document.getElementById('paymentOption').value;
         document.getElementById('paymentType').textContent = paymentOption;
@@ -586,6 +603,20 @@
 
         let nightPriceAdded = ((basePrice * nights) - basePrice);
         let transportFeeAdded = haveTransportService ? 500.00 : 0.00;
+        
+        let discountValue = basePrice * (@discountValue/(100-@discountValue));
+        discountPrice.innerText = "-" + discountValue.toFixed(2);
+
+        const hasActiveDiscount = @hasActiveDiscount.ToString().ToLower(); // Without quotes — this outputs a literal `true` or `false` in JS
+        console.log("Active Discount:", hasActiveDiscount);
+        
+        if(hasActiveDiscount){
+            const promoCode = "@promoCode"; // Make sure this is properly quoted
+            console.log("Promo Code:", promoCode);
+            document.getElementById('hiddenDiscountPromoCode').value = promoCode;
+        } else {
+            document.getElementById('hiddenDiscountPromoCode').value = "NONE";
+        }
 
         let formattedNightPrice = nightPriceAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         let formattedTransportFee = transportFeeAdded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

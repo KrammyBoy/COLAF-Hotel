@@ -2,9 +2,53 @@
 @{
     ViewBag.Title = "Rooms";
     var userRole = ViewBag.UserRole;
+    
+    // Check for active discount from session
+    bool hasActiveDiscount = Context.Session.GetString("activeDiscount") == "true";
+    string discountValueString = Context.Session.GetString("discountValue");
+    decimal discountValue = string.IsNullOrEmpty(discountValueString) ? 0 : decimal.Parse(discountValueString);
+    string promoCode = Context.Session.GetString("promoCode") ?? "";
+    
+    // Check for notification messages
+    bool hasDiscountMessage = TempData["discountMessageSuccess"] != null;
 }
 
 <div class="max-w-7xl mx-auto p-4 md:p-8 bg-coffee-cream rounded-2xl shadow-xl border border-coffee-light/30">
+    <!-- Modern Side Notification -->
+<div id="notificationContainer" class="fixed top-24 right-0 z-50 w-full sm:w-96 px-4 transform translate-x-full transition-transform duration-500 ease-in-out">
+    @if (hasDiscountMessage)
+    {
+        <div id="notificationBar" class="bg-white rounded-lg shadow-lg overflow-hidden border-l-4 border-green-500">
+            <div class="p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-2 rounded-full">
+                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="font-medium text-gray-800">Promo Applied!</h3>
+                            <p class="text-sm text-gray-600">@TempData["discountMessageSuccess"]</p>
+                            @if (hasActiveDiscount)
+                            {
+                                <p class="text-sm text-green-600 font-medium mt-1">@discountValue% off with code <span class="font-bold">@promoCode</span></p>
+                            }
+                        </div>
+                    </div>
+                    <button onclick="closeNotification()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Progress bar timer -->
+            <div id="notificationTimer" class="h-1 bg-green-500 transform scale-x-0 origin-left transition-transform duration-5000 ease-linear"></div>
+        </div>
+    }
+</div>
+
     <h2 class="text-coffee-dark text-3xl md:text-5xl font-bold mb-6 md:mb-8 text-center tracking-tight">Discover Our Rooms</h2>
 
     <!-- Filters -->
@@ -74,7 +118,22 @@
                 <div class="p-4 md:p-6">
                     <div class="flex justify-between items-start mb-3 md:mb-4">
                         <h3 class="text-xl md:text-2xl font-bold text-coffee-dark">@room.Category</h3>
-                        <span class="text-xl md:text-2xl font-bold text-coffee-accent">₱@room.Price.ToString("N2")</span>
+                        @if (hasActiveDiscount)
+                        {
+                            decimal originalPrice = room.Price;
+                            decimal discountAmount = originalPrice * (discountValue / 100.0m);
+                            decimal discountedPrice = originalPrice - discountAmount;
+                            
+                            <div class="text-right">
+                                <span class="text-sm text-gray-500 line-through">₱@originalPrice.ToString("N2")</span>
+                                <span class="block text-xl md:text-2xl font-bold text-green-600">₱@discountedPrice.ToString("N2")</span>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">@discountValue% OFF</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="text-xl md:text-2xl font-bold text-coffee-accent">₱@room.Price.ToString("N2")</span>
+                        }
                     </div>
 
                     <div class="flex items-center mb-4 md:mb-6">
@@ -113,7 +172,15 @@
 
                         @if (userRole == "Guest")
                         {
-                            <a href="@Url.Action("Create", "Booking", new { roomId = room.RoomId, roomNumber = room.RoomNumber, roomImg = room.ImageUrl, roomCategory = room.Category, roomPrice = room.Price })"
+                            var bookingParams = new { 
+                                roomId = room.RoomId, 
+                                roomNumber = room.RoomNumber, 
+                                roomImg = room.ImageUrl, 
+                                roomCategory = room.Category, 
+                                roomPrice = hasActiveDiscount ? room.Price * (1 - (discountValue / 100.0m)) : room.Price 
+                            };
+                            
+                            <a href="@Url.Action("Create", "Booking", bookingParams)"
                                class="inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-3 bg-coffee-medium text-white font-medium rounded-lg transition-colors duration-300 hover:bg-coffee-dark focus:ring-4 focus:ring-coffee-light focus:ring-opacity-50 text-sm md:text-base mt-2 md:mt-0">
                                 BOOK NOW
                                 <svg class="w-4 h-4 md:w-5 md:h-5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,8 +231,41 @@
         document.getElementById("no-results").style.display = visibleCount === 0 ? "block" : "none";
     }
 
+    // Function to close notification manually
+    function closeNotification() {
+        const container = document.getElementById('notificationContainer');
+        if (container) {
+            container.classList.remove('translate-x-0');
+            container.classList.add('translate-x-full');
+        }
+    }
+
     // Initialize on page load
     document.addEventListener("DOMContentLoaded", function() {
+        // Show notification with animation
+        const container = document.getElementById('notificationContainer');
+        const timer = document.getElementById('notificationTimer');
+        
+        if (container) {
+            // Show notification with slide-in animation after a short delay
+            setTimeout(() => {
+                container.classList.remove('translate-x-full');
+                container.classList.add('translate-x-0');
+                
+                // Start the progress bar animation
+                if (timer) {
+                    timer.classList.remove('scale-x-0');
+                    timer.classList.add('scale-x-100');
+                }
+                
+                // Auto-hide notification after timer completes
+                setTimeout(() => {
+                    container.classList.remove('translate-x-0');
+                    container.classList.add('translate-x-full');
+                }, 5000);
+            }, 300);
+        }
+        
         // Add animation to the room cards
         let rooms = document.querySelectorAll(".room-card");
         rooms.forEach((room, index) => {

@@ -58,6 +58,7 @@ namespace COLAFHotel.Controllers
 
                     // Ensure promo code is uppercase for consistency
                     discount.promo_code = discount.promo_code.ToUpper();
+                    discount.expiration_date = DateTime.SpecifyKind(discount.expiration_date, DateTimeKind.Utc);
 
                     _context.Add(discount);
                     await _context.SaveChangesAsync();
@@ -80,13 +81,13 @@ namespace COLAFHotel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDiscount(Discount discount)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Ensure promo code is uppercase for consistency
                     discount.promo_code = discount.promo_code.ToUpper();
-
+                    discount.expiration_date = DateTime.SpecifyKind(discount.expiration_date, DateTimeKind.Utc);
                     _context.Update(discount);
                     await _context.SaveChangesAsync();
 
@@ -101,6 +102,7 @@ namespace COLAFHotel.Controllers
 
             return RedirectToAction(nameof(ManageOffers));
         }
+
 
         // POST: Discount/DeleteDiscount
         [HttpPost]
@@ -133,13 +135,13 @@ namespace COLAFHotel.Controllers
         // GET: Discount/ActivateDiscount/5
         public async Task<IActionResult> ActivateDiscount(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id) || !int.TryParse(id, out int discountId))
             {
                 TempData["ErrorMessage"] = "Invalid discount ID.";
                 return RedirectToAction(nameof(ManageOffers));
             }
 
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _context.Discounts.FindAsync(discountId);
             if (discount == null)
             {
                 TempData["ErrorMessage"] = "Discount not found.";
@@ -147,6 +149,7 @@ namespace COLAFHotel.Controllers
             }
 
             discount.status = "Active";
+            discount.expiration_date = DateTime.SpecifyKind(discount.expiration_date, DateTimeKind.Utc);
             _context.Update(discount);
             await _context.SaveChangesAsync();
 
@@ -157,13 +160,13 @@ namespace COLAFHotel.Controllers
         // GET: Discount/DeactivateDiscount/5
         public async Task<IActionResult> DeactivateDiscount(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id) || !int.TryParse(id, out int discountId))
             {
                 TempData["ErrorMessage"] = "Invalid discount ID.";
                 return RedirectToAction(nameof(ManageOffers));
             }
 
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _context.Discounts.FindAsync(discountId);
             if (discount == null)
             {
                 TempData["ErrorMessage"] = "Discount not found.";
@@ -171,12 +174,35 @@ namespace COLAFHotel.Controllers
             }
 
             discount.status = "Inactive";
+            discount.expiration_date = DateTime.SpecifyKind(discount.expiration_date, DateTimeKind.Utc);
             _context.Update(discount);
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Discount '{discount.name}' has been deactivated.";
             return RedirectToAction(nameof(ManageOffers));
         }
+
+        [HttpPost]
+        public IActionResult ApplyPromo(string promoCode, decimal discountValue, string discountID)
+        {
+            HttpContext.Session.SetString("activeDiscount", "true");
+
+            // Convert the decimal to string for session storage
+            HttpContext.Session.SetString("discountValue", discountValue.ToString());
+
+            Console.WriteLine($"Discount Value: {discountValue}");
+            HttpContext.Session.SetString("promoCode", promoCode);
+
+            HttpContext.Session.SetString("discountID", discountID);
+
+            TempData["discountMessageSuccess"] = $"{promoCode} promo has been activated! Enjoy your discount.";
+
+            return RedirectToAction("List", "Room");
+        }
+
+
+
+
 
         // Helper method to check if discount exists
         private bool DiscountExists(int id)
