@@ -26,7 +26,10 @@
                     <h1 class="text-4xl font-bold mb-2">Room @Model.RoomNumber</h1>
                     <div class="flex items-center space-x-2">
                         <span class="bg-coffee-accent text-white px-3 py-1 rounded-full text-sm">@Model.Category</span>
-                        <span class="bg-coffee-medium text-white px-3 py-1 rounded-full text-sm">₱@Model.Price.ToString("N2")/night</span>
+                        <span class="bg-coffee-medium text-white px-3 py-1 rounded-full text-sm">
+                            <span class="currencySymbol">₱</span>
+                            <span class="priceValue">@Model.Price.ToString("N2")/night</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -111,7 +114,7 @@
                                    class="w-6 h-6 rounded text-coffee-accent border-coffee-light focus:ring-coffee-accent cursor-pointer"
                                    onchange="toggleTransportDetails()">
                             <label for="transportService" class="text-lg font-medium text-coffee-dark cursor-pointer">
-                                Include Hotel Transport Service (+₱500)
+                                Include Hotel Transport Service (+<span class="currencySymbol">₱</span><span class="transportCurrencyPrice" data-base="500">500</span>)
                             </label>
                         </div>
 
@@ -237,18 +240,57 @@
                         </div>
                     </div>
 
-                    <!-- Payment Option Selection -->
-                    <div class="mb-6">
-                        <label for="paymentOption" class="block text-sm font-medium text-coffee-medium mb-2">Payment Type</label>
-                        <div class="relative">
-                            <select id="paymentOption" class="appearance-none w-full p-3 border border-coffee-cream rounded-lg bg-white focus:ring-2 focus:ring-coffee-accent pr-10 focus:border-coffee-accent transition-all duration-300" onchange="updatePrice()">
-                                <option value="Full Payment">Full Payment</option>
-                                <option value="Deposit">Deposit (25%)</option>
-                            </select>
-                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <svg class="w-5 h-5 text-coffee-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
+                    <!-- Payment Options Container -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-coffee-accent mb-8">
+                        <h3 class="text-coffee-dark font-bold text-lg mb-5">Payment Details</h3>
+
+                        <!-- Payment Type Selection -->
+                        <div class="mb-6">
+                            <label for="paymentOption" class="block text-sm font-medium text-coffee-medium mb-2">
+                                Payment Type
+                            </label>
+                            <div class="relative group">
+                                <select id="paymentOption" name="paymentOption"
+                                        class="w-full px-4 py-3 rounded-lg border-2 border-coffee-cream bg-white
+                           text-coffee-medium appearance-none cursor-pointer
+                           focus:outline-none focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent
+                           hover:border-coffee-light transition duration-300"
+                                        onchange="updatePrice()">
+                                    <option value="Full Payment">Full Payment</option>
+                                    <option value="Deposit">Deposit (25%)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-coffee-accent group-hover:text-coffee-medium transition-colors duration-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Currency Selection -->
+                        <div class="mb-2">
+                            <label for="currencyOption" class="block text-sm font-medium text-coffee-medium mb-2">
+                                Currency
+                            </label>
+                            <div class="relative group">
+                                <select id="currencyOption" name="currencyOption"
+                                        class="w-full px-4 py-3 rounded-lg border-2 border-coffee-cream bg-white
+                           text-coffee-medium appearance-none cursor-pointer
+                           focus:outline-none focus:ring-2 focus:ring-coffee-accent focus:border-coffee-accent
+                           hover:border-coffee-light transition duration-300"
+                                        onchange="updatePrice()">
+                                    <option value="PHP">Philippine Peso (₱)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="JPY">Japanese Yen (¥)</option>
+                                    <option value="GBP">British Pound (£)</option>
+                                    <option value="CNY">Chinese Yuan (¥)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-coffee-accent group-hover:text-coffee-medium transition-colors duration-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -404,7 +446,7 @@
                                         <p class="text-coffee-medium text-xs">Base room rate</p>
                                     </div>
                                 </div>
-                                <p class="text-coffee-dark font-semibold">₱@Model.Price.ToString("N2")</p>
+                                <p class="text-coffee-dark font-semibold"><span class="currencySymbol">₱</span><span class="priceValue">@Model.Price.ToString("N2")</span></p>
                             </div>
 
                             <!-- Nights of Stay -->
@@ -418,7 +460,7 @@
                                         <p class="text-coffee-medium text-xs"><span id="numberOfNights2">0</span> nights at room rate</p>
                                     </div>
                                 </div>
-                                <p class="text-coffee-dark font-semibold">₱<span id="nightPrice">0</span></p>
+                                <p class="text-coffee-dark font-semibold"><span class="currencySymbol"₱></span><span id="nightPrice">0</span></p>
                             </div>
 
                             <!-- Transport Fee -->
@@ -432,7 +474,7 @@
                                         <p class="text-coffee-medium text-xs">Optional shuttle service</p>
                                     </div>
                                 </div>
-                                <p class="text-coffee-dark font-semibold">₱<span id="transportFee">0</span></p>
+                                <p class="text-coffee-dark font-semibold"><span class="currencySymbol">₱</span><span id="transportFee">0</span></p>
                             </div>
 
                             <!-- Discount -->
@@ -456,7 +498,7 @@
                                         <p class="text-coffee-medium text-xs mt-1">Discount</p>
                                     </div>
                                 </div>
-                                <p class="text-coffee-dark font-semibold ml-13 sm:ml-0">₱<span id="discountPrice">0</span></p>
+                                <p class="text-coffee-dark font-semibold ml-13 sm:ml-0"><span class="currencySymbol">₱</span><span id="discountPrice">0</span></p>
                             </div>
 
 
@@ -485,7 +527,7 @@
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
                             <div class="mb-3 sm:mb-0">
                                 <p class="text-coffee-medium text-sm font-medium">Total Amount</p>
-                                <p class="text-coffee-dark text-2xl font-bold mt-1">₱<span id="totalPrice">0.00</span></p>
+                                <p class="text-coffee-dark text-2xl font-bold mt-1"><span class="currencySymbol">₱</span><span id="totalPrice">0.00</span></p>
                             </div>
                             <div class="bg-coffee-accent hover:bg-coffee-dark transition-colors duration-300 text-white px-4 py-2 rounded-lg flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -499,7 +541,7 @@
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 border-t border-coffee-cream border-opacity-50">
                             <div class="mb-3 sm:mb-0">
                                 <p class="text-coffee-medium text-sm font-medium">Deposit</p>
-                                <p class="text-coffee-dark text-xl font-semibold mt-1">₱<span id="totalDeposit">0.00</span></p>
+                                <p class="text-coffee-dark text-xl font-semibold mt-1"><span class="currencySymbol">₱</span><span id="totalDeposit">0.00</span></p>
                             </div>
                             <div class="bg-coffee-medium hover:bg-coffee-dark transition-colors duration-300 text-white px-4 py-2 rounded-lg flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -563,6 +605,24 @@
     </div>
 }
 <script>
+    const currencyRates = {
+        "PHP": 1.00,
+        "USD": 57.00,
+        "EUR": 61.50,
+        "JPY": 0.38,
+        "GBP": 71.50,
+        "CNY": 7.85
+    };
+
+    const currencySymbolArray = {
+        "PHP": "₱",
+        "USD": "$",
+        "EUR": "€",
+        "JPY": "¥",
+        "GBP": "£",
+        "CNY": "¥"
+    };
+
     function updatePrice() {
         let basePrice = @Model.Price;
         let checkInDateInput = document.getElementById('checkInDate');
@@ -570,6 +630,34 @@
         let transportService = document.getElementById('transportService');
         let hiddenTotalPrice = document.getElementById('hiddenTotalPrice');
         let discountPrice = document.getElementById('discountPrice');
+
+
+        let selectCurrency = document.getElementById('currencyOption');
+        let selectedCurrencyKey = selectCurrency.value; // This will be "PHP", "USD", etc.
+        const symbolCurrency = currencySymbolArray[selectedCurrencyKey];
+        const rate = currencyRates[selectedCurrencyKey];
+        const convertedCurrency = (basePrice/ rate);
+
+        document.querySelectorAll(".currencySymbol").forEach(el => {
+            el.innerText = symbolCurrency;
+        });
+
+        // Update all price values
+        let formattedConvertedCurrency = convertedCurrency.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        document.querySelectorAll(".priceValue").forEach(el => {
+            el.innerText = formattedConvertedCurrency;
+        });
+
+        document.querySelectorAll(".transportCurrencyPrice").forEach(el => {
+            const baseValue = parseFloat(el.dataset.base); // original PHP value
+            console.log(baseValue);
+            const converted = (baseValue / rate).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            el.innerText = converted;
+        });
 
         const paymentOption = document.getElementById('paymentOption').value;
         document.getElementById('paymentType').textContent = paymentOption;
@@ -601,10 +689,11 @@
         numberOfNights.textContent = nights;
         numberOfNights2.textContent = nights;
 
-        let nightPriceAdded = ((basePrice * nights) - basePrice);
+        let nightPriceAdded = ((basePrice * nights) - basePrice) / rate;
         let transportFeeAdded = haveTransportService ? 500.00 : 0.00;
+        transportFeeAdded /= rate;
         
-        let discountValue = basePrice * (@discountValue/(100-@discountValue));
+        let discountValue = (basePrice * (@discountValue/(100-@discountValue))) / rate;
         discountPrice.innerText = "-" + discountValue.toFixed(2);
 
         const hasActiveDiscount = @hasActiveDiscount.ToString().ToLower(); // Without quotes — this outputs a literal `true` or `false` in JS
@@ -626,7 +715,7 @@
         nightPrice.textContent = formattedNightPrice;
         transportFee.textContent = formattedTransportFee;
 
-        let totalPrice = (basePrice * nights) + transportFeeAdded;
+        let totalPrice = ((basePrice * nights) + transportFeeAdded) / rate;
         let currDeposit = 0;
 
         let depositPercent = 25;
@@ -634,7 +723,7 @@
         if (paymentOption === "Deposit" ){
             paymentTypeFinal.textContent = "(25%) Final Deposit";
             finalDeposit = totalPrice - ((totalPrice * (depositPercent / 100)));
-            currDeposit = totalPrice * (depositPercent / 100);
+            currDeposit = (totalPrice * (depositPercent / 100)) / rate;
             hiddenTotalBalance.value = finalDeposit;
         }
         else if (paymentOption === "Full Payment"){

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace COLAFHotel.Controllers
 {
@@ -110,6 +111,19 @@ namespace COLAFHotel.Controllers
             HttpContext.Session.SetString("UserId", user.user_id.ToString());
             HttpContext.Session.SetString("User", user.username);
             HttpContext.Session.SetString("Role", user.role);
+
+            var currencyRates = new Dictionary<string, CurrencyInfo>
+            {
+                { "USD", new CurrencyInfo { Rate = 57.00m, Symbol = "$" } },
+                { "EUR", new CurrencyInfo { Rate = 61.50m, Symbol = "€" } },
+                { "JPY", new CurrencyInfo { Rate = 0.38m, Symbol = "¥" } },
+                { "GBP", new CurrencyInfo { Rate = 71.50m, Symbol = "£" } },
+                { "CNY", new CurrencyInfo { Rate = 7.85m, Symbol = "¥" } },
+                { "PHP", new CurrencyInfo { Rate = 1.00m, Symbol = "₱" } }
+            };
+
+            var currencyJson = JsonConvert.SerializeObject(currencyRates);
+            HttpContext.Session.SetString("CurrencyRates", currencyJson);
 
             /*
                 Check if the user has guest_id.
