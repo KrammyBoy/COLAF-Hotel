@@ -1,0 +1,79 @@
+﻿@model COLAFHotel.Models.MaintenanceRequest
+
+@{
+    ViewData["Title"] = "Edit Maintenance Request";
+}
+
+<div class="container mx-auto p-6 bg-coffee-cream bg-opacity-10">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div class="flex items-center space-x-3 mb-4 md:mb-0">
+            <h2 class="text-2xl font-serif font-bold text-coffee-dark inline-block relative">
+                <span class="relative z-10">Edit Maintenance Request</span>
+                <span class="absolute bottom-0 left-0 w-full h-2 bg-coffee-accent bg-opacity-40 -z-0"></span>
+            </h2>
+        </div>
+        <a href="@Url.Action("Requests")" class="px-5 py-3 bg-coffee-light text-coffee-dark rounded-lg shadow-md hover:bg-coffee-cream transition flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back to List</span>
+        </a>
+    </div>
+
+    <div class="bg-gradient-to-r from-coffee-cream to-white p-6 rounded-2xl shadow-lg border border-coffee-light">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="request_id" />
+            <input type="hidden" asp-for="room_id" />
+            <input type="hidden" asp-for="reported_date" />
+            <input type="hidden" asp-for="assigned" />
+
+            <div class="mb-6">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-coffee-medium" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <label class="block text-lg font-medium text-coffee-dark">Room Number: @Model.Room.RoomNumber</label>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="issue_description" class="block mb-2 text-lg font-medium text-coffee-dark">Issue Description</label>
+                <textarea asp-for="issue_description" rows="4" class="w-full px-4 py-3 border border-coffee-light rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-accent"></textarea>
+                <span asp-validation-for="issue_description" class="text-sm text-red-500"></span>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="status" class="block mb-2 text-lg font-medium text-coffee-dark">Status</label>
+                <select asp-for="status" class="w-full px-4 py-3 border border-coffee-light rounded-lg focus:outline-none focus:ring-2 focus:ring-coffee-accent">
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <span asp-validation-for="status" class="text-sm text-red-500"></span>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-coffee-medium" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p class="text-lg font-medium text-coffee-dark">Reported Date: @Model.reported_date.ToString("MMM dd, yyyy HH:mm")</p>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-center">
+                <button type="submit" class="px-8 py-4 bg-coffee-dark text-coffee-cream rounded-lg shadow-md hover:bg-coffee-medium transition transform hover:scale-105 duration-200 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Save Changes</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

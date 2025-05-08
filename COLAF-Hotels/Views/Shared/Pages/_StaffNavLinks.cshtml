@@ -31,14 +31,6 @@
               @(Context.Request.Path.Value == Url.Action("ManageOffers", "Discount") ? "text-indigo-300" : "text-white")">
         OFFERS
     </a>
-    <a href="@Url.Action("Index", "Notification")"
-       class="relative text-sm font-medium cursor-pointer
-              after:content-[''] after:absolute after:-bottom-1 after:left-1/2
-              after:w-0 after:h-0.5 after:bg-indigo-400 after:transition-all after:duration-300
-              hover:after:w-full hover:after:left-0 hover:text-indigo-100
-              @(Context.Request.Path.Value == Url.Action("Index", "Notification") ? "text-indigo-300" : "text-white")">
-        NOTIFICATIONS
-    </a>
     <a href="@Url.Action("Summary", "Reports")"
        class="relative text-sm font-medium cursor-pointer
               after:content-[''] after:absolute after:-bottom-1 after:left-1/2

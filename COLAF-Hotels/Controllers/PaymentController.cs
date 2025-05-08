@@ -43,6 +43,7 @@ namespace COLAFHotel.Controllers
         [HttpPost]
         public IActionResult ProcessPayment(Payment payment)
         {
+
             ModelState.Remove("Booking");
 
             Console.WriteLine("Process Payment");
