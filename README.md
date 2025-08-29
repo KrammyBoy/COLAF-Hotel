@@ -1,6 +1,6 @@
-# ☕ CoffeeStay: Hotel Management System  
+# ☕ COLAF-Hotel: Hotel Management System  
 
-CoffeeStay is a hotel management system designed around the warmth, elegance, and culture of coffee. Just like the perfect brew, it blends simplicity with efficiency — making hotel operations smoother for both employees and guests.  
+COLAF-Hotel is a hotel management system designed around the warmth, elegance, and culture of coffee. Just like the perfect brew, it blends simplicity with efficiency — making hotel operations smoother for both employees and guests.
 
 ## 🌟 Features  
 
